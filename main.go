@@ -27,7 +27,6 @@ func main() {
 }
 
 func handle(w http.ResponseWriter, r *http.Request) {
-
 	fmt.Fprintln(w, "asd")
 	w.Write([]byte("Hello"))
 	err := r.Write(w)
