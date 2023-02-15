@@ -49,7 +49,6 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 	server.DB.Create(&userdata)
 }
-<<<<<<< Updated upstream
 
 func CreateUserdata(w http.ResponseWriter, r *http.Request) {
 	uid, _ := strconv.ParseInt(r.FormValue("userid"), 10, 64)
@@ -72,5 +71,3 @@ func CreateUserdata(w http.ResponseWriter, r *http.Request) {
 	server.DB.Create(&userdata)
 
 }
-=======
->>>>>>> Stashed changes

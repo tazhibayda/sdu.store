@@ -18,8 +18,6 @@ func main() {
 		DB.AutoMigrate(model.Session{}, model.User{}, model.Userdata{})
 	}
 
-	//server.DB.AutoMigrate(model.Session{}, model.User{}, model.Userdata{})
-
 	a := http.NewServeMux()
 
 	a.HandleFunc("/Users", model.GetUsers)
@@ -36,20 +34,3 @@ func main() {
 	}
 
 }
-<<<<<<< Updated upstream
-=======
-
-func handle(w http.ResponseWriter, r *http.Request) {
-
-	fmt.Fprintln(w, "asd")
-	w.Write([]byte("Hello"))
-	err := r.Write(w)
-	if err != nil {
-		return
-	}
-}
-func getHello(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("got /hello request\n")
-	io.WriteString(w, "Hello, HTTP!\n")
-}
->>>>>>> Stashed changes
