@@ -16,7 +16,10 @@ func main() {
 	restart := flag.Bool("dbRestart", false, "Restarting database")
 	flag.Parse()
 	if *restart {
-		DB.AutoMigrate(model.Session{}, model.User{}, model.Userdata{})
+		err := DB.AutoMigrate(model.Session{}, model.User{}, model.Userdata{})
+		if err != nil {
+			return
+		}
 	}
 
 	a := http.NewServeMux()
@@ -34,6 +37,7 @@ func main() {
 	a.HandleFunc("/Admin/session", model.AdminServe)
 	a.HandleFunc("/Admin/userdata", model.AdminUserdata)
 	a.HandleFunc("/Admin/userdata/create", model.CreateUserdata)
+	a.HandleFunc("/Admin/userdata/delete/", model.DeleteUserdata)
 	//
 
 	err := http.ListenAndServe(":9090", a)

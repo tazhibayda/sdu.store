@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"sdu.store/server"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -69,6 +70,15 @@ func CreateUserdata(w http.ResponseWriter, r *http.Request) {
 		Birthday:    birthday,
 	}
 	server.DB.Create(&userdata)
+	http.Redirect(w, r, "/Admin/userdata", http.StatusSeeOther)
+
+}
+
+func DeleteUserdata(w http.ResponseWriter, r *http.Request) {
+	vars := strings.Split(r.URL.Path, "/")
+	userID := vars[len(vars)-1]
+	var userdata Userdata
+	server.DB.Where("User_ID = ?", userID).Delete(&userdata)
 	http.Redirect(w, r, "/Admin/userdata", http.StatusSeeOther)
 
 }

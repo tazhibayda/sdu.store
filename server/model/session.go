@@ -10,3 +10,7 @@ type Session struct {
 	DeletedAt time.Time `json:"deleted_at"`
 	LastLogin time.Time `json:"last_login"`
 }
+
+func CreateSession() {
+
+}
