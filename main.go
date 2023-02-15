@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"gorm.io/gorm"
 	"io"
@@ -13,6 +14,11 @@ import (
 var DB *gorm.DB = server.DB
 
 func main() {
+	restart := flag.Bool("dbRestart", false, "Restarting database")
+	flag.Parse()
+	if *restart {
+		DB.AutoMigrate(model.Session{}, model.User{}, model.Userdata{})
+	}
 
 	a := http.NewServeMux()
 
