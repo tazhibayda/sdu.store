@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"sdu.store/server"
+	"strings"
 )
 
 type User struct {
@@ -26,7 +27,9 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		user = User{Login: login, Password: password, Username: username}
 	}
 	server.DB.Create(&user)
-	json.NewEncoder(w).Encode(user)
+	//json.NewEncoder(w).Encode(user)
+	http.Redirect(w, r, "/Admin/user", http.StatusSeeOther)
+
 }
 
 func GetUsers(w http.ResponseWriter, r *http.Request) {
@@ -42,4 +45,13 @@ func GetUserByID(w http.ResponseWriter, r *http.Request) {
 	server.DB.Where("id", r.FormValue("user_id")).Find(&user)
 	fmt.Println(user)
 	json.NewEncoder(w).Encode(user)
+}
+
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+	vars := strings.Split(r.URL.Path, "/")
+	userID := vars[len(vars)-1]
+	user := User{}
+	server.DB.Where("ID = ?", userID).Delete(&user)
+	http.Redirect(w, r, "/Admin/user", http.StatusSeeOther)
+
 }

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
+    <title>Document</title>
+</head>
+<body>
+<a href="/Admin">back</a>
+
+<h2>List of users</h2>
+
+<div class="Create">
+    <form method="post" action="console.log( phoneInput.getData())">
+        <label>
+            <input type="number" name="userid" value="login">
+        </label>
+        <label>
+            <input type="text" name="firstname" value="username">
+        </label>
+        <label>
+            <input type="text" name="lastname" value="username">
+        </label>
+        <label>
+            <input type="tel" id="phone" name="phone">
+        </label>
+        <label>
+            <input type="tel" name="username" value="username">
+        </label>
+        <label>
+            <input type="text" name="password" value="password">
+        </label>
+        <button type="submit">
+            Add
+        </button>
+    </form>
+</div>
+<button onclick="console.log( phoneInput.getNumber())">AAAAAA</button>
+<button onclick="console.log( phoneInput.getCountryData())">AAAAAaaA</button>
+
+
+
+<table>
+    <tr>
+        <td>User Id</td>
+        <td>First Name</td>
+        <td>Last Name</td>
+        <td>Phone Number</td>
+        <td>Country Code</td>
+        <td>ZIP Code</td>
+        <td>Birthday</td>
+    </tr>
+    {{ range . }}
+        <tr>
+
+            <td> {{.UserId}} </td>
+            <td> {{.Firstname}} </td>
+            <td> {{.Lastname}} </td>
+            <td> {{.PhoneNumber}} </td>
+            <td> {{.CountryCode}} </td>
+            <td> {{.ZIPCode}} </td>
+            <td> {{.Birthday}} </td>
+
+            <td>Edit</td>
+            <td>
+                <form action="userdata/delete/{{.UserId}}" method="GET">
+                    <button>
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+    {{ end }}
+</table>
+
+
+
+</body>
+<script>
+    const phoneInputField = document.querySelector("#phone");
+    const phoneInput = window.intlTelInput(phoneInputField, {
+        utilsScript:
+            "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+    });
+</script>
+</html>

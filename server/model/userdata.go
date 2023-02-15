@@ -3,6 +3,7 @@ package model
 import (
 	"net/http"
 	"sdu.store/server"
+	"strconv"
 	"time"
 )
 
@@ -49,3 +50,24 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	server.DB.Create(&userdata)
 }
 
+func CreateUserdata(w http.ResponseWriter, r *http.Request) {
+	uid, _ := strconv.ParseInt(r.FormValue("userid"), 10, 64)
+	firstname := r.FormValue("firstname")
+	lastname := r.FormValue("lastname")
+	phone := r.FormValue("phone")
+	countrycode := r.FormValue("country_code")
+	zip := r.FormValue("zip")
+	birthday, _ := time.Parse("2006-01-02", r.FormValue("zip"))
+
+	userdata := Userdata{
+		UserId:      uid,
+		Firstname:   firstname,
+		Lastname:    lastname,
+		PhoneNumber: phone,
+		CountryCode: countrycode,
+		ZIPCode:     zip,
+		Birthday:    birthday,
+	}
+	server.DB.Create(&userdata)
+
+}
