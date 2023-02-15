@@ -6,15 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="f768acd2-e300-4496-a37e-aedb3465e1c9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/progress_reports/progress_report1/Progress_Report.md" beforeDir="false" afterPath="$PROJECT_DIR$/progress_reports/progress_report1/Progress_Report.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/model/admin.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/admin.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/model/userdata.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/userdata.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Admin/AdminUser.gohtml" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Admin/AdminUser.gohtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Admin/AdminUserdata.gohtml" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Admin/AdminUserdata.gohtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +61,8 @@
     "WebServerToolWindowFactoryState": "false",
     "go.import.settings.migrated": "true",
     "last_opened_file_path": "C:/Users/Daryn/Desktop/projects/sdu.store",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
@@ -146,6 +145,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="progress report" />

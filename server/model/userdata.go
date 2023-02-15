@@ -28,7 +28,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	phone := r.FormValue("phone")
 	countrycode := r.FormValue("country_code")
 	zip := r.FormValue("zip")
-	birthday, _ := time.Parse("2006-01-02", r.FormValue("zip"))
+	birthday, _ := time.Parse("2006-01-02", r.FormValue("birthday"))
 
 	user := User{Login: login, Password: password, Username: username}
 
@@ -57,7 +57,7 @@ func CreateUserdata(w http.ResponseWriter, r *http.Request) {
 	phone := r.FormValue("phone")
 	countrycode := r.FormValue("country_code")
 	zip := r.FormValue("zip")
-	birthday, _ := time.Parse("2006-01-02", r.FormValue("zip"))
+	birthday, _ := time.Parse("2006-01-02", r.FormValue("birthday"))
 
 	userdata := Userdata{
 		UserId:      uid,
@@ -69,5 +69,6 @@ func CreateUserdata(w http.ResponseWriter, r *http.Request) {
 		Birthday:    birthday,
 	}
 	server.DB.Create(&userdata)
+	http.Redirect(w, r, "/Admin/userdata", http.StatusSeeOther)
 
 }

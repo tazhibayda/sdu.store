@@ -19,32 +19,33 @@
 <h2>List of users</h2>
 
 <div class="Create">
-    <form method="post" action="console.log( phoneInput.getData())">
+    <form method="post" action="/Admin/userdata/create">
         <label>
-            <input type="number" name="userid" value="login">
+            <input type="number" name="userid" placeholder="userid">
         </label>
         <label>
-            <input type="text" name="firstname" value="username">
+            <input type="text" name="firstname" placeholder="firstname">
         </label>
         <label>
-            <input type="text" name="lastname" value="username">
+            <input type="text" name="lastname" placeholder="lastname">
         </label>
         <label>
             <input type="tel" id="phone" name="phone">
         </label>
         <label>
-            <input type="tel" name="username" value="username">
+            <input type="tel" name="country_code" placeholder="country code">
         </label>
         <label>
-            <input type="text" name="password" value="password">
+            <input type="text" name="zip" placeholder="ZIP code">
+        </label>
+        <label>
+            <input type="date" name="birthday" placeholder="birthday">
         </label>
         <button type="submit">
             Add
         </button>
     </form>
 </div>
-<button onclick="console.log( phoneInput.getNumber())">AAAAAA</button>
-<button onclick="console.log( phoneInput.getCountryData())">AAAAAaaA</button>
 
 
 
