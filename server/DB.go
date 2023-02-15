@@ -11,10 +11,11 @@ import (
 var DB = ConnectDB()
 
 func ConnectDB() *gorm.DB {
-
 	_ = pq.Driver{}
-	psqlInfo := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable",
-		Username, Password, Host, Port, Dbname)
+	psqlInfo := fmt.Sprintf(
+		"postgres://%s:%s@%s:%d/%s?sslmode=disable",
+		Username, Password, Host, Port, Dbname,
+	)
 
 	sqlDB, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
@@ -25,13 +26,16 @@ func ConnectDB() *gorm.DB {
 		panic(err)
 	}
 
-	db, err := gorm.Open(postgres.New(postgres.Config{
-		Conn: sqlDB,
-	}), &gorm.Config{})
+	db, err := gorm.Open(
+		postgres.New(
+			postgres.Config{
+				Conn: sqlDB,
+			},
+		), &gorm.Config{},
+	)
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println("Successfully connected to database! ")
-
 	return db
 }
