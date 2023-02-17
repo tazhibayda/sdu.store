@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Register</title>
+        <link rel="stylesheet" href="/static/css/sign-up.css">
+    </head>
+    <body>
+        <div class="main-container">
+            <div class="form-container">
+                <div class="title-container">Register</div>
+                <form action="/sign-up" method="post">
+                    <div class="">
+                        <div class="input-title">
+                            Name
+                        </div>
+                        <div class="input-container">
+                            <img src="/static/images/profile.png" alt="">
+                            <input type="text" placeholder="Enter your full name" name="name">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="input-title">
+                            Username
+                        </div>
+                        <div class="input-container">
+                            <img src="/static/images/profile.png" alt="">
+                            <input type="text" placeholder="Enter your username" name="username">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="input-title">
+                            Email
+                        </div>
+                        <div class="input-container">
+                            <img src="/static/images/email.png" alt="">
+                            <input type="text" placeholder="Enter your email" name="email">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="input-title">
+                            Password
+                        </div>
+                        <div class="input-container">
+                            <img src="/static/images/password.png" alt="">
+                            <input type="password" name="password" placeholder="Type your password">
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="input-title">
+                            Confirm Password
+                        </div>
+                        <div class="input-container">
+                            <img src="/static/images/password.png" alt="">
+                            <input type="password" name="repassword" id="" placeholder="Retype your password">
+                        </div>
+                    </div>
+                    <div class="forget-password-container">
+                        <a href="/login-page">Do you have an account</a>
+                    </div>
+                    <div class="button-container">
+                        <button type="submit">REGISTER</button>
+                    </div>
+                </form>
+            </div>
+            <div class="sign-up-container">
+                <a href="login-page">Sign in</a>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+body{
+    margin: 0px;
+    height: 100%;
+    width: 100%;
+}
+header{
+    background-color: #153C7A;
+    width: 100%;
+}
+.header{
+    display: flex;
+    justify-content: space-between;
+}
+.header a{
+    text-decoration: none;
+}
+.logo-container{
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    margin-left: 40px;
+}
+.logo-container img{
+    height: 60px;
+    margin-left: 5px;
+}
+.logo-text{
+    margin-left: 10px;
+    font-size: 50px;
+    color: white;
+    font-weight: 500;
+    margin-right: 5px;
+    font-family: 'Oswald', sans-serif;
+}
+.header-menu-container{
+    align-items: center;
+    display: flex;
+
+}
+.header-menu-container a{
+    font-size: 20px;
+    height: 20px;
+    text-decoration: none;
+    margin-right: 20px;
+    margin-left: 20px;
+    color: white	;
+}
+.account-container{
+    display: flex;
+    align-items: center;
+    margin-right: 40px;
+}
+.account-container a{
+    font-size: 20px;
+    height: 40px;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sign-up{
+    color: white;
+    margin-right: 10px;
+    border: #215EC0 1px;
+    border-radius: 5px;
+    background-color: #215EC0;
+    transition: background-color 1s ease-out 100ms;
+}
+.sign-up:hover{
+    background-color: #153C7A;
+}
+.sign-in{
+    color: white;
+    margin-left: 10px;
+    border: #A30000 1px;
+    border-radius: 5px;
+    background-color: #A30000;
+    transition: background-color 1s ease-out 100ms;
+}
+.sign-in:hover{
+    background-color: #d61b1b;
+}
