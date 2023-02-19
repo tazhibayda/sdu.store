@@ -36,6 +36,13 @@
                             <input type="password" name="repassword" id="" placeholder="Retype your password">
                         </div>
                     </div>
+                    <div class="errors">
+                        {{ range . }}
+                        <div class="error">
+                            {{.}}
+                        </div>
+                        {{ end}}
+                    </div>
                     <div class="forget-password-container">
                         <a href="/login-page">Do you have an account</a>
                     </div>
