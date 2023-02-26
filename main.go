@@ -14,6 +14,7 @@ func main() {
 	flag.Parse()
 	if *restart {
 		err := server.DB.AutoMigrate(model.Session{}, model.User{}, model.Userdata{})
+		_ = server.DB.AutoMigrate(model.Category{}, model.Delivery{}, model.Item{}, model.Image{}, model.Product{}, model.ProductInfo{}, model.Supplier{}, model.DeliveryItem{})
 		if err != nil {
 			return
 		}
@@ -48,7 +49,11 @@ func main() {
 	mux.HandleFunc("/Admin/userdata/create", model.CreateUserdata)
 	mux.HandleFunc("/Admin/userdata/delete/", model.DeleteUserdata)
 	//
+	files = http.FileServer(http.Dir("images"))
+	mux.Handle("/images/", http.StripPrefix("/images/", files))
 
+	mux.HandleFunc("/test/images/upload", model.UploadImage)
+	mux.HandleFunc("/test/images", model.ShowImages)
 	err := http.ListenAndServe(":9090", mux)
 	if err != nil {
 		log.Fatal(err.Error())

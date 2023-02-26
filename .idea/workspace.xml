@@ -4,17 +4,20 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f768acd2-e300-4496-a37e-aedb3465e1c9" name="Changes" comment="Create/Delete admin panel works great">
-      <change afterPath="$PROJECT_DIR$/Readme.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/progress_reports/progress_report2/Progress_Report.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/progress_reports/progress_report2/img.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/progress_reports/progress_report2/img_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/progress_reports/progress_report2/img_2.png" afterDir="false" />
+    <list default="true" id="f768acd2-e300-4496-a37e-aedb3465e1c9" name="Changes" comment="Progress Report 2 done">
+      <change afterPath="$PROJECT_DIR$/server/model/Delivery_item.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/model/category.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/model/delivery.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/model/item.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/model/item_image.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/model/product.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/model/product_info.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/model/supplier.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/test/image.gohtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handlers/index.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/index.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/progress_reports/progress_report1/Progress_Report.md" beforeDir="false" afterPath="$PROJECT_DIR$/progress_reports/progress_report1/Progress_Report.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/model/session.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/session.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/model/userdata.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/userdata.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/DB.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/DB.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +81,14 @@
     </key>
   </component>
   <component name="RunManager" selected="Go Build.go build main.go">
+    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="sdu.store" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
     <configuration name="go build main.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="sdu.store" />
       <working_directory value="$PROJECT_DIR$" />
@@ -105,6 +116,15 @@
       <filePath value="$PROJECT_DIR$/main.go" />
       <method v="2" />
     </configuration>
+    <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
+      <module name="sdu.store" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="DIRECTORY" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Go Build.go build main.go" />
@@ -128,6 +148,7 @@
       <workItem from="1676357221728" duration="53000" />
       <workItem from="1676357279204" duration="27000" />
       <workItem from="1676357309223" duration="144000" />
+      <workItem from="1676629277416" duration="33000" />
     </task>
     <task id="LOCAL-00001" summary="progress report">
       <created>1675834894864</created>
@@ -164,7 +185,8 @@
     <MESSAGE value="progress report" />
     <MESSAGE value="progress report done 1'st week" />
     <MESSAGE value="Create/Delete admin panel works great" />
-    <option name="LAST_COMMIT_MESSAGE" value="Create/Delete admin panel works great" />
+    <MESSAGE value="Progress Report 2 done" />
+    <option name="LAST_COMMIT_MESSAGE" value="Progress Report 2 done" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
