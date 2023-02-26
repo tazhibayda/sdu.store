@@ -5,18 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56cbedba-eae0-49c8-b417-4341c1d95c71" name="Changes" comment="Added index page html, setup.sql updated, validator, sign up works correctly">
-      <change afterPath="$PROJECT_DIR$/images/upload-2551253601.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/upload-571511270.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/progress_reports/progress_report3/img.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/progress_reports/progress_report3/img_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/progress_reports/progress_report3/img_2.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handlers/authentifaction.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/authentifaction.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handlers/index.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/index.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/progress_reports/progress_report3/Progress_Report.md" beforeDir="false" afterPath="$PROJECT_DIR$/progress_reports/progress_report3/Progress_Report.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/model/setup.sql" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/setup.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/progress_reports/progress_report3/img.png" beforeDir="false" afterPath="$PROJECT_DIR$/progress_reports/progress_report3/img.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/model/product_info.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/product_info.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
