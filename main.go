@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"sdu.store/handlers"
@@ -10,9 +11,10 @@ import (
 )
 
 func main() {
-	restart := flag.Bool("dbRestart", false, "Restarting database")
 	flag.Parse()
+	restart := flag.Bool("dbRestart", false, "Restarting database")
 	if *restart {
+		fmt.Println("restart ")
 		err := server.DB.AutoMigrate(model.Session{}, model.User{}, model.Userdata{})
 		_ = server.DB.AutoMigrate(model.Category{}, model.Delivery{}, model.Item{}, model.Image{}, model.Product{}, model.ProductInfo{}, model.Supplier{}, model.DeliveryItem{})
 		if err != nil {
