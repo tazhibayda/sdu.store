@@ -4,7 +4,20 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56cbedba-eae0-49c8-b417-4341c1d95c71" name="Changes" comment="Created databases, added image adding" />
+    <list default="true" id="56cbedba-eae0-49c8-b417-4341c1d95c71" name="Changes" comment="Added index page html, setup.sql updated, validator, sign up works correctly">
+      <change afterPath="$PROJECT_DIR$/images/upload-2551253601.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/upload-571511270.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/progress_reports/progress_report3/img.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/progress_reports/progress_report3/img_1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/progress_reports/progress_report3/img_2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handlers/authentifaction.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/authentifaction.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handlers/index.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/index.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/progress_reports/progress_report3/Progress_Report.md" beforeDir="false" afterPath="$PROJECT_DIR$/progress_reports/progress_report3/Progress_Report.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/model/setup.sql" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/setup.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -61,7 +74,7 @@
     ]
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Go Build.go build sdu.store">
     <configuration name="go build sdu.store" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="sdu.store" />
       <working_directory value="$PROJECT_DIR$" />
@@ -71,9 +84,17 @@
       <filePath value="$PROJECT_DIR$/main.go" />
       <method v="2" />
     </configuration>
+    <configuration name="All in generated-requests" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http">
+      <method v="2" />
+    </configuration>
+    <configuration name="generated-requests | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" requestIdentifier="#1" runType="Run single request">
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Go Build.go build sdu.store" />
+        <item itemvalue="HTTP Request.generated-requests | #1" />
+        <item itemvalue="HTTP Request.All in generated-requests" />
       </list>
     </recent_temporary>
   </component>
@@ -94,7 +115,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Created databases, added image adding" />
-    <option name="LAST_COMMIT_MESSAGE" value="Created databases, added image adding" />
+    <MESSAGE value="merged" />
+    <MESSAGE value="Added index page html, setup.sql updated, validator, sign up works correctly" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added index page html, setup.sql updated, validator, sign up works correctly" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

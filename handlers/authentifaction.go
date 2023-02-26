@@ -44,6 +44,7 @@ func SignUp(writer http.ResponseWriter, request *http.Request) {
 			return
 			//danger method
 		}
+		fmt.Println("Qazx")
 		http.Redirect(writer, request, "/sign-in", 302)
 	} else {
 		t, _ := template.ParseFiles("templates/sign-up.html")

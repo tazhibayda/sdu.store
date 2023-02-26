@@ -24,7 +24,7 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	files := http.FileServer(http.Dir("public"))
+	files := http.FileServer(http.Dir("static"))
 	mux.Handle("/static/", http.StripPrefix("/static/", files))
 
 	// Request for postman
@@ -32,6 +32,10 @@ func main() {
 	mux.HandleFunc("/request/user", model.GetUserByID)
 
 	// Handlers for main handlers
+	//files = http.FileServer(http.Dir("static/image"))
+	//mux.Handle("/static/image/", http.StripPrefix("/static/image/", files))
+	//mux.Handle("/static/image/", http.StripPrefix("/static/image/", files))
+
 	mux.HandleFunc("/index", handlers.Index)
 
 	// Handlers for authentication
@@ -53,7 +57,6 @@ func main() {
 	//
 	files = http.FileServer(http.Dir("images"))
 	mux.Handle("/images/", http.StripPrefix("/images/", files))
-
 	mux.HandleFunc("/test/images/upload", model.UploadImage)
 	mux.HandleFunc("/test/images", model.ShowImages)
 	err := http.ListenAndServe(":9090", mux)
