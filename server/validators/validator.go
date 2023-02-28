@@ -1,6 +1,7 @@
 package validators
 
 import (
+	"net/http"
 	"sdu.store/server"
 	"sdu.store/server/model"
 	"unicode"
@@ -18,6 +19,7 @@ type UserValidator struct {
 }
 
 func (v *UserValidator) Check() {
+
 	if v.User.Username == "" {
 		v.errors = append(v.errors, InvalidFormatOfUsername)
 	}
@@ -27,6 +29,7 @@ func (v *UserValidator) Check() {
 	if !ValidPassword(v.User.Password) {
 		v.errors = append(v.errors, InvalidFormatOfPassword)
 	}
+
 }
 
 func (v *UserValidator) IsValid() bool {
@@ -60,4 +63,17 @@ func ValidPassword(s string) bool {
 		}
 	}
 	return hasSymbol && hasUpper && hasLower && hasDigit
+}
+
+func GetUserByUsername(username string) (*model.User, error) {
+
+	user := model.User{}
+	server.DB.Where("username", username).Find(&user)
+	//json.NewEncoder(w).Encode(user)
+
+	if user.Username == "" {
+		return nil, http.ErrAbortHandler
+	}
+
+	return &user, nil
 }

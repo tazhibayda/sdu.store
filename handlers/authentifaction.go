@@ -10,7 +10,26 @@ import (
 )
 
 func Login(writer http.ResponseWriter, request *http.Request) {
+	if request.Method == "GET" {
+		fmt.Println("GET")
+		t, _ := template.ParseFiles("templates/login.html")
+		t.Execute(writer, nil)
+	} else {
 
+		Username := request.PostFormValue("username")
+		Password := request.PostFormValue("password")
+
+		user, err := validators.GetUserByUsername(Username)
+		if err != nil {
+			panic("User not Exists")
+		}
+		if user.Password == Password {
+			// Need to add cookie
+			//cookie := http.Cookie{Name: "session", Value: string(user)}
+			//
+			//http.SetCookie(writer, &cookie)
+		}
+	}
 }
 
 func Logout(writer http.ResponseWriter, request *http.Request) {

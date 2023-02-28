@@ -4,11 +4,15 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56cbedba-eae0-49c8-b417-4341c1d95c71" name="Changes" comment="Added index page html, setup.sql updated, validator, sign up works correctly">
+    <list default="true" id="56cbedba-eae0-49c8-b417-4341c1d95c71" name="Changes" comment="Progress Report 3 done">
+      <change afterPath="$PROJECT_DIR$/server/validators/errors.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/progress_reports/progress_report3/Progress_Report.md" beforeDir="false" afterPath="$PROJECT_DIR$/progress_reports/progress_report3/Progress_Report.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/progress_reports/progress_report3/img.png" beforeDir="false" afterPath="$PROJECT_DIR$/progress_reports/progress_report3/img.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/model/product_info.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/product_info.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handlers/authentifaction.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/authentifaction.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/model/admin.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/admin.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/model/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/validators/messages.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/validators/messages.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/validators/validator.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/validators/validator.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,6 +22,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="HTML File" />
         <option value="Go File" />
       </list>
     </option>
@@ -47,6 +52,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "DefaultGoTemplateProperty": "Go File",
+    "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
@@ -109,7 +115,8 @@
     <MESSAGE value="Created databases, added image adding" />
     <MESSAGE value="merged" />
     <MESSAGE value="Added index page html, setup.sql updated, validator, sign up works correctly" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added index page html, setup.sql updated, validator, sign up works correctly" />
+    <MESSAGE value="Progress Report 3 done" />
+    <option name="LAST_COMMIT_MESSAGE" value="Progress Report 3 done" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
