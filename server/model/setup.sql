@@ -123,7 +123,7 @@ ALTER SEQUENCE public.users_id_seq
 
 CREATE TABLE IF NOT EXISTS public.users
 (
-    id bigint NOT NULL DEFAULT 'nextval('users_id_seq'::regclass)',
+    id bigint NOT NULL DEFAULT nextval('users_id_seq'::regclass),
     login text COLLATE pg_catalog."default" NOT NULL,
     username text COLLATE pg_catalog."default" NOT NULL,
     password text COLLATE pg_catalog."default" NOT NULL,
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS public.users
 
 CREATE TABLE IF NOT EXISTS public.categories
 (
-    id bigint NOT NULL DEFAULT 'nextval('categories_id_seq'::regclass)',
+    id bigint NOT NULL DEFAULT nextval('categories_id_seq'::regclass),
     name text COLLATE pg_catalog."default",
     CONSTRAINT categories_pkey PRIMARY KEY (id)
     )
@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS public.categories
 
 CREATE TABLE IF NOT EXISTS public.items
 (
-    id bigint NOT NULL DEFAULT 'nextval('items_id_seq'::regclass)',
+    id bigint NOT NULL DEFAULT nextval('items_id_seq'::regclass),
     category_id bigint NOT NULL,
     color text COLLATE pg_catalog."default",
     size text COLLATE pg_catalog."default",
@@ -165,7 +165,7 @@ CREATE TABLE IF NOT EXISTS public.items
 
 CREATE TABLE IF NOT EXISTS public.deliveries
 (
-    id bigint NOT NULL DEFAULT 'nextval('deliveries_id_seq'::regclass)',
+    id bigint NOT NULL DEFAULT nextval('deliveries_id_seq'::regclass),
     address text COLLATE pg_catalog."default" NOT NULL,
     phone_number text COLLATE pg_catalog."default" NOT NULL,
     status text COLLATE pg_catalog."default" NOT NULL,
@@ -202,7 +202,7 @@ CREATE TABLE IF NOT EXISTS public.delivery_items
 
 CREATE TABLE IF NOT EXISTS public.images
 (
-    id bigint NOT NULL DEFAULT 'nextval('images_id_seq'::regclass)',
+    id bigint NOT NULL DEFAULT nextval('images_id_seq'::regclass),
     item_id bigint NOT NULL,
     name text COLLATE pg_catalog."default" NOT NULL,
     data bytea NOT NULL,
@@ -213,7 +213,7 @@ CREATE TABLE IF NOT EXISTS public.images
 
 CREATE TABLE IF NOT EXISTS public.products
 (
-    id bigint NOT NULL DEFAULT 'nextval('products_id_seq'::regclass)',
+    id bigint NOT NULL DEFAULT nextval('products_id_seq'::regclass),
     name text COLLATE pg_catalog."default" NOT NULL,
     category_id bigint NOT NULL,
     price numeric NOT NULL,
@@ -232,7 +232,7 @@ CREATE TABLE IF NOT EXISTS public.products
 
 CREATE TABLE IF NOT EXISTS public.product_infos
 (
-    id bigint NOT NULL DEFAULT 'nextval('product_infos_id_seq'::regclass)',
+    id bigint NOT NULL DEFAULT nextval('product_infos_id_seq'::regclass),
     product_id bigint NOT NULL,
     created_at timestamp with time zone,
     CONSTRAINT product_infos_pkey PRIMARY KEY (id),
@@ -255,21 +255,26 @@ ALTER TABLE IF EXISTS public.product_infos
 
 CREATE TABLE IF NOT EXISTS public.sessions
 (
-    id bigint NOT NULL DEFAULT 'nextval('sessions_id_seq'::regclass)',
+    id bigint NOT NULL DEFAULT nextval('sessions_id_seq'::regclass),
     user_id bigint NOT NULL,
-    uuid bigint,
+    uuid text COLLATE pg_catalog."default" NOT NULL,
     created_at timestamp with time zone,
     deleted_at timestamp with time zone,
     last_login timestamp with time zone,
+    ip bytea,
     CONSTRAINT sessions_pkey PRIMARY KEY (id),
     CONSTRAINT user_id FOREIGN KEY (user_id)
-    REFERENCES public.users (id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION
-    NOT VALID
-    )
+        REFERENCES public.users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
 
     TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.sessions
+    OWNER to postgres;
+
 
 
 

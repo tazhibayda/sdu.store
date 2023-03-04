@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"html/template"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"sdu.store/handlers"
@@ -11,6 +13,9 @@ import (
 )
 
 func main() {
+
+	loadFiles()
+
 	flag.Parse()
 	restart := flag.Bool("dbRestart", false, "Restarting database")
 	if *restart {
@@ -21,7 +26,9 @@ func main() {
 			return
 		}
 	}
-
+	if _, err := template.ParseGlob("templates/*.gohtml"); err != nil {
+		panic(err)
+	}
 	mux := http.NewServeMux()
 
 	files := http.FileServer(http.Dir("static"))
@@ -31,30 +38,23 @@ func main() {
 	mux.HandleFunc("/request/users", model.GetUsers)
 	mux.HandleFunc("/request/user", model.GetUserByID)
 
-	// Handlers for main handlers
-	//files = http.FileServer(http.Dir("static/image"))
-	//mux.Handle("/static/image/", http.StripPrefix("/static/image/", files))
-	//mux.Handle("/static/image/", http.StripPrefix("/static/image/", files))
-
 	mux.HandleFunc("/index", handlers.Index)
 
-	// Handlers for authentication
 	mux.HandleFunc("/login", handlers.Login)
 	mux.HandleFunc("/logout", handlers.Logout)
 	mux.HandleFunc("/sign-up-page", handlers.SignUpPage)
 	mux.HandleFunc("/sign-up", handlers.SignUp)
 	mux.HandleFunc("/login-page", handlers.LoginPage)
 
-	// Admin Setting
 	mux.HandleFunc("/Admin", model.AdminServe)
 	mux.HandleFunc("/Admin/user/create", model.CreateUser)
 	mux.HandleFunc("/Admin/user", model.AdminUsers)
 	mux.HandleFunc("/Admin/user/delete/", model.DeleteUser)
-	mux.HandleFunc("/Admin/session", model.AdminServe)
+	mux.HandleFunc("/Admin/session", model.GetAllSessions)
 	mux.HandleFunc("/Admin/userdata", model.AdminUserdata)
 	mux.HandleFunc("/Admin/userdata/create", model.CreateUserdata)
 	mux.HandleFunc("/Admin/userdata/delete/", model.DeleteUserdata)
-	//
+
 	files = http.FileServer(http.Dir("images"))
 	mux.Handle("/images/", http.StripPrefix("/images/", files))
 	mux.HandleFunc("/test/images/upload", model.UploadImage)
@@ -64,4 +64,19 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
+}
+
+func loadFiles() []string {
+	files, err := ioutil.ReadDir("templates")
+
+	if err != nil {
+		panic(err)
+	}
+
+	html := make([]string, 0)
+
+	for _, file := range files {
+		html = append(html, file.Name())
+	}
+	return html
 }

@@ -126,7 +126,7 @@ a:hover{
   .child{
     height: 100%;
     width: 100%;
-    background-size: cover;
+    /* background-size: cover; */
     background-repeat: no-repeat;
     -webkit-transition: all .5s;
     -moz-transition: all .5s;
@@ -142,7 +142,7 @@ a:hover{
   }
   .bg-two{
     background-image: url("../image/jeide.jpg");
-    background-position: center;
+    /* background-position: center; */
   }
   .bg-three{
     background-image: url("../image/bur.jpg");

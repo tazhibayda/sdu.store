@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<a href="/Admin">back</a>
+
+<h2>List of users</h2>
+
+<div class="Create">
+    <form method="post" action="/Admin/user/create">
+        <label>
+            <input type="text" name="login" value="login">
+        </label>
+        <label>
+            <input type="text" name="username" value="username">
+        </label>
+        <label>
+            <input type="text" name="password" value="password">
+        </label>
+        <button type="submit">
+            Add
+        </button>
+    </form>
+</div>
+
+
+<table>
+    <tr>
+        <td>id</td>
+        <td>UserID</td>
+        <td>UUID</td>
+        <td>Created At</td>
+        <td>Deleted At</td>
+        <td>Last Login</td>
+    </tr>
+    {{ range . }}
+        <tr>
+
+            <td> {{.ID}} </td>
+            <td> {{.UserID}} </td>
+            <td> {{.UUID}} </td>
+            <td> {{.CreatedAt}} </td>
+            <td> {{.DeletedAt}} </td>
+            <td> {{.LastLogin}} </td>
+            <td> {{.IP}} </td>
+            <td>Edit</td>
+            <td>
+                <form action="user/delete/{{.ID}}" method="GET">
+                    <button>
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+    {{ end }}
+</table>
+
+</body>
+</html>

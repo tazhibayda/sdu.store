@@ -40,7 +40,6 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetUserByID(w http.ResponseWriter, r *http.Request) {
-
 	user := User{}
 	server.DB.Where("id", r.FormValue("user_id")).Find(&user)
 	fmt.Println(user)
@@ -53,5 +52,4 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	user := User{}
 	server.DB.Where("ID = ?", userID).Delete(&user)
 	http.Redirect(w, r, "/Admin/user", http.StatusSeeOther)
-
 }
