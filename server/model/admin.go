@@ -31,3 +31,13 @@ func AdminUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func AdminCategories(w http.ResponseWriter, r *http.Request) {
+	tm, _ := template.ParseFiles("templates/Admin/Categories.gohtml")
+	var categories []Category
+	server.DB.Find(&categories)
+	err := tm.Execute(w, categories)
+	if err != nil {
+		return
+	}
+}

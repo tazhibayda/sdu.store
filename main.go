@@ -16,15 +16,17 @@ func main() {
 
 	loadFiles()
 
-	flag.Parse()
 	restart := flag.Bool("dbRestart", false, "Restarting database")
+	flag.Parse()
+
 	if *restart {
 		fmt.Println("restart ")
-		err := server.DB.AutoMigrate(model.Session{}, model.User{}, model.Userdata{})
-		_ = server.DB.AutoMigrate(model.Category{}, model.Delivery{}, model.Item{}, model.Image{}, model.Product{}, model.ProductInfo{}, model.Supplier{}, model.DeliveryItem{})
-		if err != nil {
-			return
-		}
+		model.ConfigCategories()
+		server.DB.AutoMigrate(model.Session{}, model.User{}, model.Userdata{})
+		server.DB.AutoMigrate(
+			model.Category{}, model.Delivery{}, model.Item{}, model.Image{}, model.Product{}, model.ProductInfo{},
+			model.Supplier{}, model.DeliveryItem{},
+		)
 	}
 	if _, err := template.ParseGlob("templates/*.gohtml"); err != nil {
 		panic(err)
@@ -49,6 +51,10 @@ func main() {
 	mux.HandleFunc("/Admin", model.AdminServe)
 	mux.HandleFunc("/Admin/user/create", model.CreateUser)
 	mux.HandleFunc("/Admin/user", model.AdminUsers)
+	mux.HandleFunc("/Admin/categories", model.AdminCategories)
+	mux.HandleFunc("/Admin/category/create", model.CreateCategory)
+	mux.HandleFunc("/Admin/category/delete/", model.DeleteCategory)
+
 	mux.HandleFunc("/Admin/user/delete/", model.DeleteUser)
 	mux.HandleFunc("/Admin/session", model.GetAllSessions)
 	mux.HandleFunc("/Admin/userdata", model.AdminUserdata)

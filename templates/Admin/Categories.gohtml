@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<a href="/Admin">back</a>
+
+    <h2>List of users</h2>
+
+    <div class="Create">
+        <form method="post" action="/Admin/category/create">
+            <label>
+                <input type="text" name="name" placeholder="Name">
+            </label>
+            <button type="submit">
+                Add
+            </button>
+        </form>
+    </div>
+
+
+    <table>
+        <tr>
+            <td>id</td>
+            <td>Name</td>
+        </tr>
+        {{ range . }}
+            <tr>
+
+                    <td> {{.ID}} </td>
+                    <td> {{.Name}} </td>
+
+                <td>Edit</td>
+                <td>
+                    <form action="category/delete/{{.ID}}" method="POST">
+                        <button>
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {{ end }}
+    </table>
+
+</body>
+</html>
