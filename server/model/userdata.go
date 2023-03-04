@@ -31,7 +31,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	zip := r.FormValue("zip")
 	birthday, _ := time.Parse("2006-01-02", r.FormValue("birthday"))
 
-	user := User{Login: login, Password: password, Username: username}
+	user := User{Email: login, Password: password, Username: username}
 
 	server.DB.Create(&user)
 

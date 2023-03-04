@@ -10,7 +10,7 @@ import (
 
 type User struct {
 	ID       int64  `json:"id"`
-	Login    string `json:"login"`
+	Email    string `json:"login"`
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
@@ -24,7 +24,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		login := r.FormValue("login")
 		password := r.FormValue("password")
 		username := r.FormValue("username")
-		user = User{Login: login, Password: password, Username: username}
+		user = User{Email: login, Password: password, Username: username}
 	}
 	server.DB.Create(&user)
 	//json.NewEncoder(w).Encode(user)
