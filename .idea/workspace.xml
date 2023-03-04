@@ -4,28 +4,14 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56cbedba-eae0-49c8-b417-4341c1d95c71" name="Changes" comment="cookie???">
-      <change afterPath="$PROJECT_DIR$/templates/index.gohtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/layouts/header.gohtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/login.gohtml" afterDir="false" />
+    <list default="true" id="56cbedba-eae0-49c8-b417-4341c1d95c71" name="Changes" comment="Login, including html's, importing files">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handlers/authentifaction.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/authentifaction.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handlers/index.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/index.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/model/session.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/session.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/model/setup.sql" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/setup.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/model/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/user.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/css/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/.idea/templates.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Admin/AdminSession.gohtml" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Admin/AdminSession.gohtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/layouts/header.gohtml" beforeDir="false" afterPath="$PROJECT_DIR$/templates/layouts/header.gohtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/login.gohtml" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.gohtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -156,7 +142,8 @@
     <MESSAGE value="Added index page html, setup.sql updated, validator, sign up works correctly" />
     <MESSAGE value="Progress Report 3 done" />
     <MESSAGE value="cookie???" />
-    <option name="LAST_COMMIT_MESSAGE" value="cookie???" />
+    <MESSAGE value="Login, including html's, importing files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Login, including html's, importing files" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

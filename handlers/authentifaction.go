@@ -13,13 +13,10 @@ import (
 
 func Login(writer http.ResponseWriter, request *http.Request) {
 	if request.Method == "GET" {
-		filenames := []string{"templates/login.gohtml", "templates/index.gohtml", "templates/layouts/header.gohtml"}
-		t, _ := template.ParseFiles(filenames[2])
 
-		if err := t.Execute(writer, nil); err != nil {
-			panic(err)
-		}
-		t, _ = template.ParseFiles(filenames[0])
+		CallHeaderHtml(writer, request)
+
+		t, _ := template.ParseFiles("templates/login.gohtml")
 		if err := t.Execute(writer, nil); err != nil {
 			panic(err)
 		}
@@ -33,28 +30,39 @@ func Login(writer http.ResponseWriter, request *http.Request) {
 			panic("User not Exists")
 		}
 		if user.Password == Password {
-			uuid := uuid2.NewString()
-			s_time := 60 * 5
-			http.SetCookie(writer, &http.Cookie{
-				Name:   "session_token",
-				Value:  uuid,
-				MaxAge: s_time,
-			})
-			model.CurrentSession[uuid] = model.Session{
-				UserID:    user.ID,
-				UUID:      uuid,
-				CreatedAt: time.Now(),
-				DeletedAt: time.Now().Add(time.Duration(s_time)),
-				LastLogin: time.Now(),
-				IP:        model.SetInet(),
-			}
 
-			var session model.Session
-			session = model.CurrentSession[uuid]
-			server.DB.Create(&session)
+			doLogin(writer, *user)
 
+			http.Redirect(writer, request, "/index", http.StatusSeeOther)
 		}
 	}
+}
+
+func doLogin(writer http.ResponseWriter, user model.User) {
+
+	uuid := uuid2.NewString()
+
+	sTime := 60 * 5
+
+	http.SetCookie(writer, &http.Cookie{
+		Name:   "session_token",
+		Value:  uuid,
+		MaxAge: sTime,
+	})
+	CurrentSession := model.Session{
+		UserID:    user.ID,
+		UUID:      uuid,
+		CreatedAt: time.Now(),
+		DeletedAt: time.Now().Add(time.Duration(sTime)),
+		LastLogin: time.Now(),
+		IP:        model.SetInet(),
+	}
+
+	var session model.Session
+
+	session = CurrentSession
+
+	server.DB.Create(&session)
 }
 
 func Logout(writer http.ResponseWriter, request *http.Request) {
@@ -62,18 +70,13 @@ func Logout(writer http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		if err == http.ErrNoCookie {
 			writer.WriteHeader(http.StatusUnauthorized)
+		} else {
+			writer.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		writer.WriteHeader(http.StatusBadRequest)
-		return
 	}
-
 	var session model.Session
-
 	server.DB.Last(&session)
-
-	//server.DB.Find(&session).Where("id = ?", model.CurrentSession[cookie.Value].ID)
-	delete(model.CurrentSession, session.UUID)
 	session.DeletedAt = time.Now()
 	server.DB.Save(&session)
 
@@ -127,4 +130,30 @@ func LoginPage(writer http.ResponseWriter, request *http.Request) {
 func SignUpPage(writer http.ResponseWriter, request *http.Request) {
 	t, _ := template.ParseFiles("templates/sign-up.html")
 	t.Execute(writer, nil)
+}
+
+func CallHeaderHtml(writer http.ResponseWriter, request *http.Request) {
+
+	t, _ := template.ParseFiles("templates/layouts/header.gohtml")
+	user := &model.User{}
+	cookie, err := request.Cookie("session_token")
+	if err != nil {
+		if err == http.ErrNoCookie {
+			writer.WriteHeader(http.StatusUnauthorized)
+			//return
+		} else {
+			writer.WriteHeader(http.StatusBadRequest)
+			return
+		}
+	}
+
+	if cookie != nil {
+		var session *model.Session
+		server.DB.Where("uuid = ?", cookie.Value).Find(&session)
+
+		server.DB.Where("id = ?", session.UserID).Find(&user)
+	}
+	if err := t.Execute(writer, user.Login); err != nil {
+		panic(err)
+	}
 }

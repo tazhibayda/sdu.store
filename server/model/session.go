@@ -19,10 +19,12 @@ type Session struct {
 	IP        pgtype.Inet `json:"ip"`
 }
 
-var CurrentSession = make(map[string]Session)
-
 func CreateSession() {
 
+}
+
+func (s *Session) Expired() bool {
+	return s.DeletedAt.Sub(time.Now()) < 0
 }
 
 func ResolveHostIp() string {
