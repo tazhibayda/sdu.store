@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	uuid2 "github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 	"html/template"
 	"net/http"
 	"sdu.store/server"
@@ -29,7 +30,7 @@ func Login(writer http.ResponseWriter, request *http.Request) {
 		if err != nil {
 			panic("User not Exists")
 		}
-		if user.Password == Password {
+		if user.Password == Password || CheckPasswordHash(Password, user.Password) {
 
 			doLogin(writer, *user)
 
@@ -99,10 +100,15 @@ func SignUp(writer http.ResponseWriter, request *http.Request) {
 		t.Execute(writer, []string{"Server error"})
 		return
 	}
-	if request.PostFormValue("password") == request.PostFormValue("repassword") {
+	if request.Method == "POST" {
+		psw, err := HashPassword(request.PostFormValue("password"))
+		if err != nil {
+			panic(err)
+		}
 		user := model.User{
 			Username: request.PostFormValue("username"),
-			Password: request.PostFormValue("password"),
+			Email:    request.PostFormValue("email"),
+			Password: psw,
 		}
 		v := validators.UserValidator{User: &user}
 		if v.Check(); !v.IsValid() {
@@ -113,10 +119,9 @@ func SignUp(writer http.ResponseWriter, request *http.Request) {
 		}
 		if err := server.DB.Create(&user); err != nil {
 			t, _ := template.ParseFiles("templates/sign-up.html")
-			t.Execute(writer, []string{"Server error"})
+			t.Execute(writer, []string{"User Created"})
 			return
 		}
-		fmt.Println("Qazx")
 		http.Redirect(writer, request, "/sign-in", 302)
 	} else {
 		t, _ := template.ParseFiles("templates/sign-up.html")
@@ -132,6 +137,16 @@ func LoginPage(writer http.ResponseWriter, request *http.Request) {
 func SignUpPage(writer http.ResponseWriter, request *http.Request) {
 	t, _ := template.ParseFiles("templates/sign-up.html")
 	t.Execute(writer, nil)
+}
+
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
 
 func CallHeaderHtml(writer http.ResponseWriter, request *http.Request) {

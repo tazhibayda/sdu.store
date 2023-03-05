@@ -21,7 +21,8 @@ type UserValidator struct {
 func (v *UserValidator) Check() {
 
 	if v.User.Username == "" {
-		v.errors = append(v.errors, InvalidFormatOfUsername)
+		//v.errors = append(v.errors, InvalidFormatOfUsername)
+		panic(InvalidFormatOfUsername)
 	}
 	if err := server.DB.Where("username", v.User.Username).Find(v.User); err == nil {
 		v.errors = append(v.errors, ExistUsername)
