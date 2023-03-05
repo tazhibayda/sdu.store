@@ -5,13 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56cbedba-eae0-49c8-b417-4341c1d95c71" name="Changes" comment="Login, including html's, importing files">
+      <change afterPath="$PROJECT_DIR$/templates/Admin/Products.gohtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handlers/authentifaction.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/authentifaction.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handlers/index.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/index.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/model/session.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/session.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/layouts/header.gohtml" beforeDir="false" afterPath="$PROJECT_DIR$/templates/layouts/header.gohtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/login.gohtml" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.gohtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/model/admin.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/admin.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/model/product.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/product.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +59,7 @@
     "WebServerToolWindowFactoryState": "false",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "C:/Users/akimi/GolandProjects/telegrambotdsweek",
+    "last_opened_file_path": "/home/zaha/Documents/team-project/sdu.store/templates/Admin",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm"
@@ -75,6 +74,9 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/templates/Admin" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\akimi\GolandProjects\sdu.store\templates\layouts" />
       <recent name="C:\Users\akimi\GolandProjects\sdu.store\templates" />

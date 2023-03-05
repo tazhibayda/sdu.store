@@ -55,6 +55,10 @@ func main() {
 	mux.HandleFunc("/Admin/category/create", model.CreateCategory)
 	mux.HandleFunc("/Admin/category/delete/", model.DeleteCategory)
 
+	mux.HandleFunc("/Admin/products", model.AdminProducts)
+	mux.HandleFunc("/Admin/product/create", model.CreateProduct)
+	mux.HandleFunc("/Admin/product/delete/", model.DeleteProduct)
+
 	mux.HandleFunc("/Admin/user/delete/", model.DeleteUser)
 	mux.HandleFunc("/Admin/session", model.GetAllSessions)
 	mux.HandleFunc("/Admin/userdata", model.AdminUserdata)

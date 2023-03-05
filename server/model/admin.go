@@ -41,3 +41,27 @@ func AdminCategories(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func AdminProducts(w http.ResponseWriter, r *http.Request) {
+	tm, _ := template.ParseFiles("templates/Admin/Products.gohtml")
+	var products []ProductOutput
+	var productsDB []Product
+	server.DB.Find(&productsDB)
+	for _, product := range productsDB {
+		curr := ProductOutput{ID: product.ID, Name: product.Name, Price: product.Price, CreatedAt: product.CreatedAt.Format("2006-02-01")}
+		var category Category
+		server.DB.Where("ID=?", product.CategoryID).Find(&category)
+		products = append(products, curr)
+	}
+	output := struct {
+		Categories []Category
+		Products   []ProductOutput
+	}{
+		Products: products,
+	}
+	server.DB.Find(&output.Categories)
+	err := tm.Execute(w, output)
+	if err != nil {
+		return
+	}
+}

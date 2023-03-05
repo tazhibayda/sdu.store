@@ -44,11 +44,13 @@ func doLogin(writer http.ResponseWriter, user model.User) {
 
 	sTime := 60 * 5
 
-	http.SetCookie(writer, &http.Cookie{
-		Name:   "session_token",
-		Value:  uuid,
-		MaxAge: sTime,
-	})
+	http.SetCookie(
+		writer, &http.Cookie{
+			Name:   "session_token",
+			Value:  uuid,
+			MaxAge: sTime,
+		},
+	)
 	CurrentSession := model.Session{
 		UserID:    user.ID,
 		UUID:      uuid,
@@ -153,7 +155,7 @@ func CallHeaderHtml(writer http.ResponseWriter, request *http.Request) {
 
 		server.DB.Where("id = ?", session.UserID).Find(&user)
 	}
-	if err := t.Execute(writer, user.Login); err != nil {
+	if err := t.Execute(writer, user.Email); err != nil {
 		panic(err)
 	}
 }

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<a href="/Admin">back</a>
+
+<h2>List of Products</h2>
+
+<div class="Create">
+    <form method="post" action="/Admin/product/create">
+        <label>
+            <input type="text" name="name" placeholder="Name">
+        </label>
+        <label>
+            <input type="number" step="0.01" name="price" placeholder="price">
+        </label>
+        <label>
+            <select name="category">
+                {{ range .Categories }}
+                    <option value="{{ .ID }}">{{ .Name }}</option>
+                {{ end }}
+            </select>
+        </label>
+        <button type="submit">
+            Add
+        </button>
+    </form>
+</div>
+
+
+<table>
+    <tr>
+        <td>id</td>
+        <td>Name</td>
+        <td>Category</td>
+        <td>Price</td>
+        <td>Created At</td>
+        <td>Edit</td>
+        <td>Delete</td>
+    </tr>
+    {{ range .Products }}
+        <tr>
+
+            <td> {{.ID}} </td>
+            <td> {{.Name}} </td>
+            <td> {{.Category}} </td>
+            <td> {{.Price}} </td>
+            <td> {{.CreatedAt}} </td>
+
+
+            <td>Edit</td>
+            <td>
+                <form action="product/delete/{{.ID}}" method="POST">
+                    <button>
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+    {{ end }}
+</table>
+
+</body>
+</html>
