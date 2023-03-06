@@ -46,11 +46,15 @@ func AdminProducts(w http.ResponseWriter, r *http.Request) {
 	tm, _ := template.ParseFiles("templates/Admin/Products.gohtml")
 	var products []ProductOutput
 	var productsDB []Product
-	server.DB.Find(&productsDB)
+	if r.Method == "POST" {
+		server.DB.Where("Name='$?$'", r.PostFormValue("name")).Find(&productsDB)
+	} else {
+		server.DB.Find(&productsDB)
+	}
 	for _, product := range productsDB {
 		curr := ProductOutput{ID: product.ID, Name: product.Name, Price: product.Price, CreatedAt: product.CreatedAt.Format("2006-02-01")}
-		var category Category
-		server.DB.Where("ID=?", product.CategoryID).Find(&category)
+		server.DB.Table("categories").Select("name").Where("ID=?", product.CategoryID).Find(&curr.Category)
+
 		products = append(products, curr)
 	}
 	output := struct {
