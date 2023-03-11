@@ -23,9 +23,17 @@ func AdminUserdata(w http.ResponseWriter, r *http.Request) {
 }
 
 func AdminUsers(w http.ResponseWriter, r *http.Request) {
-	tm, _ := template.ParseFiles("templates/Admin/AdminUser.gohtml")
 	var user []User
-	server.DB.Find(&user)
+	query := r.URL.Query()
+	filters, presents := query["sort"]
+	if !presents || len(filters) == 0 {
+		server.DB.Find(&user)
+	} else {
+		if filters[0] == "" {
+
+		}
+	}
+	tm, _ := template.ParseFiles("templates/Admin/AdminUser.gohtml")
 	err := tm.Execute(w, user)
 	if err != nil {
 		return
@@ -46,7 +54,20 @@ func AdminProducts(w http.ResponseWriter, r *http.Request) {
 	tm, _ := template.ParseFiles("templates/Admin/Products.gohtml")
 	var products []ProductOutput
 	var productsDB []Product
-	server.DB.Find(&productsDB)
+
+	query := r.URL.Query()
+	filters, presents := query["sort"]
+	if !presents || len(filters) == 0 {
+		server.DB.Find(&productsDB)
+	} else {
+		if filters[0] == "ASCENDING" {
+			server.DB.Order("price asc").Find(&productsDB)
+		} else if filters[0] == "DESCENDING" {
+			server.DB.Order("price desc").Find(&productsDB)
+		} else {
+			server.DB.Find(&productsDB)
+		}
+	}
 	for _, product := range productsDB {
 		curr := ProductOutput{ID: product.ID, Name: product.Name, Price: product.Price, CreatedAt: product.CreatedAt.Format("2006-02-01")}
 		var category Category

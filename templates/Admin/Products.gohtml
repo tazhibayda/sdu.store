@@ -16,7 +16,7 @@
 <div class="Create">
     <form method="post" action="/Admin/product/create">
         <label>
-            <input type="text" name="name" placeholder="Name">
+            <input type="text" name="Name" placeholder="Name">
         </label>
         <label>
             <input type="number" step="0.01" name="price" placeholder="price">
@@ -40,7 +40,7 @@
         <td>id</td>
         <td>Name</td>
         <td>Category</td>
-        <td>Price</td>
+        <td>Price <p id = "sort" onclick="sorting()">/\</p></td>
         <td>Created At</td>
         <td>Edit</td>
         <td>Delete</td>
@@ -66,6 +66,31 @@
         </tr>
     {{ end }}
 </table>
-
+<script>
+    link = "http://localhost:9090/Admin/products"
+    sort = document.getElementById("sort")
+    val = true
+    function sorting(){
+        if(val){
+            sort.innerText = "\\/"
+            val = false
+            setParam()
+        }else{
+            sort.innerText = "/\\"
+            val = true
+            setParam()
+        }
+    }
+    function setParam(){
+        url = new URL("http://localhost:9090/Admin/products")
+        if(val) {
+            console.log(url.searchParams)
+            url.searchParams.append("sort", "ASCENDING")
+        }else{
+            url.searchParams.append("sort", "DESCENDING")
+        }
+        document.location.search = url
+    }
+</script>
 </body>
 </html>

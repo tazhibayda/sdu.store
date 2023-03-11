@@ -4,15 +4,11 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56cbedba-eae0-49c8-b417-4341c1d95c71" name="Changes" comment="Login, including html's, importing files">
-      <change afterPath="$PROJECT_DIR$/progress_reports/progress_report4/img.png" afterDir="false" />
+    <list default="true" id="56cbedba-eae0-49c8-b417-4341c1d95c71" name="Changes" comment="Progress report 4 done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handlers/authentifaction.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/authentifaction.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/validators/validator.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/validators/validator.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Admin/AdminUser.gohtml" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Admin/AdminUser.gohtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sign-in.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sign-in.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sign-up.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sign-up.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/model/admin.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/admin.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/model/product.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/product.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Admin/Products.gohtml" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Admin/Products.gohtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +62,7 @@
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
     &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/zaha/Documents/team-project/sdu.store/templates/Admin&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/akimi&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
@@ -90,6 +86,14 @@
     </key>
   </component>
   <component name="RunManager" selected="Go Build.go build sdu.store">
+    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="sdu.store" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
     <configuration name="go build sdu.store" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="sdu.store" />
       <working_directory value="$PROJECT_DIR$" />
@@ -147,9 +151,21 @@
     <MESSAGE value="Progress Report 3 done" />
     <MESSAGE value="cookie???" />
     <MESSAGE value="Login, including html's, importing files" />
-    <option name="LAST_COMMIT_MESSAGE" value="Login, including html's, importing files" />
+    <MESSAGE value="Progress report 4 done" />
+    <option name="LAST_COMMIT_MESSAGE" value="Progress report 4 done" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/server/model/admin.go</url>
+          <line>24</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
