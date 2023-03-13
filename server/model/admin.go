@@ -54,7 +54,7 @@ func AdminProducts(w http.ResponseWriter, r *http.Request) {
 	tm, _ := template.ParseFiles("templates/Admin/Products.gohtml")
 	var products []ProductOutput
 	var productsDB []Product
-
+	sort := "DESCENDING"
 	query := r.URL.Query()
 	filters, presents := query["sort"]
 	if !presents || len(filters) == 0 {
@@ -62,8 +62,10 @@ func AdminProducts(w http.ResponseWriter, r *http.Request) {
 	} else {
 		if filters[0] == "ASCENDING" {
 			server.DB.Order("price asc").Find(&productsDB)
+			sort = "DESCENDING"
 		} else if filters[0] == "DESCENDING" {
 			server.DB.Order("price desc").Find(&productsDB)
+			sort = "ASCENDING"
 		} else {
 			server.DB.Find(&productsDB)
 		}
@@ -77,8 +79,10 @@ func AdminProducts(w http.ResponseWriter, r *http.Request) {
 	output := struct {
 		Categories []Category
 		Products   []ProductOutput
+		sort       string
 	}{
 		Products: products,
+		sort:     sort,
 	}
 	server.DB.Find(&output.Categories)
 	err := tm.Execute(w, output)

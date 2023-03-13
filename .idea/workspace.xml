@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56cbedba-eae0-49c8-b417-4341c1d95c71" name="Changes" comment="Progress report 4 done">
+    <list default="true" id="56cbedba-eae0-49c8-b417-4341c1d95c71" name="Changes" comment="try to work with params">
+      <change afterPath="$PROJECT_DIR$/progress_reports/progress_report5/img.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/progress_reports/progress_report5/img_2.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/model/admin.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/admin.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/model/product.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/product.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/Admin/Products.gohtml" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Admin/Products.gohtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -152,20 +153,10 @@
     <MESSAGE value="cookie???" />
     <MESSAGE value="Login, including html's, importing files" />
     <MESSAGE value="Progress report 4 done" />
-    <option name="LAST_COMMIT_MESSAGE" value="Progress report 4 done" />
+    <MESSAGE value="try to work with params" />
+    <option name="LAST_COMMIT_MESSAGE" value="try to work with params" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/server/model/admin.go</url>
-          <line>24</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
