@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Title</title>
+</head>
+<body>
+    <div class="row" style="margin-left: 25%">
+        <table class="table table-striped col-sm-9 " style="max-width: 50%">
+
+        <tr>
+            <td class=" col-xs-8 col-sm-6">User ID</td>
+            {{ if . }}
+            <td class=" col-xs-4 col-sm-6">{{ .User.ID }}</td>
+            {{else}}
+            <td class=" col-xs-4 col-sm-6">nil</td>
+            {{end}}
+        </tr>
+        <tr>
+            <td class=" col-xs-8 col-sm-6">Email</td>
+            <td class=" col-xs-4 col-sm-6">{{ . }}</td>
+        </tr>
+        <tr>
+            <td class=" col-xs-8 col-sm-6">Username</td>
+            <td class=" col-xs-4 col-sm-6">{{ .User.Username }}</td>
+        </tr>
+        <tr>
+            <td class=" col-xs-8 col-sm-6">Firstname</td>
+            <td class=" col-xs-4 col-sm-6">{{ .Userdata.Firstname }}</td>
+        </tr>
+        <tr>
+            <td class=" col-xs-8 col-sm-6">Lastname</td>
+            <td class=" col-xs-4 col-sm-6">{{ .Userdata.Lastname }}</td>
+        </tr>
+        <tr>
+            <td class=" col-xs-8 col-sm-6">PhoneNumber</td>
+            <td class=" col-xs-4 col-sm-6">{{ .Userdata.PhoneNumber }}</td>
+        </tr>
+        <tr>
+            <td class=" col-xs-8 col-sm-6">Birthday</td>
+            <td class=" col-xs-4 col-sm-6">{{ .Userdata.Birthday }}</td>
+        </tr>
+        <tr>
+            <td class=" col-xs-8 col-sm-6">ZIPCode</td>
+            <td class=" col-xs-4 col-sm-6">{{ .Userdata.ZIPCode }}</td>
+        </tr>
+
+    </table>
+    </div>
+</body>
+</html>

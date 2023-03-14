@@ -49,6 +49,7 @@ func main() {
 
 	mux.HandleFunc("/login", handlers.Login)
 	mux.HandleFunc("/logout", handlers.Logout)
+	mux.HandleFunc("/account", handlers.Account)
 	mux.HandleFunc("/sign-up-page", handlers.SignUpPage)
 	mux.HandleFunc("/sign-up", handlers.SignUp)
 	mux.HandleFunc("/login-page", handlers.LoginPage)

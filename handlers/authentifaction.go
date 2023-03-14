@@ -48,7 +48,7 @@ func Login(writer http.ResponseWriter, request *http.Request) {
 
 func doLogin(writer http.ResponseWriter, user model.User) {
 
-	expirationTime := time.Now().Add(10 * time.Minute)
+	expirationTime := time.Now().Add(24 * 60 * time.Minute)
 	usr := &Claims{
 		User: &user,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -181,19 +181,17 @@ func CheckPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func CallHeaderHtml(writer http.ResponseWriter, request *http.Request) {
-
-	t, _ := template.ParseFiles("templates/layouts/header.gohtml")
-	user := &model.User{}
+func CheckCookie(writer http.ResponseWriter, request *http.Request) *Claims {
 	claims := &Claims{}
+
 	cookie, err := request.Cookie("session_token")
 	if err != nil {
 		if err == http.ErrNoCookie {
 			writer.WriteHeader(http.StatusUnauthorized)
-			//return
+			return nil
 		} else {
 			writer.WriteHeader(http.StatusBadRequest)
-			return
+			return nil
 		}
 	}
 	if cookie != nil {
@@ -203,20 +201,30 @@ func CallHeaderHtml(writer http.ResponseWriter, request *http.Request) {
 		token, err := jwt.ParseWithClaims(key, claims, func(token *jwt.Token) (interface{}, error) {
 			return jwtKey, nil
 		})
-
 		if err != nil {
 			if err == jwt.ErrSignatureInvalid {
 				writer.WriteHeader(http.StatusUnauthorized)
-				return
+				return nil
 			}
 			writer.WriteHeader(http.StatusBadRequest)
-			return
+			return nil
 		}
 		if !token.Valid {
 			writer.WriteHeader(http.StatusUnauthorized)
-			return
+			return nil
 		}
+	}
 
+	return claims
+}
+
+func CallHeaderHtml(writer http.ResponseWriter, request *http.Request) {
+
+	t, _ := template.ParseFiles("templates/layouts/header.gohtml")
+	user := &model.User{}
+
+	claims := CheckCookie(writer, request)
+	if claims != nil {
 		user = claims.User
 	}
 

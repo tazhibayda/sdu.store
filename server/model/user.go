@@ -33,17 +33,19 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetUsers(w http.ResponseWriter, r *http.Request) {
-	users := []User{}
-	server.DB.Find(&users)
-	fmt.Println(users)
-	json.NewEncoder(w).Encode(users)
+	server.DB.Find(&Users)
+	fmt.Println(Users)
+	json.NewEncoder(w).Encode(Users)
 }
 
 func GetUserByID(w http.ResponseWriter, r *http.Request) {
 	user := User{}
 	server.DB.Where("id", r.FormValue("user_id")).Find(&user)
 	fmt.Println(user)
-	json.NewEncoder(w).Encode(user)
+	err := json.NewEncoder(w).Encode(user)
+	if err != nil {
+		return
+	}
 }
 
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
