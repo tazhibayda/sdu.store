@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56cbedba-eae0-49c8-b417-4341c1d95c71" name="Changes" comment="try to work with params">
-      <change afterPath="$PROJECT_DIR$/progress_reports/progress_report5/img.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/progress_reports/progress_report5/img_2.png" afterDir="false" />
+    <list default="true" id="56cbedba-eae0-49c8-b417-4341c1d95c71" name="Changes" comment="Progress Report 5">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/model/admin.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/model/admin.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Admin/Products.gohtml" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Admin/Products.gohtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handlers/authentifaction.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/authentifaction.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,7 +28,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="product-admin" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -87,14 +87,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Go Build.go build sdu.store">
-    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
-      <module name="sdu.store" />
-      <working_directory value="$PROJECT_DIR$" />
-      <kind value="FILE" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <method v="2" />
-    </configuration>
     <configuration name="go build sdu.store" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="sdu.store" />
       <working_directory value="$PROJECT_DIR$" />
@@ -154,7 +146,8 @@
     <MESSAGE value="Login, including html's, importing files" />
     <MESSAGE value="Progress report 4 done" />
     <MESSAGE value="try to work with params" />
-    <option name="LAST_COMMIT_MESSAGE" value="try to work with params" />
+    <MESSAGE value="Progress Report 5" />
+    <option name="LAST_COMMIT_MESSAGE" value="Progress Report 5" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

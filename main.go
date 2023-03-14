@@ -13,7 +13,6 @@ import (
 )
 
 func main() {
-
 	loadFiles()
 
 	restart := flag.Bool("dbRestart", false, "Restarting database")
@@ -22,11 +21,17 @@ func main() {
 	if *restart {
 		fmt.Println("restart ")
 		model.ConfigCategories()
-		server.DB.AutoMigrate(model.Session{}, model.User{}, model.Userdata{})
-		server.DB.AutoMigrate(
+		err := server.DB.AutoMigrate(model.Session{}, model.User{}, model.Userdata{})
+		if err != nil {
+			return
+		}
+		err = server.DB.AutoMigrate(
 			model.Category{}, model.Delivery{}, model.Item{}, model.Image{}, model.Product{}, model.ProductInfo{},
 			model.Supplier{}, model.DeliveryItem{},
 		)
+		if err != nil {
+			return
+		}
 	}
 	if _, err := template.ParseGlob("templates/*.gohtml"); err != nil {
 		panic(err)
