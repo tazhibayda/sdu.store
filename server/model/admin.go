@@ -69,24 +69,29 @@ func AdminProducts(w http.ResponseWriter, r *http.Request) {
 		} else {
 			server.DB.Find(&productsDB)
 		}
-	}
-	for _, product := range productsDB {
-		curr := ProductOutput{ID: product.ID, Name: product.Name, Price: product.Price, CreatedAt: product.CreatedAt.Format("2006-02-01")}
-		var category Category
-		server.DB.Where("ID=?", product.CategoryID).Find(&category)
-		products = append(products, curr)
-	}
-	output := struct {
-		Categories []Category
-		Products   []ProductOutput
-		sort       string
-	}{
-		Products: products,
-		sort:     sort,
-	}
-	server.DB.Find(&output.Categories)
-	err := tm.Execute(w, output)
-	if err != nil {
-		return
+		if r.Method == "POST" {
+			server.DB.Where("Name='$?$'", r.PostFormValue("name")).Find(&productsDB)
+		} else {
+			server.DB.Find(&productsDB)
+		}
+		for _, product := range productsDB {
+			curr := ProductOutput{ID: product.ID, Name: product.Name, Price: product.Price, CreatedAt: product.CreatedAt.Format("2006-02-01")}
+			server.DB.Table("categories").Select("name").Where("ID=?", product.CategoryID).Find(&curr.Category)
+
+			products = append(products, curr)
+		}
+		output := struct {
+			Categories []Category
+			Products   []ProductOutput
+			sort       string
+		}{
+			Products: products,
+			sort:     sort,
+		}
+		server.DB.Find(&output.Categories)
+		err := tm.Execute(w, output)
+		if err != nil {
+			return
+		}
 	}
 }
