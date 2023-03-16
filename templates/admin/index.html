@@ -1,12 +1,78 @@
 
 {{define "head"}}
     <title>Adminstration</title>
+    <link rel="stylesheet" href="/static/css/admin/index.css">
 {{end}}
 
 {{define "content"}}
-    <li><a href="/Admin/user">Users</a></li>
-    <li><a href="session">Session</a></li>
-    <li><a href="/Admin/userdata">Userdata</a></li>
+    <div class="title main-title vertical">
+        Site adminstration
+    </div>
+    <div class="main-group vertical">
+        <div class="subtitle vertical">
+            Authentication and Authorization
+        </div>
+        <div class="table vertical">
+            <div class="table-left">
+                <a class="table-name" href="">
+                    Users
+                </a>
+            </div>
+            <div class="table-right">
+                <a href="">
+                    <img src="/static/image/plus-svgrepo-com.svg" alt="" height="30px">
+                    Add
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="main-group vertical">
+        <div class="subtitle vertical">
+            Catalog
+        </div>
+        <div class="table vertical">
+            <div class="table-left">
+                <a class="table-name">
+                    products
+                </a>
+            </div>
+            <div class="table-right">
+                <a href="">
+                    <img src="/static/image/plus-svgrepo-com.svg" alt="" height="30px">
+                    Add
+                </a>
+            </div>
+        </div>
+
+        <div class="table vertical">
+            <div class="table-left">
+                <a class="table-name">
+                    items
+                </a>
+            </div>
+            <div class="table-right">
+                <a href="">
+                    <img src="/static/image/plus-svgrepo-com.svg" alt="" height="30px">
+                    Add
+                </a>
+            </div>
+        </div>
+
+
+        <div class="table vertical">
+            <div class="table-left">
+                <a class="table-name">
+                    Categories
+                </a>
+            </div>
+            <div class="table-right">
+                <a href="">
+                    <img src="/static/image/plus-svgrepo-com.svg" alt="" height="30px">
+                    Add
+                </a>
+            </div>
+        </div>
+    </div>
 {{end}}
 
 

@@ -1,0 +1,56 @@
+.main-title{
+    color: black;
+    font-size: 30px;
+    font-weight: lighter;
+    margin-bottom: 30px;
+}
+
+main{
+    max-width: 100vw;
+    width: 100%;
+    flex-direction: column;
+}
+
+.main-group{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 40px;
+}
+
+.subtitle{
+    text-transform: uppercase;
+    font-size: 20px;
+    color: white;
+    background-color: rgba(119,174,201,255);
+    padding: 8px;
+}
+
+.table div{
+    font-size: 17px;
+}
+
+.table{
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px rgb(218, 218, 218) solid;
+}
+
+.table a{
+    text-decoration: none;
+}
+
+.table-name{
+    font-weight: bold;
+    color: rgba(65,126,156,255);
+    text-transform: capitalize;
+}
+
+.vertical{
+    width: 90%;
+}
+
+.table-right a{
+    display: flex;
+    align-items: center;
+}

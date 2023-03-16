@@ -91,14 +91,10 @@ button{
     font-size: 20px;
     font-family: 'Oswald', sans-serif;
     margin-top: 15px;
-    background: rgb(167,169,223);
-    background: linear-gradient(90deg, rgba(167,169,223,1) 0%, rgba(103,157,255,1) 35%, rgba(0,0,156,1) 100%);
+    background-color: rgba(63,118,145,255);
     background-size: 200% 100%;
     background-position: 100% 0;
     transition: background-position .5s;
-}
-button:hover{
-    background-position: 0 0;
 }
 .sign-up-container{
     display: flex;

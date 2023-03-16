@@ -5,7 +5,7 @@ body{
     width: 100%;
 }
 header{
-    background-color: #153C7A;
+    background-color: rgba(63,118,145,255);
     width: 100%;
     padding-bottom: 10px;
 }
@@ -66,39 +66,28 @@ header{
     margin-right: 10px;
     border: #215EC0 1px;
     border-radius: 5px;
-    background-color: #215EC0;
-    transition: background-color 1s ease-out 100ms;
 }
-.sign-up:hover{
-    background-color: #153C7A;
-}
+
 .sign-in{
     color: white;
     margin-left: 10px;
-    border: #A30000 1px;
     border-radius: 5px;
-    background-color: #A30000;
-    transition: background-color 1s ease-out 100ms;
-}
-.sign-in:hover{
-    background-color: #d61b1b;
 }
 
 #profile-navbar{
     color: white;
     margin-right: 10px;
-    border: #215EC0 1px;
     border-radius: 5px;
-    background-color: #215EC0;
     transition: background-color 1s ease-out 100ms;    
     width: 120px;
 }
 
-
-#profile-navbar:hover{
-    background-color: #153C7A;
-}
-
 #profile-navbar div:hover{
     color: yellow;
+}
+
+main{
+    display: flex;
+    justify-content: center;
+    padding: 50px;
 }

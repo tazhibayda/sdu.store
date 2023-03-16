@@ -13,9 +13,6 @@ import (
 )
 
 func main() {
-
-	loadFiles()
-
 	restart := flag.Bool("dbRestart", false, "Restarting database")
 	flag.Parse()
 
