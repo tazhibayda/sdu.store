@@ -14,17 +14,24 @@ func Index(writer http.ResponseWriter, request *http.Request) {
 }
 
 func Account(writer http.ResponseWriter, request *http.Request) {
+	claims := &Claims{}
+	claims = CheckCookie(writer, request)
+
+	if claims == nil {
+		http.Redirect(writer, request, "/login", http.StatusSeeOther)
+		writer.Write([]byte("<script>alert('Please login')</script>"))
+		return
+	}
+
 	CallHeaderHtml(writer, request)
 	tm, _ := template.ParseFiles("templates/account.gohtml")
 
-	claims := &Claims{}
 	userdata := &model.Userdata{}
 	type DataUser struct {
 		User     *model.User
 		Userdata *model.Userdata
 	}
 	du := &DataUser{}
-	claims = CheckCookie(writer, request)
 
 	if claims != nil {
 		server.DB.Where("user_id = ?", claims.User.ID).Find(&userdata)
