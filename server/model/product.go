@@ -1,7 +1,6 @@
 package model
 
 import (
-	"fmt"
 	"net/http"
 	"sdu.store/server"
 	"strconv"
@@ -29,7 +28,6 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 	var product Product
 	if r.Method == "POST" {
 		categoryID, _ := strconv.Atoi(r.FormValue("category"))
-		fmt.Println(int64(categoryID))
 		price, _ := strconv.ParseFloat(r.FormValue("price"), 64)
 		product = Product{
 			Name:       r.FormValue("name"),
@@ -37,7 +35,6 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 			Price:      price,
 			CreatedAt:  time.Now(),
 		}
-		fmt.Println(product.CategoryID)
 		server.DB.Create(&product)
 	} else {
 		http.Redirect(w, r, "/Admin/products", http.StatusMethodNotAllowed)

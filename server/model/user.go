@@ -1,11 +1,8 @@
 package model
 
 import (
-	"encoding/json"
-	"fmt"
 	"net/http"
 	"sdu.store/server"
-	"strings"
 )
 
 type User struct {
@@ -13,43 +10,34 @@ type User struct {
 	Email    string `json:"login"`
 	Username string `json:"username"`
 	Password string `json:"password"`
+	Is_admin bool   `json:"is_admin"`
+	Is_staff bool   `json:"is_staff"`
 }
 
 var Users []User
 
-func CreateUser(w http.ResponseWriter, r *http.Request) {
-	var user User
+func GetUserByUsername(username string) (*User, error) {
+	user := User{}
+	server.DB.Where("username", username).Find(&user)
 
-	if r.Method == "POST" {
-		login := r.FormValue("login")
-		password := r.FormValue("password")
-		username := r.FormValue("username")
-		user = User{Email: login, Password: password, Username: username}
+	if user.Username == "" {
+		return nil, http.ErrAbortHandler
 	}
-	server.DB.Create(&user)
-	//json.NewEncoder(w).Encode(user)
-	http.Redirect(w, r, "/Admin/user", http.StatusSeeOther)
 
+	return &user, nil
 }
 
-func GetUsers(w http.ResponseWriter, r *http.Request) {
-	users := []User{}
-	server.DB.Find(&users)
-	fmt.Println(users)
-	json.NewEncoder(w).Encode(users)
-}
-
-func GetUserByID(w http.ResponseWriter, r *http.Request) {
+func GetUserByID(id int64) (*User, error) {
 	user := User{}
-	server.DB.Where("id", r.FormValue("user_id")).Find(&user)
-	fmt.Println(user)
-	json.NewEncoder(w).Encode(user)
+	server.DB.Where("id", id).Find(&user)
+
+	if user.Username == "" {
+		return nil, http.ErrAbortHandler
+	}
+
+	return &user, nil
 }
 
-func DeleteUser(w http.ResponseWriter, r *http.Request) {
-	vars := strings.Split(r.URL.Path, "/")
-	userID := vars[len(vars)-1]
-	user := User{}
-	server.DB.Where("ID = ?", userID).Delete(&user)
-	http.Redirect(w, r, "/Admin/user", http.StatusSeeOther)
+func (user *User) DeleteSessions() {
+	server.DB.Where("USER_ID=?", user.ID).Delete(&Session{})
 }

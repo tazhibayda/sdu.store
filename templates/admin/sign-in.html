@@ -2,15 +2,14 @@
 <html>
     <head>
         <title>Sign-in</title>
-        <link rel="stylesheet" href="/static/css/sign-in.css">
-        <link rel="stylesheet" href="/static/css/sign-up.css">
+        <link rel="stylesheet" href="/static/css/admin/sign-in.css">
 
     </head>
     <body>
         <div class="main-container">
             <div class="form-container">
-                <div class="title-container">Login</div>
-                <form action="/login" method="post">
+                <div class="title-container">Adminstration</div>
+                <form action="/Admin/login" method="post">
                     <div class="">
                         <div class="input-title">
                             Username or Email
@@ -38,16 +37,10 @@
                         </div>
                         {{ end}}
                     </div>
-                    <div class="forget-password-container">
-                        <a href="">Forgot Password?</a>
-                    </div>
                     <div class="button-container">
                         <button type="submit">LOGIN</button>
                     </div>
                 </form>
-            </div>
-            <div class="sign-up-container">
-                <a href="/sign-up-page">Sign up</a>
             </div>
         </div>
     </body>

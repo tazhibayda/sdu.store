@@ -1,7 +1,6 @@
 package validators
 
 import (
-	"net/http"
 	"sdu.store/server"
 	"sdu.store/server/model"
 	"unicode"
@@ -21,11 +20,16 @@ type UserValidator struct {
 func (v *UserValidator) Check() {
 
 	if v.User.Username == "" {
-		//v.errors = append(v.errors, InvalidFormatOfUsername)
-		panic(InvalidFormatOfUsername)
+		v.errors = append(v.errors, InvalidFormatOfUsername)
 	}
-	if err := server.DB.Where("username", v.User.Username).Find(v.User); err == nil {
+	if server.DB.Where("username", v.User.Username).Find(v.User); v.User.ID != 0 {
 		v.errors = append(v.errors, ExistUsername)
+	}
+	if v.User.Email == "" {
+		v.errors = append(v.errors, InvalidFormatOfEmail)
+	}
+	if server.DB.Where("email", v.User.Email).Find(v.User); v.User.ID != 0 {
+		v.errors = append(v.errors, ExistEmail)
 	}
 	if !ValidPassword(v.User.Password) {
 		v.errors = append(v.errors, InvalidFormatOfPassword)
@@ -47,7 +51,6 @@ func ValidPassword(s string) bool {
 	}
 	hasUpper := false
 	hasLower := false
-	hasSymbol := false
 	hasDigit := false
 	for _, ch := range s {
 		if unicode.IsDigit(ch) {
@@ -59,22 +62,6 @@ func ValidPassword(s string) bool {
 		if unicode.IsUpper(ch) {
 			hasUpper = true
 		}
-		if unicode.IsSymbol(ch) {
-			hasSymbol = true
-		}
 	}
-	return hasSymbol && hasUpper && hasLower && hasDigit
-}
-
-func GetUserByUsername(username string) (*model.User, error) {
-
-	user := model.User{}
-	server.DB.Where("username", username).Find(&user)
-	//json.NewEncoder(w).Encode(user)
-
-	if user.Username == "" {
-		return nil, http.ErrAbortHandler
-	}
-
-	return &user, nil
+	return (hasUpper && hasLower && hasDigit)
 }

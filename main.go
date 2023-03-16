@@ -3,11 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"sdu.store/handlers"
+	"sdu.store/handlers/admin"
 	"sdu.store/server"
 	"sdu.store/server/model"
 )
@@ -28,19 +28,12 @@ func main() {
 			model.Supplier{}, model.DeliveryItem{},
 		)
 	}
-	if _, err := template.ParseGlob("templates/*.gohtml"); err != nil {
-		panic(err)
-	}
 	mux := http.NewServeMux()
 
 	files := http.FileServer(http.Dir("static"))
 	mux.Handle("/static/", http.StripPrefix("/static/", files))
 
-	// Request for postman
-	mux.HandleFunc("/request/users", model.GetUsers)
-	mux.HandleFunc("/request/user", model.GetUserByID)
-
-	mux.HandleFunc("/index", handlers.Index)
+	mux.HandleFunc("/", handlers.Index)
 
 	mux.HandleFunc("/login", handlers.Login)
 	mux.HandleFunc("/logout", handlers.Logout)
@@ -48,22 +41,26 @@ func main() {
 	mux.HandleFunc("/sign-up", handlers.SignUp)
 	mux.HandleFunc("/login-page", handlers.LoginPage)
 
-	mux.HandleFunc("/Admin", model.AdminServe)
-	mux.HandleFunc("/Admin/user/create", model.CreateUser)
-	mux.HandleFunc("/Admin/user", model.AdminUsers)
-	mux.HandleFunc("/Admin/categories", model.AdminCategories)
-	mux.HandleFunc("/Admin/category/create", model.CreateCategory)
-	mux.HandleFunc("/Admin/category/delete/", model.DeleteCategory)
+	mux.HandleFunc("/Admin", admin.AdminServe)
+	mux.HandleFunc("/Admin/login-page", admin.AdminLoginPage)
+	mux.HandleFunc("/Admin/login", admin.AdminLogin)
+	mux.HandleFunc("/Admin/logout", admin.AdminLogout)
 
-	mux.HandleFunc("/Admin/products", model.AdminProducts)
-	mux.HandleFunc("/Admin/product/create", model.CreateProduct)
-	mux.HandleFunc("/Admin/product/delete/", model.DeleteProduct)
+	mux.HandleFunc("/Admin/user/create", admin.CreateUser)
+	mux.HandleFunc("/Admin/user", admin.AdminUsers)
+	mux.HandleFunc("/Admin/categories", admin.AdminCategories)
+	mux.HandleFunc("/Admin/category/create", admin.CreateCategory)
+	mux.HandleFunc("/Admin/category/delete/", admin.DeleteCategory)
 
-	mux.HandleFunc("/Admin/user/delete/", model.DeleteUser)
-	mux.HandleFunc("/Admin/session", model.GetAllSessions)
-	mux.HandleFunc("/Admin/userdata", model.AdminUserdata)
-	mux.HandleFunc("/Admin/userdata/create", model.CreateUserdata)
-	mux.HandleFunc("/Admin/userdata/delete/", model.DeleteUserdata)
+	mux.HandleFunc("/Admin/products", admin.AdminProducts)
+	mux.HandleFunc("/Admin/product/create", admin.CreateProduct)
+	mux.HandleFunc("/Admin/product/delete/", admin.DeleteProduct)
+
+	mux.HandleFunc("/Admin/user/delete/", admin.DeleteUser)
+	mux.HandleFunc("/Admin/session", admin.GetAllSessions)
+	mux.HandleFunc("/Admin/userdata", admin.AdminUserdata)
+	mux.HandleFunc("/Admin/userdata/create", admin.CreateUserdata)
+	mux.HandleFunc("/Admin/userdata/delete/", admin.DeleteUserdata)
 
 	files = http.FileServer(http.Dir("images"))
 	mux.Handle("/images/", http.StripPrefix("/images/", files))

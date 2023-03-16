@@ -2,9 +2,7 @@ package model
 
 import (
 	"github.com/jackc/pgtype"
-	"html/template"
 	"net"
-	"net/http"
 	"sdu.store/server"
 	"time"
 )
@@ -20,7 +18,34 @@ type Session struct {
 }
 
 func CreateSession() {
+}
 
+func (session *Session) Check() bool {
+	server.DB.Where("UUID=?", session.UUID).Find(session)
+	if session.ID == 0 {
+		return false
+	}
+	if session.DeletedAt.After(time.Now()) {
+		session.Delete()
+		return false
+	}
+	return true
+}
+
+func (session *Session) CheckStaff() bool {
+	server.DB.Where("UUID=?", session.UUID).Find(session)
+	if session.ID == 0 {
+		return false
+	}
+
+	var user User
+	server.DB.Where("ID=?", session.UserID).Find(&user)
+
+	return user.Is_staff
+}
+
+func (session *Session) Delete() {
+	server.DB.Where("ID=?", session.ID).Delete(&session)
 }
 
 func (s *Session) Expired() bool {
@@ -55,13 +80,4 @@ func SetInet() pgtype.Inet {
 		panic(err)
 	}
 	return inet
-}
-
-func GetAllSessions(w http.ResponseWriter, r *http.Request) {
-	tm, _ := template.ParseFiles("templates/Admin/AdminSession.gohtml")
-	var sessions []Session
-	server.DB.Find(&sessions)
-	if err := tm.Execute(w, sessions); err != nil {
-		panic(err)
-	}
 }
