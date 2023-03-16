@@ -32,7 +32,7 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(int64(categoryID))
 		price, _ := strconv.ParseFloat(r.FormValue("price"), 64)
 		product = Product{
-			Name:       r.FormValue("Name"),
+			Name:       r.FormValue("name"),
 			CategoryID: int64(categoryID),
 			Price:      price,
 			CreatedAt:  time.Now(),
