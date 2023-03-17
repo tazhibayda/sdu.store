@@ -2,47 +2,42 @@ package handlers
 
 import (
 	"fmt"
-	uuid2 "github.com/google/uuid"
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"html/template"
 	"net/http"
 	"sdu.store/server"
 	"sdu.store/server/model"
 	"sdu.store/server/validators"
+	"sdu.store/utils"
 	"time"
 )
 
 func Login(writer http.ResponseWriter, request *http.Request) {
-	if request.Method == "GET" {
 
-		CallHeaderHtml(writer, request)
-
-		t, _ := template.ParseFiles("templates/login.gohtml")
-		if err := t.Execute(writer, nil); err != nil {
-			panic(err)
-		}
-
-	} else {
-
-		Username := request.PostFormValue("username")
-		Password := request.PostFormValue("password")
-		user, err := validators.GetUserByUsername(Username)
-		if err != nil {
-			panic("User not Exists")
-		}
-		if user.Password == Password || CheckPasswordHash(Password, user.Password) {
-
-			doLogin(writer, *user)
-
-			http.Redirect(writer, request, "/index", http.StatusSeeOther)
-		}
+	Username := request.PostFormValue("username")
+	Password := request.PostFormValue("password")
+	user, err := model.GetUserByUsername(Username)
+	if err != nil {
+		utils.ExecuteTemplateWithoutNavbar(
+			writer, []string{"Password or username is incorrect"}, "templates/sign-in.html",
+		)
+		return
 	}
+
+	if user.Password == Password || CheckPasswordHash(Password, user.Password) {
+		DoLogin(writer, *user)
+		http.Redirect(writer, request, "/", http.StatusFound)
+		return
+	}
+	http.Redirect(writer, request, "/login-page", http.StatusBadRequest)
+
 }
 
-func doLogin(writer http.ResponseWriter, user model.User) {
+func DoLogin(writer http.ResponseWriter, user model.User) {
 
 	expirationTime := time.Now().Add(24 * 60 * time.Minute)
-	usr := &Claims{
+	usr := &model.Claims{
 		User: &user,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
@@ -50,7 +45,7 @@ func doLogin(writer http.ResponseWriter, user model.User) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, usr)
-	tokenString, err := token.SignedString(jwtKey)
+	tokenString, err := token.SignedString(model.JwtKey)
 	if err != nil {
 		writer.WriteHeader(http.StatusInternalServerError)
 		return
@@ -59,6 +54,7 @@ func doLogin(writer http.ResponseWriter, user model.User) {
 	http.SetCookie(writer, &http.Cookie{
 		Name:    "session_token",
 		Value:   tokenString,
+		Path:    "/",
 		Expires: expirationTime,
 	})
 
@@ -79,33 +75,25 @@ func doLogin(writer http.ResponseWriter, user model.User) {
 }
 
 func Logout(writer http.ResponseWriter, request *http.Request) {
-	cookie, err := request.Cookie("session_token")
-	if err != nil {
-		http.Redirect(writer, request, "/", http.StatusTemporaryRedirect)
-		return
+
+	claims := utils.CheckCookie(writer, request)
+	if claims == nil {
+		http.Redirect(writer, request, "/index", http.StatusSeeOther)
 	}
-	user, _ := model.GetUserByID(session.UserID)
-	user.DeleteSessions()
-	//if err != nil {
-	//	if err == http.ErrNoCookie {
-	//		writer.WriteHeader(http.StatusUnauthorized)
-	//	} else {
-	//		writer.WriteHeader(http.StatusBadRequest)
-	//		return
-	//	}
-	//}
-	//var session model.Session
-	//server.DB.Last(&session)
-	//session.DeletedAt = time.Now()
-	//server.DB.Save(&session)
-	//
-	//cookie = &http.Cookie{
-	//	Name:    "session_token",
-	//	Expires: time.Now(),
-	//}
-	//
-	//http.SetCookie(writer, cookie)
-	//http.Redirect(writer, request, "/index", http.StatusSeeOther)
+
+	var session model.Session
+	server.DB.Last(&session)
+	session.DeletedAt = time.Now()
+	server.DB.Save(&session)
+
+	c := &http.Cookie{
+		Name:    "session_token",
+		Expires: time.Now(),
+	}
+
+	http.SetCookie(writer, c)
+	http.Redirect(writer, request, "/index", http.StatusSeeOther)
+
 }
 
 func SignUp(writer http.ResponseWriter, request *http.Request) {
@@ -163,41 +151,4 @@ func HashPassword(password string) (string, error) {
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
-}
-
-func CheckCookie(writer http.ResponseWriter, request *http.Request) *Claims {
-	claims := &Claims{}
-
-	cookie, err := request.Cookie("session_token")
-	if err != nil {
-		if err == http.ErrNoCookie {
-			writer.WriteHeader(http.StatusUnauthorized)
-			return nil
-		} else {
-			writer.WriteHeader(http.StatusBadRequest)
-			return nil
-		}
-	}
-	if cookie != nil {
-
-		key := cookie.Value
-
-		token, err := jwt.ParseWithClaims(key, claims, func(token *jwt.Token) (interface{}, error) {
-			return jwtKey, nil
-		})
-		if err != nil {
-			if err == jwt.ErrSignatureInvalid {
-				writer.WriteHeader(http.StatusUnauthorized)
-				return nil
-			}
-			writer.WriteHeader(http.StatusBadRequest)
-			return nil
-		}
-		if !token.Valid {
-			writer.WriteHeader(http.StatusUnauthorized)
-			return nil
-		}
-	}
-
-	return claims
 }

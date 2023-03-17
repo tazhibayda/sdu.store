@@ -1,11 +1,8 @@
 package model
 
 import (
-	"encoding/json"
-	"fmt"
 	"net/http"
 	"sdu.store/server"
-	"strings"
 )
 
 type User struct {
@@ -13,6 +10,8 @@ type User struct {
 	Email    string `json:"login"`
 	Username string `json:"username"`
 	Password string `json:"password"`
+	Is_admin bool   `json:"is_admin"`
+	Is_staff bool   `json:"is_staff"`
 }
 
 var Users []User
@@ -39,12 +38,11 @@ func GetUserByID(id int64) (*User, error) {
 	return &user, nil
 }
 
-func (user *User) DeleteSessions() {
-	server.DB.Where("USER_ID=?", user.ID).Delete(&Session{})
+func (user *User) IsAdmin() bool {
+	return user.Is_admin
 }
 
 func (user *User) Delete() {
-	user.DeleteSessions()
 	server.DB.Where("ID=?", user.ID).Delete(&User{})
 }
 

@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+{{define "head"}}
+<link rel="stylesheet" href="/static/css/index.css">
+<title>Account</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-    <title>Title</title>
-</head>
+{{end}}
+
+{{define "content"}}
 <body>
     <div class="row" style="margin-left: 25%">
         <table class="table table-striped col-sm-9 " style="max-width: 50%">
@@ -49,4 +53,4 @@
     </table>
     </div>
 </body>
-</html>
+{{end}}

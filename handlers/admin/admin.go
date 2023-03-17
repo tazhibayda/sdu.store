@@ -1,7 +1,6 @@
 package admin
 
 import (
-	uuid2 "github.com/google/uuid"
 	"html/template"
 	"net/http"
 	"sdu.store/handlers"
@@ -17,14 +16,27 @@ func AdminLoginPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func AdminLogout(writer http.ResponseWriter, request *http.Request) {
-	session, err := utils.SessionStaff(writer, request)
-	if err != nil {
-		http.Redirect(writer, request, "/Admin", http.StatusTemporaryRedirect)
+
+	claims := utils.CheckCookie(writer, request)
+	if claims == nil {
+		http.Redirect(writer, request, "/Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
-	user, _ := model.GetUserByID(session.UserID)
-	user.DeleteSessions()
-	http.Redirect(writer, request, "/Admin", http.StatusFound)
+
+	var session model.Session
+	server.DB.Last(&session)
+	session.DeletedAt = time.Now()
+	server.DB.Save(&session)
+
+	c := &http.Cookie{
+		Name:    "session_token",
+		Path:    "/",
+		Expires: time.Now(),
+	}
+
+	http.SetCookie(writer, c)
+	http.Redirect(writer, request, "/Admin/login-page", http.StatusSeeOther)
+
 }
 
 func AdminLogin(w http.ResponseWriter, r *http.Request) {
@@ -38,14 +50,15 @@ func AdminLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if handlers.CheckPasswordHash(Password, user.Password) {
+	if handlers.CheckPasswordHash(Password, user.Password) || user.Password == Password {
 		if !user.Is_staff {
 			utils.ExecuteTemplateWithoutNavbar(
 				w, []string{"User doesn't have access to admin page"}, "templates/admin/sign-in.html",
 			)
 			return
 		}
-		doLogin(w, *user)
+
+		handlers.DoLogin(w, *user)
 		http.Redirect(w, r, "/Admin", http.StatusFound)
 		return
 	}
@@ -53,37 +66,16 @@ func AdminLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func AdminServe(w http.ResponseWriter, r *http.Request) {
-	if _, err := utils.SessionStaff(w, r); err != nil {
+	_, err := utils.SessionStaff(w, r)
+	if err != nil {
+
 		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
+
 	tm, _ := template.ParseFiles(
 		"templates/admin/base.html", "templates/admin/index.html", "templates/admin/navbar.html",
 	)
 	tm.ExecuteTemplate(w, "base", nil)
 	return
-}
-
-func doLogin(writer http.ResponseWriter, user model.User) {
-
-	uuid := uuid2.NewString()
-
-	sTime := 60 * 60
-
-	http.SetCookie(
-		writer, &http.Cookie{
-			Name:   "session_token",
-			Value:  uuid,
-			MaxAge: sTime,
-		},
-	)
-	CurrentSession := model.Session{
-		UserID:    user.ID,
-		UUID:      uuid,
-		CreatedAt: time.Now(),
-		DeletedAt: time.Now().Add(time.Duration(sTime)),
-		LastLogin: time.Now(),
-		IP:        model.SetInet(),
-	}
-	server.DB.Create(&CurrentSession)
 }

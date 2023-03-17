@@ -3,23 +3,26 @@ package handlers
 import (
 	"html/template"
 	"net/http"
+	"sdu.store/server"
+	"sdu.store/server/model"
+	"sdu.store/utils"
+	//"sdu.store/utils"
 )
 
 func Index(writer http.ResponseWriter, request *http.Request) {
-	session, err := utils.Session(writer, request)
-	if err != nil {
+	user := utils.CheckCookie(writer, request)
+	if user != nil {
+		tm, _ := template.ParseFiles("templates/base.html", "templates/index.html", "templates/private.navbar.html")
+		tm.ExecuteTemplate(writer, "base", user)
+	} else {
 		tm, _ := template.ParseFiles("templates/base.html", "templates/index.html", "templates/public.navbar.html")
 		tm.ExecuteTemplate(writer, "base", nil)
-		return
 	}
-	user, _ := model.GetUserByID(session.UserID)
-	tm, _ := template.ParseFiles("templates/base.html", "templates/index.html", "templates/private.navbar.html")
-	tm.ExecuteTemplate(writer, "base", user)
 }
 
 func Account(writer http.ResponseWriter, request *http.Request) {
-	claims := &Claims{}
-	claims = CheckCookie(writer, request)
+	claims := &model.Claims{}
+	claims = utils.CheckCookie(writer, request)
 
 	if claims == nil {
 		http.Redirect(writer, request, "/login", http.StatusSeeOther)
@@ -27,8 +30,8 @@ func Account(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	CallHeaderHtml(writer, request)
-	tm, _ := template.ParseFiles("templates/account.gohtml")
+	//CallHeaderHtml(writer, request)
+	tm, _ := template.ParseFiles("templates/base.html", "templates/account.html", "templates/private.navbar.html")
 
 	userdata := &model.Userdata{}
 	type DataUser struct {
@@ -44,7 +47,7 @@ func Account(writer http.ResponseWriter, request *http.Request) {
 		du = nil
 	}
 
-	err := tm.Execute(writer, du)
+	err := tm.ExecuteTemplate(writer, "base", du)
 	if err != nil {
 		return
 	}

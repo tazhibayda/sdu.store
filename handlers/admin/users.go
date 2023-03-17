@@ -21,13 +21,13 @@ type UserTable struct {
 }
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
-	session, err := utils.SessionStaff(w, r)
+	user, err := utils.SessionStaff(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
 
-	if user, _ := model.GetUserByID(int64(session.UserID)); !user.Is_admin {
+	if !user.Is_admin {
 		http.Redirect(w, r, "Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
@@ -104,17 +104,16 @@ func AdminUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func User(writer http.ResponseWriter, request *http.Request) {
-	session, err := utils.SessionStaff(writer, request)
+	user, err := utils.SessionStaff(writer, request)
 	if err != nil {
 		http.Redirect(writer, request, "/Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
-	if user, _ := model.GetUserByID(session.UserID); !user.Is_admin {
+	if !user.Is_admin {
 		http.Redirect(writer, request, "/Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
-	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
-	user, _ := model.GetUserByID(int64(id))
+
 	if request.Method == "GET" {
 		tm, _ := template.ParseFiles(
 			"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminUser.html",

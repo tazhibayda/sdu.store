@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"sdu.store/handlers"
+	"sdu.store/handlers/admin"
 	"sdu.store/server"
 	"sdu.store/server/model"
 )
@@ -28,7 +29,7 @@ func main() {
 			model.Supplier{}, model.DeliveryItem{},
 		)
 	}
-	if _, err := template.ParseGlob("templates/*.gohtml"); err != nil {
+	if _, err := template.ParseGlob("templates/*.html"); err != nil {
 		panic(err)
 	}
 	mux := http.NewServeMux()
@@ -43,7 +44,7 @@ func main() {
 	mux.HandleFunc("/account", handlers.Account)
 	mux.HandleFunc("/sign-up-page", handlers.SignUpPage)
 	mux.HandleFunc("/sign-up", handlers.SignUp)
-	mux.HandleFunc("/login-page", handlers.LoginPage)
+	mux.HandleFunc("/login-page", handlers.Login)
 
 	mux.HandleFunc("/Admin", admin.AdminServe)
 	mux.HandleFunc("/Admin/login-page", admin.AdminLoginPage)
