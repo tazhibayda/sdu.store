@@ -11,12 +11,27 @@
         action="http://localhost:9090/test/images/upload"
         method="post"
 >
+    <input type="number" name="category_id">
+    <select name="color" id="color">
+        <option value="red">Red</option>
+        <option value="white">White</option>
+        <option value="black">Black</option>
+        <option value="yellow">Yellow</option>
+    </select>
+    <select name="size" id="size">
+        <option value="s">S</option>
+        <option value="l">L</option>
+        <option value="m">M</option>
+        <option value="xl">XL</option>
+        <option value="2xl">2XL</option>
+        <option value="3xl">3XL</option>
+    </select>
+    <input type="number" name="quantity">
     <input type="file" name="image" />
     <input type="submit" value="upload" />
 
     {{ range . }}
     <div>
-{{/*        <p> {{.}} </p>*/}}
         {{ print . }}
         <img width="50px" src="/images/{{ . }}">
     </div>

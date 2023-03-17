@@ -1,8 +1,11 @@
 package model
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"sdu.store/server"
+	"strings"
 )
 
 type User struct {
@@ -10,8 +13,6 @@ type User struct {
 	Email    string `json:"login"`
 	Username string `json:"username"`
 	Password string `json:"password"`
-	Is_admin bool   `json:"is_admin"`
-	Is_staff bool   `json:"is_staff"`
 }
 
 var Users []User
