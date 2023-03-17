@@ -1,0 +1,72 @@
+.main-title{
+    font-size: 30px;
+    font-weight: lighter;
+    color: rgba(136,136,136,255);
+    margin-bottom: 30px;
+}
+
+.main-table-container{
+    display: flex;
+    max-height: fit-content;
+    flex-direction: column;
+    width: 100%;
+}
+
+form{
+    width: 100%;
+}
+
+.attribute-container{
+    width: 100%;
+    border-bottom: 1px rgba(200,200,200,255) solid;
+    padding-bottom: 20px;
+    display:flex;
+    margin: 20px
+}
+
+.attribute-name{
+    font-weight: bold;
+    font-size: 18px;
+    width: 20%;
+}
+
+.attribute-value input{
+    font-size: 18px;
+    padding: 6px;
+}
+
+label{
+    margin-left: 20px;
+}
+
+.save-button{
+    padding: 7px 15px;
+    color: white;
+    background-color: rgba(63,118,145,255);
+    font-size: 20px;
+    border-radius: 5px;
+    border: none;
+    text-transform: uppercase;
+}
+.save-button:hover{
+    background-color: rgb(51, 96, 119);
+}
+
+button{
+    font-size: 20px;
+    border-radius: 5px;
+    border: none;
+    text-transform: uppercase;
+    padding: 7px 15px;
+    color: white
+
+}
+
+.delete-button{
+    background-color: rgba(226, 44, 44, 0.904);
+}
+
+.delete-button:hover{
+    background-color: rgba(199, 34, 34, 0.904);
+}
+

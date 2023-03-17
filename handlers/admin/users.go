@@ -3,8 +3,10 @@ package admin
 import (
 	"html/template"
 	"net/http"
+	"sdu.store/handlers"
 	"sdu.store/server"
 	"sdu.store/server/model"
+	"sdu.store/server/validators"
 	"sdu.store/utils"
 	"strconv"
 	"strings"
@@ -19,23 +21,39 @@ type UserTable struct {
 }
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
-	if _, err := utils.SessionStaff(w, r); err != nil {
-		http.Redirect(w, r, "/login", http.StatusUnauthorized)
+	session, err := utils.SessionStaff(w, r)
+	if err != nil {
+		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
 
-	var user model.User
+	if user, _ := model.GetUserByID(int64(session.UserID)); !user.Is_admin {
+		http.Redirect(w, r, "Admin/login-page", http.StatusTemporaryRedirect)
+		return
+	}
 
 	if r.Method == "POST" {
-		login := r.FormValue("login")
+		email := r.FormValue("email")
 		password := r.FormValue("password")
 		username := r.FormValue("username")
-		user = model.User{Email: login, Password: password, Username: username}
+		isStaff := r.FormValue("staff") == "on"
+		isAdmin := r.FormValue("admin") == "on"
+		user := model.User{Email: email, Password: password, Username: username, Is_staff: isStaff, Is_admin: isAdmin}
+		v := validators.UserValidator{User: &user}
+		if v.Check(); !v.IsValid() {
+			http.Redirect(w, r, "Admin/add-user", http.StatusTemporaryRedirect)
+			return
+		}
+		user.Password, _ = handlers.HashPassword(user.Password)
+		server.DB.Create(&user)
+		http.Redirect(w, r, "/Admin/users", http.StatusSeeOther)
+		return
+	} else {
+		tm, _ := template.ParseFiles(
+			"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminAddUser.html",
+		)
+		tm.ExecuteTemplate(w, "base", nil)
 	}
-	server.DB.Create(&user)
-	//json.NewEncoder(w).Encode(user)
-	http.Redirect(w, r, "/Admin/user", http.StatusSeeOther)
-
 }
 
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
@@ -65,7 +83,7 @@ func AdminUserdata(w http.ResponseWriter, r *http.Request) {
 
 func AdminUsers(w http.ResponseWriter, r *http.Request) {
 	if _, err := utils.SessionStaff(w, r); err != nil {
-		http.Redirect(w, r, "/Admin/login-page", http.StatusUnauthorized)
+		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
 	var users []model.User
@@ -77,7 +95,7 @@ func AdminUsers(w http.ResponseWriter, r *http.Request) {
 		userTable.Users = users
 	}
 	tm, err := template.ParseFiles(
-		"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminUser.html",
+		"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminUsers.html",
 	)
 	err = tm.ExecuteTemplate(w, "base", userTable)
 	if err != nil {
@@ -85,9 +103,50 @@ func AdminUsers(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func User(writer http.ResponseWriter, request *http.Request) {
+	session, err := utils.SessionStaff(writer, request)
+	if err != nil {
+		http.Redirect(writer, request, "/Admin/login-page", http.StatusTemporaryRedirect)
+		return
+	}
+	if user, _ := model.GetUserByID(session.UserID); !user.Is_admin {
+		http.Redirect(writer, request, "/Admin/login-page", http.StatusTemporaryRedirect)
+		return
+	}
+	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
+	user, _ := model.GetUserByID(int64(id))
+	if request.Method == "GET" {
+		tm, _ := template.ParseFiles(
+			"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminUser.html",
+		)
+		err = tm.ExecuteTemplate(writer, "base", user)
+		return
+	}
+	if request.Method == "POST" {
+		if "1" == request.URL.Query().Get("delete") {
+			user.Delete()
+		} else {
+			if "on" == request.FormValue("admin") && !user.Is_admin {
+				user.Is_admin = true
+			} else if "" == request.FormValue("admin") && user.Is_admin {
+				user.Is_admin = false
+			}
+			if "on" == request.FormValue("staff") && !user.Is_staff {
+				user.Is_staff = true
+			} else if "" == request.FormValue("staff") && user.Is_staff {
+				user.Is_staff = false
+			}
+			user.Update()
+		}
+		http.Redirect(writer, request, "/Admin/users", http.StatusTemporaryRedirect)
+		return
+	}
+
+}
+
 func CreateUserdata(w http.ResponseWriter, r *http.Request) {
 	if _, err := utils.SessionStaff(w, r); err != nil {
-		http.Redirect(w, r, "/login", http.StatusUnauthorized)
+		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
 

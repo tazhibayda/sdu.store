@@ -1,7 +1,7 @@
 .main-title{
-    color: black;
     font-size: 30px;
     font-weight: lighter;
+    color: rgba(136,136,136,255);
     margin-bottom: 30px;
 }
 

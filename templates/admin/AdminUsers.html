@@ -1,0 +1,126 @@
+{{define "head"}}
+<title>Users</title>
+<link rel="stylesheet" href="/static/css/admin/table.css">
+{{end}}
+{{ define "content"}}
+<form action="/Admin/users">
+    <div class="main-table-container">
+        <div class="main-table-title">Select user to change</div>
+        <a href="/Admin/add-user" class="table-add-container">
+            <div>ADD USER</div>
+            <div class="svg-wrapper">
+                <img src="/static/image/plus-svgrepo-com-white.svg" alt="svg">
+            </div>
+        </a>
+    </div>
+    <div class="table-main-content-container">
+        <div class="table-content-container">
+            <div class="table-left-container">
+                <div>
+                    <input class="search-input" type="search" value="{{ .Search }}" name="search">
+                    <button class="search-button">Search</button>
+                </div>
+                <div>
+                    <table>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email address</th>
+                            <th>staff status</th>
+                            <th>admin status</th>
+                        </tr>
+                            {{ range .Users}}
+                            <tr>
+                                <td class="td-username">
+                                    <a href="/Admin/user?id={{.ID}}">
+                                        <div>
+                                            {{.Username}}
+                                        </div>
+                                    </a>
+                                </td>
+                                <td class="td-email">{{ .Email }}</td>
+                                {{if .Is_staff}}
+                                    <td class="td-bool">Yes</td>
+                                {{else}}
+                                    <td class="td-bool">No</td>
+                                {{end}}
+                                {{if .Is_admin}}
+                                    <td class="td-bool">Yes</td>
+                                {{else}}
+                                    <td class="td-bool">No</td>
+                                {{end}}
+                            </tr>
+                            {{ end }}
+                        </a>
+                    </table>
+                </div>
+            </div>
+            <div class="table-right-container">
+                <div class="filter-title filter-main-container-title">
+                    Filter
+                </div>
+                <div class="filter-main-container">
+                    <div class="filter-title-container">
+                        By staff status
+                    </div>
+                    <div class="filter-input-label">
+                        {{if eq .StaffStatus 0}}
+                            <input type="radio" id="all-user-staff" name="staff" value="0" checked>
+                            <label for="all-user-staff">All</label><br>
+                        {{else}}
+                            <input type="radio" id="all-user-staff" name="staff" value="0">
+                            <label for="all-user-staff">All</label><br>
+                        {{end}}
+                        {{if eq .StaffStatus 1}}
+                            <input type="radio" id="yes-user-staff" name="staff" value="1" checked>
+                            <label for="yes-user-staff">Yes</label><br>
+                        {{else}}
+                            <input type="radio" id="yes-user-staff" name="staff" value="1">
+                             <label for="yes-user-staff">Yes</label><br>
+                        {{end}}
+
+                        {{if eq .StaffStatus 2}}
+                            <input type="radio" id="no-user-staff" name="staff" value="2" checked>
+                            <label for="no-user-staff">No</label>
+                        {{else}}
+                            <input type="radio" id="no-user-staff" name="staff" value="2">
+                            <label for="no-user-staff">No</label>
+                        {{end}}
+                          
+                
+                        <div class="hr"></div>
+                    </div>
+                </div>
+                <div class="filter-main-container">
+                    <div class="filter-title-container">
+                        By admin status
+                    </div>
+                    <div class="filter-input-label">
+                        {{if eq .AdminStatus 0}}
+                            <input type="radio" id="all-user-admin" name="admin" value="0" checked>
+                            <label for="all-user-admin">All</label><br>
+                        {{else}}
+                           <input type="radio" id="all-user-admin" name="admin" value="0">
+                           <label for="all-user-admin">All</label><br>
+                        {{end}}
+                        {{if eq .AdminStatus 1}}
+                           <input type="radio" id="yes-user-admin" name="admin" value="1" checked>
+                           <label for="yes-user-admin">Yes</label><br>
+                        {{else}}
+                           <input type="radio" id="yes-user-admin" name="admin" value="1">
+                           <label for="yes-user-admin">Yes</label><br>
+                        {{end}}
+
+                        {{if eq .AdminStatus 2}}
+                           <input type="radio" id="no-user-admin" name="admin" value="2" checked>
+                           <label for="no-user-admin">No</label>
+                        {{else}}
+                           <input type="radio" id="no-user-admin" name="admin" value="2">
+                           <label for="no-user-admin">No</label>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{{end}}

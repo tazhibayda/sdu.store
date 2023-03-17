@@ -43,8 +43,9 @@ func main() {
 	mux.HandleFunc("/Admin/login", admin.AdminLogin)
 	mux.HandleFunc("/Admin/logout", admin.AdminLogout)
 
-	mux.HandleFunc("/Admin/user/create", admin.CreateUser)
+	mux.HandleFunc("/Admin/add-user", admin.CreateUser)
 	mux.HandleFunc("/Admin/users", admin.AdminUsers)
+	mux.HandleFunc("/Admin/user", admin.User)
 	mux.HandleFunc("/Admin/categories", admin.AdminCategories)
 	mux.HandleFunc("/Admin/category/create", admin.CreateCategory)
 	mux.HandleFunc("/Admin/category/delete/", admin.DeleteCategory)

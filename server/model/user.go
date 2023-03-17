@@ -41,3 +41,17 @@ func GetUserByID(id int64) (*User, error) {
 func (user *User) DeleteSessions() {
 	server.DB.Where("USER_ID=?", user.ID).Delete(&Session{})
 }
+
+func (user *User) Delete() {
+	user.DeleteSessions()
+	server.DB.Where("ID=?", user.ID).Delete(&User{})
+}
+
+func (user *User) Update() {
+	isStaff := user.Is_staff
+	isAdmin := user.Is_admin
+	server.DB.First(user)
+	user.Is_admin = isAdmin
+	user.Is_staff = isStaff || isAdmin
+	server.DB.Save(user)
+}

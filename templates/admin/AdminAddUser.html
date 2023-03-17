@@ -4,16 +4,16 @@
 {{end}}
 {{ define "content"}}
     <div class="main-table-container">
-        <form action="/Admin/user?id={{.ID}}" method="POST">
+        <form action="/Admin/add-user" method="POST">
             <div class="main-title">
-                Change User Instance
+                Create User Instance
             </div>
             <div class="attribute-container">
                 <div class="attribute-name">
                     Username:
                 </div>
                 <div class="attribute-value">   
-                    <input type="text" readonly value="{{.Username}}">
+                    <input type="text" name="username" value="">
                 </div>
             </div>
 
@@ -22,31 +22,29 @@
                     Email:
                 </div>
                 <div class="attribute-value">
-                    <input type="text" readonly value="{{.Email}}">
+                    <input type="text" name="email" value="">
                 </div>
             </div>
 
             <div class="attribute-container">
-                {{if .Is_admin}}
-                <input type="checkbox" id="admin" name="admin" checked>
-                {{else}}
+                <div class="attribute-name">
+                    Password:
+                </div>
+                <div class="attribute-value">
+                    <input type="password" name="password" value="">
+                </div>
+            </div>
+
+            <div class="attribute-container">
                 <input type="checkbox" id="admin" name="admin">
-                {{end}}
                 <label for="admin" class="attribute-name">Is Admin</label>
             </div>
 
             <div class="attribute-container">
-                {{if .Is_staff}}
-                <input type="checkbox" id="staff" name="staff" checked>
-                {{else}}
                 <input type="checkbox" id="staff" name="staff">
-                {{end}}
                 <label for="staff" class="attribute-name">Is Staff</label>
             </div>
-            <button type="submit" class="save-button">Save</button>
-        </form>
-        <form action="/Admin/user?id={{.ID}}&delete=1" method="POST">
-            <button type="submit" class="delete-button">Delete</button>
+            <button type="submit" class="save-button">ADD</button>
         </form>
     </div>
 {{end}}
