@@ -22,12 +22,13 @@ func main() {
 
 	if *restart {
 		fmt.Println("restart ")
-		model.ConfigCategories()
+
 		server.DB.AutoMigrate(model.Session{}, model.User{}, model.Userdata{})
 		server.DB.AutoMigrate(
 			model.Category{}, model.Delivery{}, model.Item{}, model.Image{}, model.Product{}, model.ProductInfo{},
 			model.Supplier{}, model.DeliveryItem{},
 		)
+		model.ConfigCategories()
 	}
 	if _, err := template.ParseGlob("templates/*.html"); err != nil {
 		panic(err)
@@ -54,9 +55,9 @@ func main() {
 	mux.HandleFunc("/Admin/add-user", admin.CreateUser)
 	mux.HandleFunc("/Admin/users", admin.AdminUsers)
 	mux.HandleFunc("/Admin/user", admin.User)
-	mux.HandleFunc("/Admin/categories", admin.AdminCategories)
-	mux.HandleFunc("/Admin/category/create", admin.CreateCategory)
-	mux.HandleFunc("/Admin/category/delete/", admin.DeleteCategory)
+	mux.HandleFunc("/Admin/categories", admin.Categories)
+	mux.HandleFunc("/Admin/category", admin.Category)
+	mux.HandleFunc("/Admin/add-category", admin.CreateCategory)
 
 	mux.HandleFunc("/Admin/products", admin.AdminProducts)
 	mux.HandleFunc("/Admin/product/create", admin.CreateProduct)

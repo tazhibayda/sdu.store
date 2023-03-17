@@ -1,0 +1,26 @@
+{{define "head"}}
+<title>Users</title>
+<link rel="stylesheet" href="/static/css/admin/single-item.css">
+{{end}}
+{{ define "content"}}
+    <div class="main-table-container">
+        <form action="/Admin/category?id={{.ID}}" method="POST">
+            <div class="main-title">
+                Change Category Instance
+            </div>
+            <div class="attribute-container">
+                <div class="attribute-name">
+                    Name:
+                </div>
+                <div class="attribute-value">   
+                    <input type="text" name="name" value="{{.Name}}">
+                </div>
+            </div>
+
+            <button type="submit" class="save-button">Save</button>
+        </form>
+        <form action="/Admin/category?id={{.ID}}&delete=1" method="POST">
+            <button type="submit" class="delete-button">Delete</button>
+        </form>
+    </div>
+{{end}}

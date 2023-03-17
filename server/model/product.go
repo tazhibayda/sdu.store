@@ -1,20 +1,13 @@
 package model
 
 import (
+	"github.com/lib/pq"
 	"net/http"
 	"sdu.store/server"
 	"strconv"
 	"strings"
 	"time"
 )
-
-type Product struct {
-	ID         int64     `json:"id"`
-	Name       string    `json:"name"`
-	CategoryID int64     `json:"category_id"`
-	Price      float64   `json:"price"`
-	CreatedAt  time.Time `json:"created_at"`
-}
 
 type ProductOutput struct {
 	ID        int64   `json:"id"`
@@ -24,6 +17,18 @@ type ProductOutput struct {
 	CreatedAt string  `json:"created_at"`
 }
 
+type Product struct {
+	ID          int64          `json:"id"`
+	Name        string         `json:"name"`
+	CategoryID  int            `json:"category_id"`
+	Price       float64        `json:"price"`
+	Images      pq.StringArray `gorm:"type:text[]"`
+	Sizes       pq.StringArray `gorm:"type:text[]"`
+	Colors      pq.StringArray `gorm:"type:text[]"`
+	Description string         `json:"description"`
+	CreatedAt   time.Time      `json:"created_at"`
+}
+
 func CreateProduct(w http.ResponseWriter, r *http.Request) {
 	var product Product
 	if r.Method == "POST" {
@@ -31,7 +36,7 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 		price, _ := strconv.ParseFloat(r.FormValue("price"), 64)
 		product = Product{
 			Name:       r.FormValue("name"),
-			CategoryID: int64(categoryID),
+			CategoryID: categoryID,
 			Price:      price,
 			CreatedAt:  time.Now(),
 		}

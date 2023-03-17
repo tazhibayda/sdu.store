@@ -41,7 +41,10 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		user := model.User{Email: email, Password: password, Username: username, Is_staff: isStaff, Is_admin: isAdmin}
 		v := validators.UserValidator{User: &user}
 		if v.Check(); !v.IsValid() {
-			http.Redirect(w, r, "Admin/add-user", http.StatusTemporaryRedirect)
+			tm, _ := template.ParseFiles(
+				"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminAddUser.html",
+			)
+			tm.ExecuteTemplate(w, "base", v.Errors())
 			return
 		}
 		user.Password, _ = handlers.HashPassword(user.Password)
@@ -88,9 +91,9 @@ func AdminUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	var users []model.User
 	server.DB.Find(&users)
-	hasFilter, userTable := HasFilter(r)
+	hasFilter, userTable := HasFilterUserTable(r)
 	if hasFilter {
-		sort(users, &userTable)
+		sortUserTable(users, &userTable)
 	} else {
 		userTable.Users = users
 	}
@@ -185,7 +188,7 @@ func DeleteUserdata(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func HasFilter(request *http.Request) (hasFilter bool, filter UserTable) {
+func HasFilterUserTable(request *http.Request) (hasFilter bool, filter UserTable) {
 	if search := request.FormValue("search"); search != "" {
 		hasFilter = true
 		filter.Search = search
@@ -201,7 +204,7 @@ func HasFilter(request *http.Request) (hasFilter bool, filter UserTable) {
 	return
 }
 
-func sort(users []model.User, table *UserTable) {
+func sortUserTable(users []model.User, table *UserTable) {
 	ans := []model.User{}
 	for _, user := range users {
 		if isValidUser(user, table) {

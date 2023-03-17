@@ -70,3 +70,15 @@ button{
     background-color: rgba(199, 34, 34, 0.904);
 }
 
+
+.errors{
+    color: red;
+    font-family: 'Lato', sans-serif;
+    font-size: 17px;
+    margin-bottom: 30px;
+}
+
+.errors div{
+    color: red;
+    margin-bottom: 10px;
+}

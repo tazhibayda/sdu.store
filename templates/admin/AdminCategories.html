@@ -1,0 +1,46 @@
+{{define "head"}}
+<title>Users</title>
+<link rel="stylesheet" href="/static/css/admin/table.css">
+{{end}}
+{{ define "content"}}
+<form action="/Admin/categories">
+    <div class="main-table-container">
+        <div class="main-table-title">Select category to change</div>
+        <a href="/Admin/add-category" class="table-add-container">
+            <div>ADD CATEGORY</div>
+            <div class="svg-wrapper">
+                <img src="/static/image/plus-svgrepo-com-white.svg" alt="svg">
+            </div>
+        </a>
+    </div>
+    <div class="table-main-content-container">
+        <div class="table-content-container">
+            <div class="table-left-container">
+                <div>
+                    <input class="search-input" type="search" value="{{ .Search }}" name="search">
+                    <button class="search-button">Search</button>
+                </div>
+                <div>
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                        </tr>
+                            {{ range .Categories}}
+                            <tr>
+                                <td class="td-username">
+                                    <a href="/Admin/category?id={{.ID}}">
+                                        <div>
+                                            {{.Name}}
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                            {{ end }}
+                        </a>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{{end}}

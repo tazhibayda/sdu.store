@@ -1,9 +1,9 @@
 package model
 
 type Item struct {
-	ID         int64  `json:"id"`
-	CategoryId int64  `json:"category_id"`
-	Color      string `json:"color"`
-	Size       string `json:"size"`
-	Quantity   int64  `json:"quantity"`
+	ID        int64  `json:"id"`
+	ProductID int64  `json:"product_id"`
+	Color     string `json:"color"`
+	Size      string `json:"size"`
+	Quantity  int64  `json:"quantity"`
 }

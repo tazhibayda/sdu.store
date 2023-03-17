@@ -24,7 +24,7 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 		price, _ := strconv.ParseFloat(r.FormValue("price"), 64)
 		product = model.Product{
 			Name:       r.FormValue("Name"),
-			CategoryID: int64(categoryID),
+			CategoryID: categoryID,
 			Price:      price,
 			CreatedAt:  time.Now(),
 		}

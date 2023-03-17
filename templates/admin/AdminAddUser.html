@@ -44,6 +44,13 @@
                 <input type="checkbox" id="staff" name="staff">
                 <label for="staff" class="attribute-name">Is Staff</label>
             </div>
+            <div class="errors">
+                {{ range . }}
+                <div class="error">
+                    {{.}}
+                </div>
+                {{ end}}
+            </div>
             <button type="submit" class="save-button">ADD</button>
         </form>
     </div>
