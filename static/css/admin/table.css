@@ -1,0 +1,154 @@
+.main-table-title{
+    font-size: 30px;
+    font-weight: lighter;
+    color: rgba(136,136,136,255);
+}
+
+.main-table-container{
+    display: flex;
+    align-items: center;
+    max-height: fit-content;
+    justify-content: space-between;
+}
+
+form{
+    width: 100%;
+}
+
+.table-add-container{
+    display: flex;
+    align-items: center;
+    background-color: rgb(170, 170, 170);
+    border-radius: 10px;
+    padding: 3px 7px;
+    color: white;
+    margin-right: 50px;
+}
+
+.table-add-container img {
+    width: 30px;
+}
+
+.svg-wrapper {
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.table-main-content-container{
+    margin-top: 20px;
+}
+
+.table-add-container div{
+    display: flex;
+    align-items: center;
+
+}
+
+.table-content-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.table-left-container{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+}
+
+.search-input{
+    width: 50%;
+    height: 30px;
+}
+
+.search-button{
+    height: 30px;
+    padding: 2px;
+    width: 70px;
+    border-radius: 5px;
+}
+
+.table-right-container{
+    width: 15%;
+    background-color: rgba(248,248,248,255);
+
+}
+
+.filter-title{
+    text-transform: uppercase;
+    font-size: 20px;
+    color: white;
+    background-color: rgba(121,174,200,255);
+    padding: 5px 10px
+}
+
+.filter-main-container{
+    margin: 15px 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-title-container{
+    color: rgba(107,107,107,255);
+    margin-left: 10px;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.hr{
+    margin-top: 15px;
+    border-bottom: 1px rgba(200,200,200,255) solid;
+
+}
+
+.filter-main-container div label{
+    color: rgba(170,170,170,255);
+}
+
+.filter-main-container div input{
+    margin-bottom: 10px;
+}
+
+table{
+    margin-top: 40px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td{
+    border: none;
+}
+
+tr{
+    border-bottom: 1px rgba(238,238,238,255) solid;
+}
+
+tr:hover{
+    background-color: rgba(238,238,238,255);
+}
+
+th{
+    border: none;
+    background-color: rgba(246,246,246,255);
+    padding: 10px;
+    color: rgba(104,104,104,255);
+    text-transform: uppercase;
+}
+
+td{
+    text-align: center;
+    padding: 10px;
+}
+
+.td-username{
+    font-weight: bold;
+    color: rgba(70,127,156,255);
+}
+
+td a{
+    text-decoration: none;
+    color: rgba(70,127,156,255);
+}
+
+

@@ -11,6 +11,13 @@ import (
 	"time"
 )
 
+type UserTable struct {
+	Users       []model.User
+	Search      string
+	StaffStatus int
+	AdminStatus int
+}
+
 func CreateUser(w http.ResponseWriter, r *http.Request) {
 	if _, err := utils.SessionStaff(w, r); err != nil {
 		http.Redirect(w, r, "/login", http.StatusUnauthorized)
@@ -58,21 +65,21 @@ func AdminUserdata(w http.ResponseWriter, r *http.Request) {
 
 func AdminUsers(w http.ResponseWriter, r *http.Request) {
 	if _, err := utils.SessionStaff(w, r); err != nil {
-		http.Redirect(w, r, "/login", http.StatusUnauthorized)
+		http.Redirect(w, r, "/Admin/login-page", http.StatusUnauthorized)
 		return
 	}
-	var user []model.User
-	query := r.URL.Query()
-	filters, presents := query["sort"]
-	if !presents || len(filters) == 0 {
-		server.DB.Find(&user)
+	var users []model.User
+	server.DB.Find(&users)
+	hasFilter, userTable := HasFilter(r)
+	if hasFilter {
+		sort(users, &userTable)
 	} else {
-		if filters[0] == "" {
-
-		}
+		userTable.Users = users
 	}
-	tm, _ := template.ParseFiles("templates/Admin/AdminUser.gohtml")
-	err := tm.Execute(w, user)
+	tm, err := template.ParseFiles(
+		"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminUser.html",
+	)
+	err = tm.ExecuteTemplate(w, "base", userTable)
 	if err != nil {
 		return
 	}
@@ -118,4 +125,56 @@ func DeleteUserdata(w http.ResponseWriter, r *http.Request) {
 	server.DB.Where("User_ID = ?", userID).Delete(&userdata)
 	http.Redirect(w, r, "/Admin/userdata", http.StatusSeeOther)
 
+}
+
+func HasFilter(request *http.Request) (hasFilter bool, filter UserTable) {
+	if search := request.FormValue("search"); search != "" {
+		hasFilter = true
+		filter.Search = search
+	}
+	if staff := request.FormValue("staff"); staff != "" {
+		hasFilter = true
+		filter.StaffStatus, _ = strconv.Atoi(staff)
+	}
+	if admin := request.FormValue("admin"); admin != "" {
+		hasFilter = true
+		filter.AdminStatus, _ = strconv.Atoi(admin)
+	}
+	return
+}
+
+func sort(users []model.User, table *UserTable) {
+	ans := []model.User{}
+	for _, user := range users {
+		if isValidUser(user, table) {
+			ans = append(ans, user)
+		}
+	}
+	table.Users = ans
+}
+
+func isValidUser(user model.User, table *UserTable) bool {
+	if table.Search != "" {
+		contains := strings.Contains(user.Username, table.Search)
+		if !contains {
+			return false
+		}
+	}
+	if table.StaffStatus != 0 {
+		if table.StaffStatus == 1 && !user.Is_staff {
+			return false
+		}
+		if table.StaffStatus == 2 && user.Is_staff {
+			return false
+		}
+	}
+	if table.AdminStatus != 0 {
+		if table.AdminStatus == 1 && !user.Is_admin {
+			return false
+		}
+		if table.AdminStatus == 2 && user.Is_admin {
+			return false
+		}
+	}
+	return true
 }
