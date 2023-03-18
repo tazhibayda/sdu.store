@@ -13,10 +13,13 @@ import (
 )
 
 func CreateProduct(w http.ResponseWriter, r *http.Request) {
-	if _, err := utils.SessionStaff(w, r); err != nil {
+	user, err := utils.SessionStaff(w, r)
+	if err != nil {
 		http.Redirect(w, r, "login", http.StatusUnauthorized)
 		return
 	}
+	CheckAdmin(user, w, r)
+
 	var product model.Product
 	if r.Method == "POST" {
 		categoryID, _ := strconv.Atoi(r.FormValue("category"))
@@ -38,10 +41,12 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteProduct(w http.ResponseWriter, r *http.Request) {
-	if _, err := utils.SessionStaff(w, r); err != nil {
+	user, err := utils.SessionStaff(w, r)
+	if err != nil {
 		http.Redirect(w, r, "login", http.StatusUnauthorized)
 		return
 	}
+	CheckAdmin(user, w, r)
 
 	if _, err := utils.SessionStaff(w, r); err != nil {
 		http.Redirect(w, r, "/login", http.StatusUnauthorized)
@@ -54,10 +59,12 @@ func DeleteProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func AdminProducts(w http.ResponseWriter, r *http.Request) {
-	if _, err := utils.SessionStaff(w, r); err != nil {
+	user, err := utils.SessionStaff(w, r)
+	if err != nil {
 		http.Redirect(w, r, "login", http.StatusUnauthorized)
 		return
 	}
+	CheckAdmin(user, w, r)
 
 	tm, _ := template.ParseFiles("templates/Admin/Products.gohtml")
 	var products []model.ProductOutput
@@ -93,7 +100,7 @@ func AdminProducts(w http.ResponseWriter, r *http.Request) {
 		sort:     sort,
 	}
 	server.DB.Find(&output.Categories)
-	err := tm.Execute(w, output)
+	err = tm.Execute(w, output)
 	if err != nil {
 		return
 	}

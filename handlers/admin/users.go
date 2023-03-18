@@ -60,9 +60,11 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
-	if _, err := utils.SessionStaff(w, r); err != nil {
+	u, err := utils.SessionStaff(w, r)
+	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusUnauthorized)
 	}
+	CheckAdmin(u, w, r)
 
 	vars := strings.Split(r.URL.Path, "/")
 	userID := vars[len(vars)-1]
@@ -72,23 +74,28 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func AdminUserdata(w http.ResponseWriter, r *http.Request) {
-	if _, err := utils.SessionStaff(w, r); err != nil {
+	user, err := utils.SessionStaff(w, r)
+	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusUnauthorized)
 	}
+	CheckAdmin(user, w, r)
+
 	tm, _ := template.ParseFiles("templates/Admin/AdminUserdata.gohtml")
 	var userdata []model.Userdata
 	server.DB.Find(&userdata)
-	err := tm.Execute(w, userdata)
+	err = tm.Execute(w, userdata)
 	if err != nil {
 		return
 	}
 }
 
 func AdminUsers(w http.ResponseWriter, r *http.Request) {
-	if _, err := utils.SessionStaff(w, r); err != nil {
+	user, err := utils.SessionStaff(w, r)
+	if err != nil {
 		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
+	CheckAdmin(user, w, r)
 	var users []model.User
 	server.DB.Find(&users)
 	hasFilter, userTable := HasFilterUserTable(r)
@@ -147,11 +154,12 @@ func User(writer http.ResponseWriter, request *http.Request) {
 }
 
 func CreateUserdata(w http.ResponseWriter, r *http.Request) {
-	if _, err := utils.SessionStaff(w, r); err != nil {
+	user, err := utils.SessionStaff(w, r)
+	if err != nil {
 		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
-
+	CheckAdmin(user, w, r)
 	uid, _ := strconv.ParseInt(r.FormValue("userid"), 10, 64)
 	firstname := r.FormValue("firstname")
 	lastname := r.FormValue("lastname")
@@ -175,10 +183,12 @@ func CreateUserdata(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteUserdata(w http.ResponseWriter, r *http.Request) {
-	if _, err := utils.SessionStaff(w, r); err != nil {
+	user, err := utils.SessionStaff(w, r)
+	if err != nil {
 		http.Redirect(w, r, "/sign-in", http.StatusUnauthorized)
 		return
 	}
+	CheckAdmin(user, w, r)
 
 	vars := strings.Split(r.URL.Path, "/")
 	userID := vars[len(vars)-1]

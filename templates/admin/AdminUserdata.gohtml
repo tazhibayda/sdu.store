@@ -39,7 +39,7 @@
             <input type="text" name="zip" placeholder="ZIP code">
         </label>
         <label>
-            <input type="date" name="birthday" placeholder="birthday">
+            <input type="date" asp-format="{0:yyyy-MM-dd}" name="birthday" placeholder="birthday">
         </label>
         <button type="submit">
             Add
@@ -91,5 +91,11 @@
         utilsScript:
             "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
     });
+
+    function date(date){
+        d = new Date   (date).toISOString().slice(0, 10)
+        console.log(d)
+        document.getElementById("birth").innerHTML = d
+    }
 </script>
 </html>

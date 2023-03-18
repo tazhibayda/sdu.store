@@ -9,9 +9,11 @@ import (
 )
 
 func GetAllSessions(w http.ResponseWriter, r *http.Request) {
-	if _, err := utils.SessionStaff(w, r); err != nil {
+	user, err := utils.SessionStaff(w, r)
+	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusUnauthorized)
 	}
+	CheckAdmin(user, w, r)
 
 	tm, _ := template.ParseFiles("templates/Admin/AdminSession.gohtml")
 	var sessions []model.Session

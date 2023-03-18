@@ -63,10 +63,10 @@ func CheckCookie(writer http.ResponseWriter, request *http.Request) *model.Claim
 	cookie, err := request.Cookie("session_token")
 	if err != nil {
 		if err == http.ErrNoCookie {
-			writer.WriteHeader(http.StatusUnauthorized)
+			//writer.WriteHeader(http.StatusUnauthorized)
 			return nil
 		} else {
-			writer.WriteHeader(http.StatusBadRequest)
+			//writer.WriteHeader(http.StatusBadRequest)
 			return nil
 		}
 	}

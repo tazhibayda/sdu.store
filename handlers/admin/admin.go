@@ -11,6 +11,8 @@ import (
 )
 
 func AdminLoginPage(w http.ResponseWriter, r *http.Request) {
+	user, _ := utils.SessionStaff(w, r)
+	CheckAdmin(user, w, r)
 	t, _ := template.ParseFiles("templates/admin/sign-in.html")
 	t.Execute(w, nil)
 }
@@ -19,7 +21,7 @@ func AdminLogout(writer http.ResponseWriter, request *http.Request) {
 
 	claims := utils.CheckCookie(writer, request)
 	if claims == nil {
-		http.Redirect(writer, request, "/Admin/login-page", http.StatusTemporaryRedirect)
+		http.Redirect(writer, request, "/Admin/login-page", 200)
 		return
 	}
 
@@ -66,16 +68,26 @@ func AdminLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func AdminServe(w http.ResponseWriter, r *http.Request) {
-	_, err := utils.SessionStaff(w, r)
-	if err != nil {
-
-		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
-		return
-	}
+	user, err := utils.SessionStaff(w, r)
 
 	tm, _ := template.ParseFiles(
 		"templates/admin/base.html", "templates/admin/index.html", "templates/admin/navbar.html",
 	)
+	if err != nil {
+		http.Redirect(w, r, "/Admin/login-page", 302)
+	}
+	CheckAdmin(user, w, r)
 	tm.ExecuteTemplate(w, "base", nil)
-	return
+
+}
+
+func CheckAdmin(u *model.User, w http.ResponseWriter, r *http.Request) {
+
+	if u == nil {
+		http.Redirect(w, r, "/Admin/login-page", 302)
+	}
+	if !u.Is_admin || !u.Is_staff {
+		http.Redirect(w, r, "/", 302)
+	}
+
 }
