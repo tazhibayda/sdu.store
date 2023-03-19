@@ -2,6 +2,9 @@
 
 [Link to video explanation](https://youtu.be/zDDMd2p2Df4)
 
+[Link to midterm commit](https://github.com/tazhibayda/sdu.store/tree/105c5cf6915d60514f77e7c9d392b54ace8009c8)
+
+
 ## Introduction:
 SDU store is an online store that offers various products for sale. The store has three types of users, including clients, staff, and admin. Each user has different levels of access to the store's functionalities.
 
