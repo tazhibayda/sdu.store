@@ -15,7 +15,7 @@ import (
 func CreateProduct(w http.ResponseWriter, r *http.Request) {
 	user, err := utils.SessionStaff(w, r)
 	if err != nil {
-		http.Redirect(w, r, "login", http.StatusUnauthorized)
+		http.Redirect(w, r, "/Admin/login-page", http.StatusUnauthorized)
 		return
 	}
 	CheckAdmin(user, w, r)
@@ -35,18 +35,18 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 		server.DB.Create(&product)
 	} else {
 		http.Redirect(w, r, "/Admin/products", http.StatusMethodNotAllowed)
+		return
 	}
 
 	http.Redirect(w, r, "/Admin/products", http.StatusSeeOther)
 }
 
 func DeleteProduct(w http.ResponseWriter, r *http.Request) {
-	user, err := utils.SessionStaff(w, r)
+	_, err := utils.SessionStaff(w, r)
 	if err != nil {
-		http.Redirect(w, r, "login", http.StatusUnauthorized)
+		http.Redirect(w, r, "/Admin/login-page", http.StatusUnauthorized)
 		return
 	}
-	CheckAdmin(user, w, r)
 
 	if _, err := utils.SessionStaff(w, r); err != nil {
 		http.Redirect(w, r, "/login", http.StatusUnauthorized)
@@ -59,12 +59,11 @@ func DeleteProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func AdminProducts(w http.ResponseWriter, r *http.Request) {
-	user, err := utils.SessionStaff(w, r)
+	_, err := utils.SessionStaff(w, r)
 	if err != nil {
 		http.Redirect(w, r, "login", http.StatusUnauthorized)
 		return
 	}
-	CheckAdmin(user, w, r)
 
 	tm, _ := template.ParseFiles("templates/Admin/Products.gohtml")
 	var products []model.ProductOutput

@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"sdu.store/server"
 	"sdu.store/server/model"
 )
 
@@ -38,12 +39,25 @@ func SessionStaff(writer http.ResponseWriter, request *http.Request) (session *m
 	}
 	user := cookie.User
 	if err == nil {
-		if ok := user.IsAdmin(); !ok {
-			err = errors.New("Invalid admin session")
+		if ok := user.IsStaff(); !ok {
+			err = errors.New("Invalid staff session")
 		}
 	}
 
 	return user, nil
+}
+
+func SessionAdmin(writer http.ResponseWriter, request *http.Request) (user *model.User, err error) {
+	cookie := CheckCookie(writer, request)
+	if cookie == nil {
+		return nil, http.ErrNoCookie
+	}
+	user = cookie.User
+	server.DB.Find(user)
+	if !user.IsAdmin() {
+		err = errors.New("Invalid admin session")
+	}
+	return
 }
 
 func CallHeader(writer http.ResponseWriter, request *http.Request) {
@@ -62,21 +76,17 @@ func CheckCookie(writer http.ResponseWriter, request *http.Request) *model.Claim
 
 	cookie, err := request.Cookie("session_token")
 	if err != nil {
-		if err == http.ErrNoCookie {
-			//writer.WriteHeader(http.StatusUnauthorized)
-			return nil
-		} else {
-			//writer.WriteHeader(http.StatusBadRequest)
-			return nil
-		}
+		return nil
 	}
 	if cookie != nil {
 
 		key := cookie.Value
 
-		token, err := jwt.ParseWithClaims(key, claims, func(token *jwt.Token) (interface{}, error) {
-			return model.JwtKey, nil
-		})
+		token, err := jwt.ParseWithClaims(
+			key, claims, func(token *jwt.Token) (interface{}, error) {
+				return model.JwtKey, nil
+			},
+		)
 		if err != nil {
 			if err == jwt.ErrSignatureInvalid {
 				writer.WriteHeader(http.StatusUnauthorized)

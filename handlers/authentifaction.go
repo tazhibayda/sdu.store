@@ -51,12 +51,14 @@ func DoLogin(writer http.ResponseWriter, user model.User) {
 		return
 	}
 
-	http.SetCookie(writer, &http.Cookie{
-		Name:    "session_token",
-		Value:   tokenString,
-		Path:    "/",
-		Expires: expirationTime,
-	})
+	http.SetCookie(
+		writer, &http.Cookie{
+			Name:    "session_token",
+			Value:   tokenString,
+			Path:    "/",
+			Expires: expirationTime,
+		},
+	)
 
 	CurrentSession := model.Session{
 		UserID:    user.ID,
@@ -135,7 +137,8 @@ func SignUp(writer http.ResponseWriter, request *http.Request) {
 }
 
 func LoginPage(writer http.ResponseWriter, request *http.Request) {
-
+	t, _ := template.ParseFiles("templates/sign-in.html")
+	t.Execute(writer, nil)
 }
 
 func SignUpPage(writer http.ResponseWriter, request *http.Request) {
