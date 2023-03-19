@@ -12,7 +12,10 @@ import (
 
 func AdminLoginPage(w http.ResponseWriter, r *http.Request) {
 	user, _ := utils.SessionStaff(w, r)
-	CheckAdmin(user, w, r)
+	if user != nil {
+		http.Redirect(w, r, "/Admin", http.StatusTemporaryRedirect)
+		return
+	}
 	t, _ := template.ParseFiles("templates/admin/sign-in.html")
 	t.Execute(w, nil)
 }
@@ -68,15 +71,15 @@ func AdminLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func AdminServe(w http.ResponseWriter, r *http.Request) {
-	user, err := utils.SessionStaff(w, r)
+	_, err := utils.SessionStaff(w, r)
 
 	tm, _ := template.ParseFiles(
 		"templates/admin/base.html", "templates/admin/index.html", "templates/admin/navbar.html",
 	)
 	if err != nil {
 		http.Redirect(w, r, "/Admin/login-page", 302)
+		return
 	}
-	CheckAdmin(user, w, r)
 	tm.ExecuteTemplate(w, "base", nil)
 
 }
@@ -86,7 +89,7 @@ func CheckAdmin(u *model.User, w http.ResponseWriter, r *http.Request) {
 	if u == nil {
 		http.Redirect(w, r, "/Admin/login-page", 302)
 	}
-	if !u.Is_admin || !u.Is_staff {
+	if !u.Is_admin {
 		http.Redirect(w, r, "/", 302)
 	}
 

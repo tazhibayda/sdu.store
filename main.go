@@ -45,7 +45,7 @@ func main() {
 	mux.HandleFunc("/account", handlers.Account)
 	mux.HandleFunc("/sign-up-page", handlers.SignUpPage)
 	mux.HandleFunc("/sign-up", handlers.SignUp)
-	mux.HandleFunc("/login-page", handlers.Login)
+	mux.HandleFunc("/login-page", handlers.LoginPage)
 
 	mux.HandleFunc("/Admin", admin.AdminServe)
 	mux.HandleFunc("/Admin/login-page", admin.AdminLoginPage)

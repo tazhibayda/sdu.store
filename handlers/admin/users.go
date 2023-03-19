@@ -21,14 +21,9 @@ type UserTable struct {
 }
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
-	user, err := utils.SessionStaff(w, r)
+	_, err := utils.SessionAdmin(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
-		return
-	}
-
-	if !user.Is_admin {
-		http.Redirect(w, r, "Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
 
@@ -60,11 +55,10 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
-	u, err := utils.SessionStaff(w, r)
+	_, err := utils.SessionAdmin(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusUnauthorized)
 	}
-	CheckAdmin(u, w, r)
 
 	vars := strings.Split(r.URL.Path, "/")
 	userID := vars[len(vars)-1]
@@ -74,11 +68,10 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func AdminUserdata(w http.ResponseWriter, r *http.Request) {
-	user, err := utils.SessionStaff(w, r)
+	_, err := utils.SessionAdmin(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusUnauthorized)
 	}
-	CheckAdmin(user, w, r)
 
 	tm, _ := template.ParseFiles("templates/Admin/AdminUserdata.gohtml")
 	var userdata []model.Userdata
@@ -90,12 +83,11 @@ func AdminUserdata(w http.ResponseWriter, r *http.Request) {
 }
 
 func AdminUsers(w http.ResponseWriter, r *http.Request) {
-	user, err := utils.SessionStaff(w, r)
+	_, err := utils.SessionAdmin(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
-	CheckAdmin(user, w, r)
 	var users []model.User
 	server.DB.Find(&users)
 	hasFilter, userTable := HasFilterUserTable(r)
@@ -114,15 +106,14 @@ func AdminUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func User(writer http.ResponseWriter, request *http.Request) {
-	user, err := utils.SessionStaff(writer, request)
+	_, err := utils.SessionAdmin(writer, request)
 	if err != nil {
 		http.Redirect(writer, request, "/Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
-	if !user.Is_admin {
-		http.Redirect(writer, request, "/Admin/login-page", http.StatusTemporaryRedirect)
-		return
-	}
+
+	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
+	user, _ := model.GetUserByID(int64(id))
 
 	if request.Method == "GET" {
 		tm, _ := template.ParseFiles(
@@ -154,12 +145,11 @@ func User(writer http.ResponseWriter, request *http.Request) {
 }
 
 func CreateUserdata(w http.ResponseWriter, r *http.Request) {
-	user, err := utils.SessionStaff(w, r)
+	_, err := utils.SessionAdmin(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
-	CheckAdmin(user, w, r)
 	uid, _ := strconv.ParseInt(r.FormValue("userid"), 10, 64)
 	firstname := r.FormValue("firstname")
 	lastname := r.FormValue("lastname")
@@ -183,12 +173,11 @@ func CreateUserdata(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteUserdata(w http.ResponseWriter, r *http.Request) {
-	user, err := utils.SessionStaff(w, r)
+	_, err := utils.SessionStaff(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/sign-in", http.StatusUnauthorized)
 		return
 	}
-	CheckAdmin(user, w, r)
 
 	vars := strings.Split(r.URL.Path, "/")
 	userID := vars[len(vars)-1]

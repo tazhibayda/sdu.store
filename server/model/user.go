@@ -42,6 +42,10 @@ func (user *User) IsAdmin() bool {
 	return user.Is_admin
 }
 
+func (user *User) IsStaff() bool {
+	return user.Is_staff
+}
+
 func (user *User) Delete() {
 	server.DB.Where("ID=?", user.ID).Delete(&User{})
 }
