@@ -10,10 +10,10 @@ import (
 )
 
 func Index(writer http.ResponseWriter, request *http.Request) {
-	user := utils.CheckCookie(writer, request)
-	if user != nil {
+	claim := utils.CheckCookie(writer, request)
+	if claim != nil {
 		tm, _ := template.ParseFiles("templates/base.html", "templates/index.html", "templates/private.navbar.html")
-		tm.ExecuteTemplate(writer, "base", user)
+		tm.ExecuteTemplate(writer, "base", *claim.User)
 	} else {
 		tm, _ := template.ParseFiles("templates/base.html", "templates/index.html", "templates/public.navbar.html")
 		tm.ExecuteTemplate(writer, "base", nil)

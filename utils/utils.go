@@ -39,7 +39,7 @@ func SessionStaff(writer http.ResponseWriter, request *http.Request) (session *m
 	}
 	user := cookie.User
 	if err == nil {
-		if ok := user.IsStaff(); !ok {
+		if !user.IsStaff() {
 			err = errors.New("Invalid staff session")
 		}
 	}

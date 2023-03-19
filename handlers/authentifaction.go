@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"html/template"
@@ -14,6 +13,11 @@ import (
 )
 
 func Login(writer http.ResponseWriter, request *http.Request) {
+
+	if request.Method != "POST" {
+		http.Redirect(writer, request, "/login-page", http.StatusMethodNotAllowed)
+		return
+	}
 
 	Username := request.PostFormValue("username")
 	Password := request.PostFormValue("password")
@@ -35,7 +39,6 @@ func Login(writer http.ResponseWriter, request *http.Request) {
 }
 
 func DoLogin(writer http.ResponseWriter, user model.User) {
-
 	expirationTime := time.Now().Add(24 * 60 * time.Minute)
 	usr := &model.Claims{
 		User: &user,
@@ -99,35 +102,25 @@ func Logout(writer http.ResponseWriter, request *http.Request) {
 }
 
 func SignUp(writer http.ResponseWriter, request *http.Request) {
-	err := request.ParseForm()
-	if err != nil {
-		fmt.Println(err)
-		t, _ := template.ParseFiles("templates/sign-up.html")
-		t.Execute(writer, []string{"Server error"})
+	request.ParseForm()
+	if request.Method != "POST" {
+		writer.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
-	if request.Method == "POST" {
-		psw, err := HashPassword(request.PostFormValue("password"))
-		if err != nil {
-			panic(err)
-		}
+	if request.PostFormValue("password") == request.PostFormValue("repassword") {
 		user := model.User{
 			Username: request.PostFormValue("username"),
 			Email:    request.PostFormValue("email"),
-			Password: psw,
+			Password: request.PostFormValue("password"),
 		}
 		v := validators.UserValidator{User: &user}
 		if v.Check(); !v.IsValid() {
 			t, _ := template.ParseFiles("templates/sign-up.html")
-			fmt.Println(v.Errors())
 			t.Execute(writer, v.Errors())
 			return
 		}
-		if err := server.DB.Create(&user); err != nil {
-			t, _ := template.ParseFiles("templates/sign-up.html")
-			t.Execute(writer, []string{"User Created"})
-			return
-		}
+		user.Password, _ = HashPassword(user.Password)
+		server.DB.Create(&user)
 		http.Redirect(writer, request, "/sign-in", 302)
 	} else {
 		t, _ := template.ParseFiles("templates/sign-up.html")
