@@ -3,8 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"html/template"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"sdu.store/handlers"
@@ -15,8 +13,6 @@ import (
 
 func main() {
 
-	loadFiles()
-
 	restart := flag.Bool("dbRestart", false, "Restarting database")
 	flag.Parse()
 
@@ -25,13 +21,10 @@ func main() {
 
 		server.DB.AutoMigrate(model.Session{}, model.User{}, model.Userdata{})
 		server.DB.AutoMigrate(
-			model.Category{}, model.Delivery{}, model.Item{}, model.Image{}, model.Product{}, model.ProductInfo{},
+			model.Category{}, model.Delivery{}, model.Product{}, model.Item{},
 			model.Supplier{}, model.DeliveryItem{},
 		)
 		model.ConfigCategories()
-	}
-	if _, err := template.ParseGlob("templates/*.html"); err != nil {
-		panic(err)
 	}
 	mux := http.NewServeMux()
 
@@ -59,8 +52,8 @@ func main() {
 	mux.HandleFunc("/Admin/category", admin.Category)
 	mux.HandleFunc("/Admin/add-category", admin.CreateCategory)
 
-	mux.HandleFunc("/Admin/products", admin.AdminProducts)
-	mux.HandleFunc("/Admin/product/create", admin.CreateProduct)
+	mux.HandleFunc("/Admin/products", admin.Products)
+	mux.HandleFunc("/Admin/add-product", admin.CreateProduct)
 	mux.HandleFunc("/Admin/product/delete/", admin.DeleteProduct)
 
 	mux.HandleFunc("/Admin/user/delete/", admin.DeleteUser)
@@ -71,26 +64,9 @@ func main() {
 
 	files = http.FileServer(http.Dir("images"))
 	mux.Handle("/images/", http.StripPrefix("/images/", files))
-	mux.HandleFunc("/test/images/upload", model.UploadImage)
-	mux.HandleFunc("/test/images", model.ShowImages)
 	err := http.ListenAndServe(":9090", mux)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
-}
-
-func loadFiles() []string {
-	files, err := ioutil.ReadDir("templates")
-
-	if err != nil {
-		panic(err)
-	}
-
-	html := make([]string, 0)
-
-	for _, file := range files {
-		html = append(html, file.Name())
-	}
-	return html
 }

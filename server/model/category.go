@@ -1,12 +1,14 @@
 package model
 
 import (
+	"gorm.io/gorm"
 	"sdu.store/server"
 )
 
 type Category struct {
-	ID   int64  `json:"id"`
-	Name string `json:"name"`
+	gorm.Model
+	Name     string    `json:"name"`
+	Products []Product `gorm:"foreignKey:ID"`
 }
 
 func ConfigCategories() {
