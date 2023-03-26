@@ -38,13 +38,12 @@ func SessionStaff(writer http.ResponseWriter, request *http.Request) (session *m
 		return nil, http.ErrNoCookie
 	}
 	user := cookie.User
-	if err == nil {
-		if !user.IsStaff() {
-			err = errors.New("Invalid staff session")
-		}
+	server.DB.Find(user)
+	if !user.IsStaff() {
+		err = errors.New("Invalid staff session")
 	}
 
-	return user, nil
+	return user, err
 }
 
 func SessionAdmin(writer http.ResponseWriter, request *http.Request) (user *model.User, err error) {

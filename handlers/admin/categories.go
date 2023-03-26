@@ -16,12 +16,11 @@ type CategoryTable struct {
 }
 
 func Category(writer http.ResponseWriter, request *http.Request) {
-	user, err := utils.SessionStaff(writer, request)
+	_, err := utils.SessionStaff(writer, request)
 	if err != nil {
 		http.Redirect(writer, request, "/Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
-	CheckAdmin(user, writer, request)
 
 	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
 	category := model.GetCategoryByID(id)
@@ -53,12 +52,11 @@ func Category(writer http.ResponseWriter, request *http.Request) {
 }
 
 func Categories(w http.ResponseWriter, r *http.Request) {
-	user, err := utils.SessionStaff(w, r)
+	_, err := utils.SessionStaff(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
-	CheckAdmin(user, w, r)
 
 	var categories []model.Category
 	server.DB.Find(&categories)
@@ -79,12 +77,11 @@ func Categories(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateCategory(w http.ResponseWriter, r *http.Request) {
-	user, err := utils.SessionStaff(w, r)
+	_, err := utils.SessionStaff(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
-	CheckAdmin(user, w, r)
 	var category model.Category
 	if r.Method == "POST" {
 		name := r.FormValue("name")

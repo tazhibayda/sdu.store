@@ -73,24 +73,36 @@ func AdminLogin(w http.ResponseWriter, r *http.Request) {
 func AdminServe(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.SessionStaff(w, r)
 
-	tm, _ := template.ParseFiles(
-		"templates/admin/base.html", "templates/admin/index.html", "templates/admin/navbar.html",
-	)
 	if err != nil {
 		http.Redirect(w, r, "/Admin/login-page", 302)
 		return
 	}
+
+	tm, _ := template.ParseFiles(
+		"templates/admin/base.html", "templates/admin/index.html", "templates/admin/navbar.html",
+	)
 	tm.ExecuteTemplate(w, "base", nil)
 
 }
 
-func CheckAdmin(u *model.User, w http.ResponseWriter, r *http.Request) {
-
-	if u == nil {
-		http.Redirect(w, r, "/Admin/login-page", 302)
+func StaffLoggingMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		_, err := utils.SessionStaff(writer, request)
+		if err != nil {
+			http.Redirect(writer, request, "/Admin/login-page", http.StatusUnauthorized)
+			return
+		}
+		next(writer, request)
 	}
-	if !u.Is_admin {
-		http.Redirect(w, r, "/", 302)
-	}
+}
 
+func AdminLoggingMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		_, err := utils.SessionAdmin(writer, request)
+		if err != nil {
+			http.Redirect(writer, request, "/Admin/login-page", http.StatusTemporaryRedirect)
+			return
+		}
+		next(writer, request)
+	}
 }

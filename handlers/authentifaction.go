@@ -121,6 +121,11 @@ func SignUp(writer http.ResponseWriter, request *http.Request) {
 		}
 		user.Password, _ = HashPassword(user.Password)
 		server.DB.Create(&user)
+		if user.ID == 1 {
+			user.Is_admin = true
+			user.Is_staff = true
+			server.DB.Save(&user)
+		}
 		http.Redirect(writer, request, "/sign-in", 302)
 	} else {
 		t, _ := template.ParseFiles("templates/sign-up.html")
