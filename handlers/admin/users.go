@@ -21,37 +21,31 @@ type UserTable struct {
 }
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
-	_, err := utils.SessionAdmin(w, r)
-	if err != nil {
-		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
-		return
-	}
-
-	if r.Method == "POST" {
-		email := r.FormValue("email")
-		password := r.FormValue("password")
-		username := r.FormValue("username")
-		isStaff := r.FormValue("staff") == "on"
-		isAdmin := r.FormValue("admin") == "on"
-		user := model.User{Email: email, Password: password, Username: username, Is_staff: isStaff, Is_admin: isAdmin}
-		v := validators.UserValidator{User: &user}
-		if v.Check(); !v.IsValid() {
-			tm, _ := template.ParseFiles(
-				"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminAddUser.html",
-			)
-			tm.ExecuteTemplate(w, "base", v.Errors())
-			return
-		}
-		user.Password, _ = handlers.HashPassword(user.Password)
-		server.DB.Create(&user)
-		http.Redirect(w, r, "/Admin/users", http.StatusSeeOther)
-		return
-	} else {
+	email := r.FormValue("email")
+	password := r.FormValue("password")
+	username := r.FormValue("username")
+	isStaff := r.FormValue("staff") == "on"
+	isAdmin := r.FormValue("admin") == "on"
+	user := model.User{Email: email, Password: password, Username: username, Is_staff: isStaff, Is_admin: isAdmin}
+	v := validators.UserValidator{User: &user}
+	if v.Check(); !v.IsValid() {
 		tm, _ := template.ParseFiles(
 			"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminAddUser.html",
 		)
-		tm.ExecuteTemplate(w, "base", nil)
+		tm.ExecuteTemplate(w, "base", v.Errors())
+		return
 	}
+	user.Password, _ = handlers.HashPassword(user.Password)
+	server.DB.Create(&user)
+	http.Redirect(w, r, "/Admin/users", http.StatusSeeOther)
+	return
+}
+
+func AddUserPage(writer http.ResponseWriter, request *http.Request) {
+	tm, _ := template.ParseFiles(
+		"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminAddUser.html",
+	)
+	tm.ExecuteTemplate(writer, "base", nil)
 }
 
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
@@ -83,11 +77,6 @@ func AdminUserdata(w http.ResponseWriter, r *http.Request) {
 }
 
 func AdminUsers(w http.ResponseWriter, r *http.Request) {
-	_, err := utils.SessionAdmin(w, r)
-	if err != nil {
-		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
-		return
-	}
 	var users []model.User
 	server.DB.Find(&users)
 	hasFilter, userTable := HasFilterUserTable(r)

@@ -77,12 +77,11 @@ func Categories(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateCategory(w http.ResponseWriter, r *http.Request) {
-	user, err := utils.SessionStaff(w, r)
+	_, err := utils.SessionStaff(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
 		return
 	}
-	CheckAdmin(user, w, r)
 	var category model.Category
 	if r.Method == "POST" {
 		name := r.FormValue("name")

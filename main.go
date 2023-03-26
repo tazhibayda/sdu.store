@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	mux2 "github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"sdu.store/handlers"
@@ -26,7 +27,7 @@ func main() {
 		)
 		model.ConfigCategories()
 	}
-	mux := http.NewServeMux()
+	mux := mux2.NewRouter()
 
 	files := http.FileServer(http.Dir("static"))
 	mux.Handle("/static/", http.StripPrefix("/static/", files))
@@ -40,13 +41,14 @@ func main() {
 	mux.HandleFunc("/sign-up", handlers.SignUp)
 	mux.HandleFunc("/login-page", handlers.LoginPage)
 
-	mux.HandleFunc("/Admin", admin.AdminServe)
-	mux.HandleFunc("/Admin/login-page", admin.AdminLoginPage)
-	mux.HandleFunc("/Admin/login", admin.AdminLogin)
+	mux.HandleFunc("/Admin", admin.StaffLoggingMiddleware(admin.AdminServe))
+	mux.HandleFunc("/Admin/login-page", admin.AdminLoginPage).Methods("GET")
+	mux.HandleFunc("/Admin/login", admin.AdminLogin).Methods("POST")
 	mux.HandleFunc("/Admin/logout", admin.AdminLogout)
 
-	mux.HandleFunc("/Admin/add-user", admin.CreateUser)
-	mux.HandleFunc("/Admin/users", admin.AdminUsers)
+	mux.HandleFunc("/Admin/add-user", admin.AdminLoggingMiddleware(admin.CreateUser)).Methods("POST")
+	mux.HandleFunc("/Admin/add-user", admin.AdminLoggingMiddleware(admin.AddUserPage)).Methods("GET")
+	mux.HandleFunc("/Admin/users", admin.AdminLoggingMiddleware(admin.AdminUsers))
 	mux.HandleFunc("/Admin/user", admin.User)
 	mux.HandleFunc("/Admin/categories", admin.Categories)
 	mux.HandleFunc("/Admin/category", admin.Category)

@@ -1,0 +1,50 @@
+{{define "head"}}
+<title>Users</title>
+<link rel="stylesheet" href="/static/css/admin/single-item.css">
+{{end}}
+{{ define "content"}}
+    <div class="main-table-container">
+        <form action="/Admin/add-product" method="POST">
+            <div class="main-title">
+                Create Product Instance
+            </div>
+            <div class="attribute-container">
+                <div class="attribute-name">
+                    Name:
+                </div>
+                <div class="attribute-value">   
+                    <input type="text" name="name" value="" required>
+                </div>
+            </div>
+            <div class="attribute-container">
+                <div class="attribute-name">
+                    Category:
+                </div>
+                <div class="attribute-value">
+                    <select type="text" name="category" value="" required>
+                        {{ range .Categories}}
+                        <option value="{{.ID}}">{{.Name}}</option>
+                        {{ end }}
+                    </select>
+                </div>
+            </div>
+            <div class="attribute-container">
+                <div class="attribute-name">
+                    Price:
+                </div>
+                <div class="attribute-value">
+                    <input type="number" name="price" value="" required>
+                </div>
+            </div>
+            <div class="attribute-container">
+                <div class="attribute-name">
+                    Images:
+                </div>
+                <div class="attribute-value">
+                    <input type="text" name="name" value="">
+                </div>
+            </div>
+            <button type="submit" class="save-button">ADD</button>
+        </form>
+    </div>
+{{end}}
