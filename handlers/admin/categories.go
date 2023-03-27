@@ -52,12 +52,6 @@ func Category(writer http.ResponseWriter, request *http.Request) {
 }
 
 func Categories(w http.ResponseWriter, r *http.Request) {
-	_, err := utils.SessionStaff(w, r)
-	if err != nil {
-		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
-		return
-	}
-
 	var categories []model.Category
 	server.DB.Find(&categories)
 
