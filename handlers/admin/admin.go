@@ -21,10 +21,9 @@ func AdminLoginPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func AdminLogout(writer http.ResponseWriter, request *http.Request) {
-
 	claims := utils.CheckCookie(writer, request)
 	if claims == nil {
-		http.Redirect(writer, request, "/Admin/login-page", 200)
+		http.Redirect(writer, request, "/", http.StatusSeeOther)
 		return
 	}
 
@@ -40,7 +39,7 @@ func AdminLogout(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	http.SetCookie(writer, c)
-	http.Redirect(writer, request, "/Admin/login-page", http.StatusSeeOther)
+	http.Redirect(writer, request, "/Admin/login", http.StatusSeeOther)
 
 }
 
@@ -67,42 +66,16 @@ func AdminLogin(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/Admin", http.StatusFound)
 		return
 	}
-	http.Redirect(w, r, "/", http.StatusBadRequest)
+
+	utils.ExecuteTemplateWithoutNavbar(
+		w, []string{"Password or username is not correct"}, "templates/admin/sign-in.html",
+	)
 }
 
 func AdminServe(w http.ResponseWriter, r *http.Request) {
-	_, err := utils.SessionStaff(w, r)
-
-	if err != nil {
-		http.Redirect(w, r, "/Admin/login-page", 302)
-		return
-	}
-
 	tm, _ := template.ParseFiles(
 		"templates/admin/base.html", "templates/admin/index.html", "templates/admin/navbar.html",
 	)
 	tm.ExecuteTemplate(w, "base", nil)
 
-}
-
-func StaffLoggingMiddleware(next http.HandlerFunc) http.HandlerFunc {
-	return func(writer http.ResponseWriter, request *http.Request) {
-		_, err := utils.SessionStaff(writer, request)
-		if err != nil {
-			http.Redirect(writer, request, "/Admin/login-page", http.StatusUnauthorized)
-			return
-		}
-		next(writer, request)
-	}
-}
-
-func AdminLoggingMiddleware(next http.HandlerFunc) http.HandlerFunc {
-	return func(writer http.ResponseWriter, request *http.Request) {
-		_, err := utils.SessionAdmin(writer, request)
-		if err != nil {
-			http.Redirect(writer, request, "/Admin/login-page", http.StatusTemporaryRedirect)
-			return
-		}
-		next(writer, request)
-	}
 }

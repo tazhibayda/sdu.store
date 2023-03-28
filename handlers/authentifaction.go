@@ -13,12 +13,6 @@ import (
 )
 
 func Login(writer http.ResponseWriter, request *http.Request) {
-
-	if request.Method != "POST" {
-		http.Redirect(writer, request, "/login-page", http.StatusMethodNotAllowed)
-		return
-	}
-
 	Username := request.PostFormValue("username")
 	Password := request.PostFormValue("password")
 	user, err := model.GetUserByUsername(Username)
@@ -34,8 +28,8 @@ func Login(writer http.ResponseWriter, request *http.Request) {
 		http.Redirect(writer, request, "/", http.StatusFound)
 		return
 	}
-	http.Redirect(writer, request, "/login-page", http.StatusBadRequest)
-
+	t, _ := template.ParseFiles("templates/sign-in.html")
+	t.Execute(writer, []string{"Password or username is not correct"})
 }
 
 func DoLogin(writer http.ResponseWriter, user model.User) {
@@ -83,7 +77,8 @@ func Logout(writer http.ResponseWriter, request *http.Request) {
 
 	claims := utils.CheckCookie(writer, request)
 	if claims == nil {
-		http.Redirect(writer, request, "/index", http.StatusSeeOther)
+		http.Redirect(writer, request, "/", http.StatusSeeOther)
+		return
 	}
 
 	var session model.Session
@@ -97,7 +92,7 @@ func Logout(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	http.SetCookie(writer, c)
-	http.Redirect(writer, request, "/index", http.StatusSeeOther)
+	http.Redirect(writer, request, "/", http.StatusSeeOther)
 
 }
 
@@ -135,6 +130,11 @@ func SignUp(writer http.ResponseWriter, request *http.Request) {
 }
 
 func LoginPage(writer http.ResponseWriter, request *http.Request) {
+	_, err := utils.Session(writer, request)
+	if err == nil {
+		http.Redirect(writer, request, "/", http.StatusFound)
+		return
+	}
 	t, _ := template.ParseFiles("templates/sign-in.html")
 	t.Execute(writer, nil)
 }
