@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	"fmt"
 	"github.com/golang-jwt/jwt/v5"
 	"html/template"
 	"io"
@@ -21,15 +22,18 @@ type OutputData struct {
 	Data interface{}
 }
 
-func Session(writer http.ResponseWriter, request *http.Request) (session model.Session, err error) {
-	cookie, err := request.Cookie("session_token")
-	if err == nil {
-		session = model.Session{UUID: cookie.Value}
-		if ok := session.Check(); !ok {
-			err = errors.New("Invalid session")
-		}
+func Session(writer http.ResponseWriter, request *http.Request) (user *model.User, err error) {
+	cookie := CheckCookie(writer, request)
+	if cookie == nil {
+		return nil, http.ErrNoCookie
 	}
-	return
+	user = cookie.User
+	server.DB.Find(user)
+	if !user.IsStaff() {
+		err = errors.New("Invalid staff session")
+	}
+
+	return user, err
 }
 
 func SessionStaff(writer http.ResponseWriter, request *http.Request) (session *model.User, err error) {
@@ -103,6 +107,18 @@ func CheckCookie(writer http.ResponseWriter, request *http.Request) *model.Claim
 	return claims
 }
 
+func ErrorTemplate(w http.ResponseWriter, err string, status int, files ...string) {
+	t, _ := template.ParseFiles(files...)
+	output := struct {
+		Error  string
+		Status int
+	}{
+		err,
+		status,
+	}
+	t.Execute(w, output)
+}
+
 func ExecuteTemplateWithNavbar(w http.ResponseWriter, data OutputData, files ...string) {
 	t, _ := template.ParseFiles(files...)
 	t.Execute(w, data)
@@ -127,4 +143,13 @@ func pasteFile(request *http.Request, location string) (filename string, err err
 	defer out.Close()
 	io.Copy(out, in)
 	return out.Name(), nil
+}
+
+func ErrorLogger(err string, request *http.Request) {
+	fmt.Fprintf(os.Stdout, "%s:\t %s: \t", request.URL, request.Method)
+	fmt.Fprintf(os.Stdout, "%s \n", err)
+}
+
+func PrintInfo(message string) {
+	fmt.Fprintln(os.Stdout, message)
 }

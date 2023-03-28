@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"sdu.store/server"
 	"sdu.store/server/model"
-	"sdu.store/utils"
 	"strconv"
 	"strings"
 )
@@ -15,40 +14,38 @@ type CategoryTable struct {
 	Search     string
 }
 
-func Category(writer http.ResponseWriter, request *http.Request) {
-	_, err := utils.SessionStaff(writer, request)
-	if err != nil {
-		http.Redirect(writer, request, "/Admin/login-page", http.StatusTemporaryRedirect)
-		return
-	}
-
+func CategoryPage(writer http.ResponseWriter, request *http.Request) {
 	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
 	category := model.GetCategoryByID(id)
-	if request.Method == "GET" {
+	tm, _ := template.ParseFiles(
+		"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminCategory.html",
+	)
+	tm.ExecuteTemplate(writer, "base", category)
+	return
+}
+
+func CategoryDelete(writer http.ResponseWriter, request *http.Request) {
+	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
+	category := model.GetCategoryByID(id)
+	category.Delete()
+	http.Redirect(writer, request, "/Admin/categories", http.StatusSeeOther)
+}
+
+func Category(writer http.ResponseWriter, request *http.Request) {
+	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
+	category := model.GetCategoryByID(id)
+	name := request.FormValue("name")
+	if name == "" {
 		tm, _ := template.ParseFiles(
 			"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminCategory.html",
 		)
-		err = tm.ExecuteTemplate(writer, "base", category)
+		tm.ExecuteTemplate(writer, "base", category)
 		return
 	}
-	if request.Method == "POST" {
-		if "1" == request.URL.Query().Get("delete") {
-			category.Delete()
-		} else {
-			name := request.FormValue("name")
-			if name == "" {
-				tm, _ := template.ParseFiles(
-					"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminCategory.html",
-				)
-				err = tm.ExecuteTemplate(writer, "base", category)
-				return
-			}
-			category.Name = name
-			category.Update()
-		}
-		http.Redirect(writer, request, "/Admin/categories", http.StatusTemporaryRedirect)
-		return
-	}
+	category.Name = name
+	category.Update()
+	http.Redirect(writer, request, "/Admin/categories", http.StatusSeeOther)
+	return
 }
 
 func Categories(w http.ResponseWriter, r *http.Request) {
@@ -71,31 +68,26 @@ func Categories(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateCategory(w http.ResponseWriter, r *http.Request) {
-	_, err := utils.SessionStaff(w, r)
-	if err != nil {
-		http.Redirect(w, r, "/Admin/login-page", http.StatusTemporaryRedirect)
-		return
-	}
 	var category model.Category
-	if r.Method == "POST" {
-		name := r.FormValue("name")
-		if name == "" {
-			tm, _ := template.ParseFiles(
-				"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminAddCategory.html",
-			)
-			tm.ExecuteTemplate(w, "base", nil)
-			return
-		}
-		category = model.Category{Name: name}
-	} else {
+	name := r.FormValue("name")
+	if name == "" {
 		tm, _ := template.ParseFiles(
 			"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminAddCategory.html",
 		)
 		tm.ExecuteTemplate(w, "base", nil)
 		return
 	}
+	category = model.Category{Name: name}
 	server.DB.Create(&category)
-	http.Redirect(w, r, "/Admin/categories", http.StatusFound)
+	http.Redirect(w, r, "/Admin/categories", http.StatusSeeOther)
+}
+
+func CreateCategoryPage(writer http.ResponseWriter, request *http.Request) {
+	tm, _ := template.ParseFiles(
+		"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminAddCategory.html",
+	)
+	tm.ExecuteTemplate(writer, "base", nil)
+	return
 }
 
 func HasFilterCategoryTable(request *http.Request) (hasFilter bool, filter CategoryTable) {

@@ -48,19 +48,6 @@ func AddUserPage(writer http.ResponseWriter, request *http.Request) {
 	tm.ExecuteTemplate(writer, "base", nil)
 }
 
-func DeleteUser(w http.ResponseWriter, r *http.Request) {
-	_, err := utils.SessionAdmin(w, r)
-	if err != nil {
-		http.Redirect(w, r, "/login", http.StatusUnauthorized)
-	}
-
-	vars := strings.Split(r.URL.Path, "/")
-	userID := vars[len(vars)-1]
-	user := model.User{}
-	server.DB.Where("ID = ?", userID).Delete(&user)
-	http.Redirect(w, r, "/Admin/user", http.StatusSeeOther)
-}
-
 func AdminUserdata(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.SessionAdmin(w, r)
 	if err != nil {
@@ -94,42 +81,44 @@ func AdminUsers(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func User(writer http.ResponseWriter, request *http.Request) {
-	_, err := utils.SessionAdmin(writer, request)
-	if err != nil {
-		http.Redirect(writer, request, "/Admin/login-page", http.StatusTemporaryRedirect)
-		return
-	}
+func UserPage(writer http.ResponseWriter, request *http.Request) {
 
 	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
 	user, _ := model.GetUserByID(int64(id))
+	tm, _ := template.ParseFiles(
+		"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminUser.html",
+	)
+	tm.ExecuteTemplate(writer, "base", user)
+	return
+}
 
-	if request.Method == "GET" {
-		tm, _ := template.ParseFiles(
-			"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminUser.html",
-		)
-		err = tm.ExecuteTemplate(writer, "base", user)
-		return
+func UserDelete(writer http.ResponseWriter, request *http.Request) {
+	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
+	user, _ := model.GetUserByID(int64(id))
+
+	user.Delete()
+
+	http.Redirect(writer, request, "/Admin/users", http.StatusSeeOther)
+}
+
+func User(writer http.ResponseWriter, request *http.Request) {
+	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
+	user, _ := model.GetUserByID(int64(id))
+
+	if "on" == request.FormValue("admin") && !user.Is_admin {
+		user.Is_admin = true
+	} else if "" == request.FormValue("admin") && user.Is_admin {
+		user.Is_admin = false
 	}
-	if request.Method == "POST" {
-		if "1" == request.URL.Query().Get("delete") {
-			user.Delete()
-		} else {
-			if "on" == request.FormValue("admin") && !user.Is_admin {
-				user.Is_admin = true
-			} else if "" == request.FormValue("admin") && user.Is_admin {
-				user.Is_admin = false
-			}
-			if "on" == request.FormValue("staff") && !user.Is_staff {
-				user.Is_staff = true
-			} else if "" == request.FormValue("staff") && user.Is_staff {
-				user.Is_staff = false
-			}
-			user.Update()
-		}
-		http.Redirect(writer, request, "/Admin/users", http.StatusTemporaryRedirect)
-		return
+	if "on" == request.FormValue("staff") && !user.Is_staff {
+		user.Is_staff = true
+	} else if "" == request.FormValue("staff") && user.Is_staff {
+		user.Is_staff = false
 	}
+	user.Update()
+
+	http.Redirect(writer, request, "/Admin/users", http.StatusSeeOther)
+	return
 
 }
 
