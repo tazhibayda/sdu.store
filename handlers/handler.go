@@ -16,8 +16,3 @@ func NotAllowedMethod(writer http.ResponseWriter, request *http.Request) {
 	utils.ErrorLogger(err, request)
 	utils.ErrorTemplate(writer, err, http.StatusMethodNotAllowed, "templates/error.html")
 }
-
-func ServerErrorHandler(writer http.ResponseWriter, request *http.Request, err error) {
-	utils.ErrorLogger(err.Error(), request)
-	utils.ErrorTemplate(writer, "Server Error", http.StatusInternalServerError, "templates/error.html")
-}

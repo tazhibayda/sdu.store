@@ -2,8 +2,6 @@ package handlers
 
 import (
 	"github.com/golang-jwt/jwt/v5"
-	"golang.org/x/crypto/bcrypt"
-	"html/template"
 	"net/http"
 	"sdu.store/server"
 	"sdu.store/server/model"
@@ -18,21 +16,25 @@ func Login(writer http.ResponseWriter, request *http.Request) {
 	user, err := model.GetUserByUsername(Username)
 	if err != nil {
 		utils.ExecuteTemplateWithoutNavbar(
-			writer, []string{"Password or username is incorrect"}, "templates/sign-in.html",
+			writer, request, []string{"Password or username is incorrect"}, "templates/sign-in.html",
 		)
 		return
 	}
 
-	if user.Password == Password || CheckPasswordHash(Password, user.Password) {
-		DoLogin(writer, *user)
+	if user.Password == Password || utils.CheckPasswordHash(Password, user.Password) {
+		if err := DoLogin(writer, *user); err != nil {
+			utils.ServerErrorHandler(writer, request, err)
+			return
+		}
 		http.Redirect(writer, request, "/", http.StatusSeeOther)
 		return
 	}
-	t, _ := template.ParseFiles("templates/sign-in.html")
-	t.Execute(writer, []string{"Password or username is not correct"})
+	utils.ExecuteTemplateWithoutNavbar(
+		writer, request, []string{"Password or username is incorrect"}, "templates/sign-in.html",
+	)
 }
 
-func DoLogin(writer http.ResponseWriter, user model.User) {
+func DoLogin(writer http.ResponseWriter, user model.User) error {
 	expirationTime := time.Now().Add(24 * 60 * time.Minute)
 	usr := &model.Claims{
 		User: &user,
@@ -44,8 +46,7 @@ func DoLogin(writer http.ResponseWriter, user model.User) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, usr)
 	tokenString, err := token.SignedString(model.JwtKey)
 	if err != nil {
-		writer.WriteHeader(http.StatusInternalServerError)
-		return
+		return err
 	}
 
 	http.SetCookie(
@@ -56,12 +57,13 @@ func DoLogin(writer http.ResponseWriter, user model.User) {
 			Expires: expirationTime,
 		},
 	)
+	return nil
 }
 
 func Logout(writer http.ResponseWriter, request *http.Request) {
 
-	claims := utils.CheckCookie(writer, request)
-	if claims == nil {
+	_, err := utils.CheckCookie(writer, request)
+	if err != nil {
 		http.Redirect(writer, request, "/", http.StatusSeeOther)
 		return
 	}
@@ -86,23 +88,27 @@ func SignUp(writer http.ResponseWriter, request *http.Request) {
 		}
 		v := validators.UserValidator{User: &user}
 		if v.Check(); !v.IsValid() {
-			t, _ := template.ParseFiles("templates/sign-up.html")
-			t.Execute(writer, v.Errors())
+			utils.ExecuteTemplateWithoutNavbar(writer, request, v.Errors(), "templates/sign-up.html")
 			return
 		}
-		user.Password, _ = HashPassword(user.Password)
-		server.DB.Create(&user)
+		if err := server.DB.Create(&user).Error; err != nil {
+			utils.ServerErrorHandler(writer, request, err)
+			return
+		}
 		if user.ID == 1 {
 			user.Is_admin = true
 			user.Is_staff = true
 			server.DB.Save(&user)
 		}
-		http.Redirect(writer, request, "/sign-in", 302)
-	} else {
-		t, _ := template.ParseFiles("templates/sign-up.html")
-		t.Execute(writer, []string{"Two passwords doesn't match"})
+		http.Redirect(writer, request, "/login", 302)
 		return
 	}
+
+	utils.ExecuteTemplateWithoutNavbar(
+		writer, request, []string{"Two passwords doesn't match"}, "templates/sign-up.html",
+	)
+	return
+
 }
 
 func LoginPage(writer http.ResponseWriter, request *http.Request) {
@@ -111,21 +117,10 @@ func LoginPage(writer http.ResponseWriter, request *http.Request) {
 		http.Redirect(writer, request, "/", http.StatusSeeOther)
 		return
 	}
-	t, _ := template.ParseFiles("templates/sign-in.html")
-	t.Execute(writer, nil)
+	utils.ExecuteTemplateWithoutNavbar(writer, request, nil, "templates/sign-in.html")
+
 }
 
 func SignUpPage(writer http.ResponseWriter, request *http.Request) {
-	t, _ := template.ParseFiles("templates/sign-up.html")
-	t.Execute(writer, nil)
-}
-
-func HashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	return string(bytes), err
-}
-
-func CheckPasswordHash(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
+	utils.ExecuteTemplateWithoutNavbar(writer, request, nil, "templates/sign-up.html")
 }

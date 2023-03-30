@@ -1,12 +1,13 @@
 package model
 
 import (
-	"net/http"
+	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 	"sdu.store/server"
 )
 
 type User struct {
-	ID       int64  `json:"id"`
+	gorm.Model
 	Email    string `json:"login"`
 	Username string `json:"username"`
 	Password string `json:"password"`
@@ -18,10 +19,8 @@ var Users []User
 
 func GetUserByUsername(username string) (*User, error) {
 	user := User{}
-	server.DB.Where("username", username).Find(&user)
-
-	if user.Username == "" {
-		return nil, http.ErrAbortHandler
+	if err := server.DB.Where("username", username).Find(&user).Error; err != nil {
+		return nil, err
 	}
 
 	return &user, nil
@@ -29,10 +28,9 @@ func GetUserByUsername(username string) (*User, error) {
 
 func GetUserByID(id int64) (*User, error) {
 	user := User{}
-	server.DB.Where("id", id).Find(&user)
 
-	if user.Username == "" {
-		return nil, http.ErrAbortHandler
+	if err := server.DB.Where("id", id).Find(&user).Error; err != nil {
+		return nil, err
 	}
 
 	return &user, nil
@@ -46,15 +44,33 @@ func (user *User) IsStaff() bool {
 	return user.Is_staff
 }
 
-func (user *User) Delete() {
-	server.DB.Where("ID=?", user.ID).Delete(&User{})
+func (user *User) Delete() error {
+	if err := server.DB.Where("ID=?", user.ID).Delete(&User{}).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
-func (user *User) Update() {
+func (user *User) Update() error {
 	isStaff := user.Is_staff
 	isAdmin := user.Is_admin
-	server.DB.First(user)
+	if err := server.DB.First(user).Error; err != nil {
+		return err
+	}
 	user.Is_admin = isAdmin
 	user.Is_staff = isStaff || isAdmin
-	server.DB.Save(user)
+	if err := server.DB.Save(user).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (this *User) BeforeCreate(tx *gorm.DB) (err error) {
+	this.Password, err = hashPassword(this.Password)
+	return err
+}
+
+func hashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
 }

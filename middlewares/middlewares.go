@@ -3,7 +3,6 @@ package middlewares
 import (
 	"fmt"
 	"net/http"
-	"sdu.store/handlers"
 	"sdu.store/utils"
 )
 
@@ -12,6 +11,7 @@ func StaffLoggingMiddleware(next http.Handler) http.Handler {
 		func(writer http.ResponseWriter, request *http.Request) {
 			_, err := utils.SessionStaff(writer, request)
 			if err != nil {
+				utils.ErrorLogger(err.Error(), request)
 				http.Redirect(writer, request, "/Admin/login?access=staff", http.StatusSeeOther)
 				return
 			}
@@ -25,6 +25,7 @@ func AdminLoggingMiddleware(next http.Handler) http.Handler {
 		func(writer http.ResponseWriter, request *http.Request) {
 			_, err := utils.SessionAdmin(writer, request)
 			if err != nil {
+				utils.ErrorLogger(err.Error(), request)
 				http.Redirect(writer, request, "/Admin?access=admin", http.StatusSeeOther)
 				return
 			}
@@ -59,7 +60,7 @@ func RecoverPanic(next http.Handler) http.Handler {
 			defer func() {
 				if err := recover(); err != nil {
 					w.Header().Set("Connection", "close")
-					handlers.ServerErrorHandler(w, r, fmt.Errorf("%s", err))
+					utils.ServerErrorHandler(w, r, fmt.Errorf("%s", err))
 				}
 			}()
 
