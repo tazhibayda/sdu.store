@@ -3,7 +3,6 @@ package admin
 import (
 	"html/template"
 	"net/http"
-	"sdu.store/handlers"
 	"sdu.store/server"
 	"sdu.store/server/model"
 	"sdu.store/server/validators"
@@ -29,23 +28,25 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	user := model.User{Email: email, Password: password, Username: username, Is_staff: isStaff, Is_admin: isAdmin}
 	v := validators.UserValidator{User: &user}
 	if v.Check(); !v.IsValid() {
-		tm, _ := template.ParseFiles(
-			"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminAddUser.html",
+		utils.ExecuteTemplateWithoutNavbar(
+			w, r, v.Errors(), "templates/admin/base.html", "templates/admin/navbar.html",
+			"templates/admin/AdminAddUser.html",
 		)
-		tm.ExecuteTemplate(w, "base", v.Errors())
 		return
 	}
-	user.Password, _ = handlers.HashPassword(user.Password)
-	server.DB.Create(&user)
+	if err := server.DB.Create(&user).Error; err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
 	http.Redirect(w, r, "/Admin/users", http.StatusSeeOther)
 	return
 }
 
 func AddUserPage(writer http.ResponseWriter, request *http.Request) {
-	tm, _ := template.ParseFiles(
-		"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminAddUser.html",
+	utils.ExecuteTemplateWithoutNavbar(
+		writer, request, nil, "templates/admin/base.html", "templates/admin/navbar.html",
+		"templates/admin/AdminAddUser.html",
 	)
-	tm.ExecuteTemplate(writer, "base", nil)
 }
 
 func AdminUserdata(w http.ResponseWriter, r *http.Request) {
@@ -65,45 +66,61 @@ func AdminUserdata(w http.ResponseWriter, r *http.Request) {
 
 func AdminUsers(w http.ResponseWriter, r *http.Request) {
 	var users []model.User
-	server.DB.Find(&users)
+	if err := server.DB.Find(&users).Error; err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
 	hasFilter, userTable := HasFilterUserTable(r)
 	if hasFilter {
 		sortUserTable(users, &userTable)
 	} else {
 		userTable.Users = users
 	}
-	tm, err := template.ParseFiles(
-		"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminUsers.html",
+	utils.ExecuteTemplateWithoutNavbar(
+		w, r, userTable, "templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminUsers.html",
 	)
-	err = tm.ExecuteTemplate(w, "base", userTable)
-	if err != nil {
-		return
-	}
 }
 
 func UserPage(writer http.ResponseWriter, request *http.Request) {
 
 	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
-	user, _ := model.GetUserByID(int64(id))
-	tm, _ := template.ParseFiles(
-		"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminUser.html",
+	user, err := model.GetUserByID(int64(id))
+	if err != nil {
+		utils.ServerErrorHandler(writer, request, err)
+		return
+	}
+	utils.ExecuteTemplateWithoutNavbar(
+		writer, request, user, "templates/admin/base.html", "templates/admin/navbar.html",
+		"templates/admin/AdminUser.html",
 	)
-	tm.ExecuteTemplate(writer, "base", user)
 	return
 }
 
 func UserDelete(writer http.ResponseWriter, request *http.Request) {
 	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
-	user, _ := model.GetUserByID(int64(id))
+	user, err := model.GetUserByID(int64(id))
 
-	user.Delete()
+	if err != nil {
+		utils.ServerErrorHandler(writer, request, err)
+		return
+	}
+
+	if err := user.Delete(); err != nil {
+		utils.ServerErrorHandler(writer, request, err)
+		return
+	}
 
 	http.Redirect(writer, request, "/Admin/users", http.StatusSeeOther)
 }
 
 func User(writer http.ResponseWriter, request *http.Request) {
 	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
-	user, _ := model.GetUserByID(int64(id))
+	user, err := model.GetUserByID(int64(id))
+
+	if err != nil {
+		utils.ServerErrorHandler(writer, request, err)
+		return
+	}
 
 	if "on" == request.FormValue("admin") && !user.Is_admin {
 		user.Is_admin = true
@@ -115,7 +132,10 @@ func User(writer http.ResponseWriter, request *http.Request) {
 	} else if "" == request.FormValue("staff") && user.Is_staff {
 		user.Is_staff = false
 	}
-	user.Update()
+	if err := user.Update(); err != nil {
+		utils.ServerErrorHandler(writer, request, err)
+		return
+	}
 
 	http.Redirect(writer, request, "/Admin/users", http.StatusSeeOther)
 	return

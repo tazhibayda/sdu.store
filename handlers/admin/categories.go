@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"sdu.store/server"
 	"sdu.store/server/model"
+	"sdu.store/utils"
 	"strconv"
 	"strings"
 )
@@ -16,24 +17,46 @@ type CategoryTable struct {
 
 func CategoryPage(writer http.ResponseWriter, request *http.Request) {
 	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
-	category := model.GetCategoryByID(id)
-	tm, _ := template.ParseFiles(
-		"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminCategory.html",
+	category, err := model.GetCategoryByID(id)
+
+	if err != nil {
+		utils.ServerErrorHandler(writer, request, err)
+		return
+	}
+
+	utils.ExecuteTemplateWithoutNavbar(
+		writer, request, category, "templates/admin/base.html", "templates/admin/navbar.html",
+		"templates/admin/AdminCategory.html",
 	)
-	tm.ExecuteTemplate(writer, "base", category)
 	return
 }
 
 func CategoryDelete(writer http.ResponseWriter, request *http.Request) {
 	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
-	category := model.GetCategoryByID(id)
-	category.Delete()
+	category, err := model.GetCategoryByID(id)
+
+	if err != nil {
+		utils.ServerErrorHandler(writer, request, err)
+		return
+	}
+
+	if err := category.Delete(); err != nil {
+		utils.ServerErrorHandler(writer, request, err)
+		return
+	}
+
 	http.Redirect(writer, request, "/Admin/categories", http.StatusSeeOther)
 }
 
 func Category(writer http.ResponseWriter, request *http.Request) {
 	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
-	category := model.GetCategoryByID(id)
+	category, err := model.GetCategoryByID(id)
+
+	if err != nil {
+		utils.ServerErrorHandler(writer, request, err)
+		return
+	}
+
 	name := request.FormValue("name")
 	if name == "" {
 		tm, _ := template.ParseFiles(
@@ -43,14 +66,20 @@ func Category(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 	category.Name = name
-	category.Update()
+	if err := category.Update(); err != nil {
+		utils.ServerErrorHandler(writer, request, err)
+		return
+	}
 	http.Redirect(writer, request, "/Admin/categories", http.StatusSeeOther)
 	return
 }
 
 func Categories(w http.ResponseWriter, r *http.Request) {
 	var categories []model.Category
-	server.DB.Find(&categories)
+	if err := server.DB.Find(&categories).Error; err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
 
 	hasFilter, categoryTable := HasFilterCategoryTable(r)
 	if hasFilter {
@@ -58,36 +87,37 @@ func Categories(w http.ResponseWriter, r *http.Request) {
 	} else {
 		categoryTable.Categories = categories
 	}
-	tm, err := template.ParseFiles(
-		"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminCategories.html",
+	utils.ExecuteTemplateWithoutNavbar(
+		w, r, categoryTable, "templates/admin/base.html", "templates/admin/navbar.html",
+		"templates/admin/AdminCategories.html",
 	)
-	err = tm.ExecuteTemplate(w, "base", categoryTable)
-	if err != nil {
-		return
-	}
 }
 
 func CreateCategory(w http.ResponseWriter, r *http.Request) {
 	var category model.Category
 	name := r.FormValue("name")
 	if name == "" {
-		tm, _ := template.ParseFiles(
-			"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminAddCategory.html",
+		utils.ExecuteTemplateWithoutNavbar(
+			w, r, nil, "templates/admin/base.html", "templates/admin/navbar.html",
+			"templates/admin/AdminAddCategory.html",
 		)
-		tm.ExecuteTemplate(w, "base", nil)
 		return
 	}
 	category = model.Category{Name: name}
-	server.DB.Create(&category)
+
+	if err := server.DB.Create(&category).Error; err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
+
 	http.Redirect(w, r, "/Admin/categories", http.StatusSeeOther)
 }
 
 func CreateCategoryPage(writer http.ResponseWriter, request *http.Request) {
-	tm, _ := template.ParseFiles(
-		"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminAddCategory.html",
+	utils.ExecuteTemplateWithoutNavbar(
+		writer, request, nil, "templates/admin/base.html", "templates/admin/navbar.html",
+		"templates/admin/AdminAddCategory.html",
 	)
-	tm.ExecuteTemplate(writer, "base", nil)
-	return
 }
 
 func HasFilterCategoryTable(request *http.Request) (hasFilter bool, filter CategoryTable) {

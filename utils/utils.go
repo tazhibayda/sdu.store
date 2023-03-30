@@ -22,61 +22,57 @@ type OutputData struct {
 	Data interface{}
 }
 
-func Session(writer http.ResponseWriter, request *http.Request) (user *model.User, err error) {
-	cookie := CheckCookie(writer, request)
-	if cookie == nil {
-		return nil, http.ErrNoCookie
-	}
-	user = cookie.User
-	server.DB.Find(user)
-
-	return user, err
+func ServerErrorHandler(writer http.ResponseWriter, request *http.Request, err error) {
+	ErrorLogger(err.Error(), request)
+	ErrorTemplate(writer, "Server Error", http.StatusInternalServerError, "templates/error.html")
 }
 
-func SessionStaff(writer http.ResponseWriter, request *http.Request) (session *model.User, err error) {
-	cookie := CheckCookie(writer, request)
-	if cookie == nil {
-		return nil, http.ErrNoCookie
+func Session(writer http.ResponseWriter, request *http.Request) (user *model.User, err error) {
+	cookie, err := CheckCookie(writer, request)
+	if err != nil {
+		return nil, err
 	}
-	user := cookie.User
-	server.DB.Find(user)
-	if !user.IsStaff() {
-		err = errors.New("Invalid staff access")
+	user = cookie.User
+	if err = server.DB.Find(user).Error; err != nil {
+		return nil, err
 	}
+	return user, nil
+}
 
-	return user, err
+func SessionStaff(writer http.ResponseWriter, request *http.Request) (user *model.User, err error) {
+	cookie, err := CheckCookie(writer, request)
+	if err != nil {
+		return nil, err
+	}
+	user = cookie.User
+	err = server.DB.Find(user).Error
+	if !user.IsStaff() || err != nil {
+		err = errors.New("Invalid staff access")
+		return nil, err
+	}
+	return
 }
 
 func SessionAdmin(writer http.ResponseWriter, request *http.Request) (user *model.User, err error) {
-	cookie := CheckCookie(writer, request)
-	if cookie == nil {
-		return nil, http.ErrNoCookie
+	cookie, err := CheckCookie(writer, request)
+	if err != nil {
+		return nil, err
 	}
 	user = cookie.User
 	err = server.DB.Find(user).Error
 	if !user.IsAdmin() || err != nil {
 		err = errors.New("Invalid admin access")
+		return nil, err
 	}
 	return
 }
 
-func CallHeader(writer http.ResponseWriter, request *http.Request) {
-	user := CheckCookie(writer, request)
-	if user != nil {
-		tm, _ := template.ParseFiles("templates/base.html", "templates/private.navbar.html")
-		tm.ExecuteTemplate(writer, "base", user)
-	} else {
-		tm, _ := template.ParseFiles("templates/base.html", "templates/public.navbar.html")
-		tm.ExecuteTemplate(writer, "base", nil)
-	}
-}
-
-func CheckCookie(writer http.ResponseWriter, request *http.Request) *model.Claims {
+func CheckCookie(writer http.ResponseWriter, request *http.Request) (*model.Claims, error) {
 	claims := &model.Claims{}
 
 	cookie, err := request.Cookie("session_token")
 	if err != nil {
-		return nil
+		return nil, err
 	}
 	if cookie != nil {
 
@@ -88,20 +84,15 @@ func CheckCookie(writer http.ResponseWriter, request *http.Request) *model.Claim
 			},
 		)
 		if err != nil {
-			if err == jwt.ErrSignatureInvalid {
-				writer.WriteHeader(http.StatusUnauthorized)
-				return nil
-			}
-			writer.WriteHeader(http.StatusBadRequest)
-			return nil
+
+			return nil, err
 		}
 		if !token.Valid {
 			writer.WriteHeader(http.StatusUnauthorized)
-			return nil
+			return nil, InvalidTokenError
 		}
 	}
-
-	return claims
+	return claims, nil
 }
 
 func ErrorTemplate(w http.ResponseWriter, err string, status int, files ...string) {
@@ -116,14 +107,29 @@ func ErrorTemplate(w http.ResponseWriter, err string, status int, files ...strin
 	t.Execute(w, output)
 }
 
-func ExecuteTemplateWithNavbar(w http.ResponseWriter, data OutputData, files ...string) {
-	t, _ := template.ParseFiles(files...)
-	t.Execute(w, data)
+func ExecuteTemplateWithNavbar(
+	w http.ResponseWriter, r *http.Request, data interface{}, user model.User, files ...string,
+) {
+	t, err := template.ParseFiles(files...)
+	if err != nil {
+		ServerErrorHandler(w, r, err)
+		return
+	}
+	err = t.ExecuteTemplate(w, "base", data)
+	if err != nil {
+		ServerErrorHandler(w, r, err)
+	}
 }
 
-func ExecuteTemplateWithoutNavbar(w http.ResponseWriter, data interface{}, files ...string) {
-	t, _ := template.ParseFiles(files...)
-	t.Execute(w, data)
+func ExecuteTemplateWithoutNavbar(w http.ResponseWriter, r *http.Request, data interface{}, files ...string) {
+	t, err := template.ParseFiles(files...)
+	if err != nil {
+		ServerErrorHandler(w, r, err)
+		return
+	}
+	if err = t.ExecuteTemplate(w, "base", data); err != nil {
+		ServerErrorHandler(w, r, err)
+	}
 }
 
 func pasteFile(request *http.Request, location string) (filename string, err error) {

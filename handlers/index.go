@@ -10,27 +10,28 @@ import (
 )
 
 func Index(writer http.ResponseWriter, request *http.Request) {
-	claim := utils.CheckCookie(writer, request)
-	if claim != nil {
-		tm, _ := template.ParseFiles("templates/base.html", "templates/index.html", "templates/private.navbar.html")
-		tm.ExecuteTemplate(writer, "base", *claim.User)
-	} else {
-		tm, _ := template.ParseFiles("templates/base.html", "templates/index.html", "templates/public.navbar.html")
-		tm.ExecuteTemplate(writer, "base", nil)
+	claim, err := utils.CheckCookie(writer, request)
+	if err == nil {
+		utils.ExecuteTemplateWithNavbar(
+			writer, request, nil, *claim.User, "templates/base.html", "templates/index.html",
+			"templates/private.navbar.html",
+		)
+		return
 	}
+	utils.ExecuteTemplateWithoutNavbar(
+		writer, request, nil, "templates/base.html", "templates/index.html", "templates/public.navbar.html",
+	)
 }
 
 func Account(writer http.ResponseWriter, request *http.Request) {
-	claims := &model.Claims{}
-	claims = utils.CheckCookie(writer, request)
+	claims, err := utils.CheckCookie(writer, request)
 
-	if claims == nil {
+	if err != nil {
 		http.Redirect(writer, request, "/login", http.StatusSeeOther)
 		writer.Write([]byte("<script>alert('Please login')</script>"))
 		return
 	}
 
-	//CallHeaderHtml(writer, request)
 	tm, _ := template.ParseFiles("templates/base.html", "templates/account.html", "templates/private.navbar.html")
 
 	userdata := &model.Userdata{}
@@ -47,7 +48,7 @@ func Account(writer http.ResponseWriter, request *http.Request) {
 		du = nil
 	}
 
-	err := tm.ExecuteTemplate(writer, "base", du)
+	err = tm.ExecuteTemplate(writer, "base", du)
 	if err != nil {
 		return
 	}

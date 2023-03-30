@@ -17,19 +17,23 @@ func ConfigCategories() {
 	server.DB.Create(&Category{Name: "T-shirts"})
 }
 
-func GetCategoryByID(id int) Category {
+func GetCategoryByID(id int) (Category, error) {
 	var category Category
-	server.DB.Where("ID=?", id).Find(&category)
-	return category
+	if err := server.DB.Where("ID=?", id).Find(&category).Error; err != nil {
+		return category, err
+	}
+	return category, nil
 }
 
-func (category *Category) Delete() {
-	server.DB.Where("ID=?", category.ID).Delete(&Category{})
+func (category *Category) Delete() error {
+	return server.DB.Where("ID=?", category.ID).Delete(&Category{}).Error
 }
 
-func (category *Category) Update() {
+func (category *Category) Update() error {
 	name := category.Name
-	server.DB.First(category)
+	if err := server.DB.First(category).Error; err != nil {
+		return err
+	}
 	category.Name = name
-	server.DB.Save(category)
+	return server.DB.Save(category).Error
 }
