@@ -29,9 +29,6 @@ func Session(writer http.ResponseWriter, request *http.Request) (user *model.Use
 	}
 	user = cookie.User
 	server.DB.Find(user)
-	if !user.IsStaff() {
-		err = errors.New("Invalid staff session")
-	}
 
 	return user, err
 }
@@ -44,7 +41,7 @@ func SessionStaff(writer http.ResponseWriter, request *http.Request) (session *m
 	user := cookie.User
 	server.DB.Find(user)
 	if !user.IsStaff() {
-		err = errors.New("Invalid staff session")
+		err = errors.New("Invalid staff access")
 	}
 
 	return user, err
@@ -56,9 +53,9 @@ func SessionAdmin(writer http.ResponseWriter, request *http.Request) (user *mode
 		return nil, http.ErrNoCookie
 	}
 	user = cookie.User
-	server.DB.Find(user)
-	if !user.IsAdmin() {
-		err = errors.New("Invalid admin session")
+	err = server.DB.Find(user).Error
+	if !user.IsAdmin() || err != nil {
+		err = errors.New("Invalid admin access")
 	}
 	return
 }

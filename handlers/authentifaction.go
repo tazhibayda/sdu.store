@@ -25,7 +25,7 @@ func Login(writer http.ResponseWriter, request *http.Request) {
 
 	if user.Password == Password || CheckPasswordHash(Password, user.Password) {
 		DoLogin(writer, *user)
-		http.Redirect(writer, request, "/", http.StatusFound)
+		http.Redirect(writer, request, "/", http.StatusSeeOther)
 		return
 	}
 	t, _ := template.ParseFiles("templates/sign-in.html")
@@ -56,21 +56,6 @@ func DoLogin(writer http.ResponseWriter, user model.User) {
 			Expires: expirationTime,
 		},
 	)
-
-	CurrentSession := model.Session{
-		UserID:    user.ID,
-		UUID:      tokenString,
-		CreatedAt: time.Now(),
-		DeletedAt: expirationTime,
-		LastLogin: time.Now(),
-		IP:        model.SetInet(),
-	}
-
-	var session model.Session
-
-	session = CurrentSession
-
-	server.DB.Create(&session)
 }
 
 func Logout(writer http.ResponseWriter, request *http.Request) {
@@ -80,11 +65,6 @@ func Logout(writer http.ResponseWriter, request *http.Request) {
 		http.Redirect(writer, request, "/", http.StatusSeeOther)
 		return
 	}
-
-	var session model.Session
-	server.DB.Last(&session)
-	session.DeletedAt = time.Now()
-	server.DB.Save(&session)
 
 	c := &http.Cookie{
 		Name:    "session_token",
@@ -98,10 +78,6 @@ func Logout(writer http.ResponseWriter, request *http.Request) {
 
 func SignUp(writer http.ResponseWriter, request *http.Request) {
 	request.ParseForm()
-	if request.Method != "POST" {
-		writer.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
 	if request.PostFormValue("password") == request.PostFormValue("repassword") {
 		user := model.User{
 			Username: request.PostFormValue("username"),
@@ -132,7 +108,7 @@ func SignUp(writer http.ResponseWriter, request *http.Request) {
 func LoginPage(writer http.ResponseWriter, request *http.Request) {
 	_, err := utils.Session(writer, request)
 	if err == nil {
-		http.Redirect(writer, request, "/", http.StatusFound)
+		http.Redirect(writer, request, "/", http.StatusSeeOther)
 		return
 	}
 	t, _ := template.ParseFiles("templates/sign-in.html")

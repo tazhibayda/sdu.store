@@ -4,7 +4,6 @@ import (
 	"html/template"
 	"net/http"
 	"sdu.store/handlers"
-	"sdu.store/server"
 	"sdu.store/server/model"
 	"sdu.store/utils"
 	"time"
@@ -17,7 +16,13 @@ func AdminLoginPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	t, _ := template.ParseFiles("templates/admin/sign-in.html")
-	t.Execute(w, nil)
+
+	access := r.URL.Query().Get("access")
+	if access != "" {
+		t.Execute(w, []string{"Need " + access + " access"})
+	} else {
+		t.Execute(w, nil)
+	}
 }
 
 func AdminLogout(writer http.ResponseWriter, request *http.Request) {
@@ -26,11 +31,6 @@ func AdminLogout(writer http.ResponseWriter, request *http.Request) {
 		http.Redirect(writer, request, "/", http.StatusSeeOther)
 		return
 	}
-
-	var session model.Session
-	server.DB.Last(&session)
-	session.DeletedAt = time.Now()
-	server.DB.Save(&session)
 
 	c := &http.Cookie{
 		Name:    "session_token",
@@ -76,6 +76,11 @@ func AdminServe(w http.ResponseWriter, r *http.Request) {
 	tm, _ := template.ParseFiles(
 		"templates/admin/base.html", "templates/admin/index.html", "templates/admin/navbar.html",
 	)
-	tm.ExecuteTemplate(w, "base", nil)
+	access := r.URL.Query().Get("access")
+	if access != "" {
+		tm.ExecuteTemplate(w, "base", []string{"Need " + access + " access"})
+	} else {
+		tm.ExecuteTemplate(w, "base", nil)
+	}
 
 }

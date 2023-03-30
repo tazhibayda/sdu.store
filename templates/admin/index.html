@@ -8,6 +8,15 @@
     <div class="title main-title vertical">
         Site adminstration
     </div>
+    <div class="vertical">
+        <div class="errors">
+            {{ range . }}
+            <div class="error">
+                {{.}}
+            </div>
+            {{ end}}
+        </div>
+    </div>
     <div class="main-group vertical">
         <div class="subtitle vertical">
             Authentication and Authorization

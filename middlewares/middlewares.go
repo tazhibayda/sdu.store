@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"sdu.store/handlers"
-	"sdu.store/handlers/admin"
 	"sdu.store/utils"
 )
 
@@ -13,7 +12,7 @@ func StaffLoggingMiddleware(next http.Handler) http.Handler {
 		func(writer http.ResponseWriter, request *http.Request) {
 			_, err := utils.SessionStaff(writer, request)
 			if err != nil {
-				admin.AdminLoginPage(writer, request)
+				http.Redirect(writer, request, "/Admin/login?access=staff", http.StatusSeeOther)
 				return
 			}
 			next.ServeHTTP(writer, request)
@@ -26,7 +25,7 @@ func AdminLoggingMiddleware(next http.Handler) http.Handler {
 		func(writer http.ResponseWriter, request *http.Request) {
 			_, err := utils.SessionAdmin(writer, request)
 			if err != nil {
-				admin.AdminLoginPage(writer, request)
+				http.Redirect(writer, request, "/Admin?access=admin", http.StatusSeeOther)
 				return
 			}
 			next.ServeHTTP(writer, request)

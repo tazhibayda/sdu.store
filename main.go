@@ -17,7 +17,7 @@ func main() {
 	if *restart {
 		fmt.Println("restart ")
 
-		server.DB.AutoMigrate(model.Session{}, model.User{}, model.Userdata{})
+		server.DB.AutoMigrate(model.User{}, model.Userdata{})
 		server.DB.AutoMigrate(
 			model.Category{}, model.Delivery{}, model.Product{}, model.Item{},
 			model.Supplier{}, model.DeliveryItem{},
