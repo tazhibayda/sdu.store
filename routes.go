@@ -15,7 +15,7 @@ func routes() http.Handler {
 	router.NotFound = http.HandlerFunc(handlers.NotFoundHandler)
 	router.MethodNotAllowed = http.HandlerFunc(handlers.NotAllowedMethod)
 
-	standardMiddleware := alice.New(middlewares.EnableCORS, middlewares.RecoverPanic, middlewares.LoggingRequest)
+	standardMiddleware := alice.New(middlewares.EnableCORS, middlewares.LoggingRequest)
 	adminMiddleware := alice.New(middlewares.AdminLoggingMiddleware)
 	staffMiddleware := alice.New(middlewares.StaffLoggingMiddleware)
 
@@ -47,6 +47,9 @@ func routes() http.Handler {
 	router.Handler(http.MethodPost, "/Admin/delete-category", staffMiddleware.ThenFunc(admin.CategoryDelete))
 	router.Handler(http.MethodPost, "/Admin/add-category", staffMiddleware.ThenFunc(admin.CreateCategory))
 	router.Handler(http.MethodGet, "/Admin/add-category", staffMiddleware.ThenFunc(admin.CreateCategoryPage))
+
+	router.Handler(http.MethodGet, "/Admin/add-product", staffMiddleware.ThenFunc(admin.AddProductPage))
+	router.Handler(http.MethodPost, "/Admin/add-product", staffMiddleware.ThenFunc(admin.AddProduct))
 	//
 	//router.HandleFunc("/Admin/products", admin.Products)
 	//router.HandleFunc("/Admin/add-product", admin.CreateProduct)

@@ -9,6 +9,32 @@ import (
 	"strings"
 )
 
+func AddProductPage(w http.ResponseWriter, r *http.Request) {
+	categories, err := model.GetAllCategory()
+	if err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
+	utils.ExecuteTemplateWithoutNavbar(
+		w, r, categories, "templates/admin/base.html", "templates/admin/navbar.html",
+		"templates/admin/AdminAddProduct.html",
+	)
+}
+
+func AddProduct(w http.ResponseWriter, r *http.Request) {
+	var product = &model.Product{}
+	err := model.ParseProduct(product, r)
+	if err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
+	if err = product.Create(); err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
+	http.Redirect(w, r, "/Admin/products", http.StatusSeeOther)
+}
+
 func CreateProduct(w http.ResponseWriter, r *http.Request) {
 	var product model.Product
 	if r.Method == "POST" {
@@ -16,7 +42,7 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 		price, _ := strconv.ParseFloat(r.FormValue("price"), 64)
 		product = model.Product{
 			Name:       r.FormValue("Name"),
-			CategoryID: uint(categoryID),
+			CategoryID: categoryID,
 			Price:      price,
 		}
 		server.DB.Create(&product)

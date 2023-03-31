@@ -7,14 +7,19 @@ import (
 
 type Category struct {
 	gorm.Model
-	Name     string    `json:"name"`
-	Products []Product `gorm:"foreignKey:ID"`
+	Name     string `json:"name"`
+	Products []Product
 }
 
 func ConfigCategories() {
 	server.DB.Create(&Category{Name: "Hoodies"})
 	server.DB.Create(&Category{Name: "Caps"})
 	server.DB.Create(&Category{Name: "T-shirts"})
+}
+
+func GetAllCategory() (categories []Category, err error) {
+	err = server.DB.Find(&categories).Error
+	return
 }
 
 func GetCategoryByID(id int) (Category, error) {
@@ -30,10 +35,5 @@ func (category *Category) Delete() error {
 }
 
 func (category *Category) Update() error {
-	name := category.Name
-	if err := server.DB.First(category).Error; err != nil {
-		return err
-	}
-	category.Name = name
-	return server.DB.Save(category).Error
+	return server.DB.Model(category).Update("name", category.Name).Error
 }

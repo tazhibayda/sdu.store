@@ -5,11 +5,30 @@
     margin-bottom: 30px;
 }
 
+select{
+    font-size: 18px;
+    padding: 6px;
+    width: 248px;
+}
+
 .main-table-container{
     display: flex;
     max-height: fit-content;
     flex-direction: column;
     width: 100%;
+}
+
+textarea{
+    font-size: 18px;
+    padding: 6px;
+}
+
+.note{
+    width: 100%;
+    padding-bottom: 20px;
+    display:flex;
+    margin: 20px;
+    color: red;
 }
 
 form{
