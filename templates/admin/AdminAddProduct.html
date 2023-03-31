@@ -1,10 +1,10 @@
 {{define "head"}}
-<title>Users</title>
+<title>Add Product</title>
 <link rel="stylesheet" href="/static/css/admin/single-item.css">
 {{end}}
 {{ define "content"}}
     <div class="main-table-container">
-        <form action="/Admin/add-product" method="POST">
+        <form action="/Admin/add-product" method="POST" enctype="multipart/form-data">
             <div class="main-title">
                 Create Product Instance
             </div>
@@ -22,7 +22,7 @@
                 </div>
                 <div class="attribute-value">
                     <select type="text" name="category" value="" required>
-                        {{ range .Categories}}
+                        {{ range .}}
                         <option value="{{.ID}}">{{.Name}}</option>
                         {{ end }}
                     </select>
@@ -41,7 +41,37 @@
                     Images:
                 </div>
                 <div class="attribute-value">
-                    <input type="text" name="name" value="">
+                    <input type="file" name="images" value="" multiple required>
+                </div>
+            </div>
+            <div class="note">
+                You should add size by whitespace
+            </div>
+            <div class="attribute-container">
+                <div class="attribute-name">
+                    Sizes:
+                </div>
+                <div class="attribute-value">   
+                    <input type="text" name="sizes" value="" required>
+                </div>
+            </div>
+            <div class="note">
+                You should add colors by whitespace
+            </div>
+            <div class="attribute-container">
+                <div class="attribute-name">
+                    Colors:
+                </div>
+                <div class="attribute-value">   
+                    <input type="text" name="colors" value="" required>
+                </div>
+            </div>
+            <div class="attribute-container">
+                <div class="attribute-name">
+                    Description:
+                </div>
+                <div class="attribute-value">
+                    <textarea name="description" value="" cols="80" rows="10" required></textarea>
                 </div>
             </div>
             <button type="submit" class="save-button">ADD</button>

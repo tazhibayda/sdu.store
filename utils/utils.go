@@ -92,6 +92,13 @@ func CheckCookie(writer http.ResponseWriter, request *http.Request) (*model.Clai
 			return nil, InvalidTokenError
 		}
 	}
+	var exists bool
+	if server.DB.Model(&model.User{}).
+		Select("count(*) > 0").
+		Where("id = ?", claims.User.ID).
+		Find(&exists); !exists {
+		return nil, InvalidTokenError
+	}
 	return claims, nil
 }
 

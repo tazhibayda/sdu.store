@@ -1,20 +1,24 @@
 package model
 
 import (
-	"gorm.io/gorm"
 	"sdu.store/server"
 )
 
 type Category struct {
-	gorm.Model
+	ID       int
 	Name     string    `json:"name"`
-	Products []Product `gorm:"foreignKey:ID"`
+	Products []Product `gorm:"constraint:OnDelete:CASCADE;"`
 }
 
 func ConfigCategories() {
 	server.DB.Create(&Category{Name: "Hoodies"})
 	server.DB.Create(&Category{Name: "Caps"})
 	server.DB.Create(&Category{Name: "T-shirts"})
+}
+
+func GetAllCategory() (categories []Category, err error) {
+	err = server.DB.Find(&categories).Error
+	return
 }
 
 func GetCategoryByID(id int) (Category, error) {
@@ -26,14 +30,9 @@ func GetCategoryByID(id int) (Category, error) {
 }
 
 func (category *Category) Delete() error {
-	return server.DB.Where("ID=?", category.ID).Delete(&Category{}).Error
+	return server.DB.Where("ID=?", category.ID).Unscoped().Delete(&Category{}).Error
 }
 
 func (category *Category) Update() error {
-	name := category.Name
-	if err := server.DB.First(category).Error; err != nil {
-		return err
-	}
-	category.Name = name
-	return server.DB.Save(category).Error
+	return server.DB.Model(category).Update("name", category.Name).Error
 }

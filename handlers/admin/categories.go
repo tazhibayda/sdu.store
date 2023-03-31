@@ -75,8 +75,8 @@ func Category(writer http.ResponseWriter, request *http.Request) {
 }
 
 func Categories(w http.ResponseWriter, r *http.Request) {
-	var categories []model.Category
-	if err := server.DB.Find(&categories).Error; err != nil {
+	categories, err := model.GetAllCategory()
+	if err != nil {
 		utils.ServerErrorHandler(w, r, err)
 		return
 	}
