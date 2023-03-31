@@ -50,6 +50,8 @@ func routes() http.Handler {
 
 	router.Handler(http.MethodGet, "/Admin/add-product", staffMiddleware.ThenFunc(admin.AddProductPage))
 	router.Handler(http.MethodPost, "/Admin/add-product", staffMiddleware.ThenFunc(admin.AddProduct))
+	router.Handler(http.MethodGet, "/Admin/products", staffMiddleware.ThenFunc(admin.Products))
+
 	//
 	//router.HandleFunc("/Admin/products", admin.Products)
 	//router.HandleFunc("/Admin/add-product", admin.CreateProduct)

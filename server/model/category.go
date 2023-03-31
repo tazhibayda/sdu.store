@@ -1,14 +1,13 @@
 package model
 
 import (
-	"gorm.io/gorm"
 	"sdu.store/server"
 )
 
 type Category struct {
-	gorm.Model
-	Name     string `json:"name"`
-	Products []Product
+	ID       int
+	Name     string    `json:"name"`
+	Products []Product `gorm:"constraint:OnDelete:CASCADE;"`
 }
 
 func ConfigCategories() {
@@ -31,7 +30,7 @@ func GetCategoryByID(id int) (Category, error) {
 }
 
 func (category *Category) Delete() error {
-	return server.DB.Where("ID=?", category.ID).Delete(&Category{}).Error
+	return server.DB.Where("ID=?", category.ID).Unscoped().Delete(&Category{}).Error
 }
 
 func (category *Category) Update() error {
