@@ -5,11 +5,19 @@ import (
 	"sdu.store/server"
 	"sdu.store/server/model"
 	"sdu.store/utils"
+	"strconv"
+	"strings"
 )
 
 type ProductTable struct {
-	Products []ProductOutput
-	Search   string
+	Products   []ProductOutput
+	Search     string
+	MaxPrice   int
+	MinPrice   int
+	Categories []struct {
+		Category   model.Category
+		IsSelected bool
+	}
 }
 
 type ProductOutput struct {
@@ -66,5 +74,35 @@ func Products(w http.ResponseWriter, r *http.Request) {
 		w, r, productTable, "templates/admin/base.html", "templates/admin/navbar.html",
 		"templates/admin/AdminProducts.html",
 	)
+
+}
+
+//func filterByCategories(request *http.Request, table *ProductTable) error {
+//
+//}
+
+func retrieveCategories(request *http.Request, table *ProductTable) error {
+	categoriesID := strings.Split(request.FormValue("categories"), " ")
+	categoriesIDMap := make(map[string]bool)
+	for _, id := range categoriesID {
+		categoriesIDMap[id] = true
+	}
+	categories, err := model.GetAllCategory()
+	if err != nil {
+		return err
+	}
+	for _, category := range categories {
+		isSelected := false
+		if categoriesIDMap[strconv.Itoa(category.ID)] {
+			isSelected = true
+		}
+		table.Categories = append(
+			table.Categories, struct {
+				Category   model.Category
+				IsSelected bool
+			}{Category: category, IsSelected: isSelected},
+		)
+	}
+	return nil
 
 }
