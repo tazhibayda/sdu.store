@@ -25,7 +25,8 @@
                         <tr>
                             <th>Name</th>
                             <th>Category</th>
-                            <th>Description</th>
+                            <th>Description</th> 
+                            <th>Price</th>
                         </tr>
                             {{ range .Products}}
                             <tr>
@@ -38,6 +39,8 @@
                                 </td>
                                 <td class="td-email">{{ .Category }}</td>
                                 <td class="td-email">{{ .Description }}</td>
+                                <td class="td-email">{{ .Price }}</td>
+
                             </tr>
                             {{ end }}
                         </a>
@@ -50,64 +53,39 @@
                 </div>
                 <div class="filter-main-container">
                     <div class="filter-title-container">
-                        By staff status
+                        Max Price
                     </div>
                     <div class="filter-input-label">
-                        {{if eq .StaffStatus 0}}
-                            <input type="radio" id="all-user-staff" name="staff" value="0" checked>
-                            <label for="all-user-staff">All</label><br>
-                        {{else}}
-                            <input type="radio" id="all-user-staff" name="staff" value="0">
-                            <label for="all-user-staff">All</label><br>
-                        {{end}}
-                        {{if eq .StaffStatus 1}}
-                            <input type="radio" id="yes-user-staff" name="staff" value="1" checked>
-                            <label for="yes-user-staff">Yes</label><br>
-                        {{else}}
-                            <input type="radio" id="yes-user-staff" name="staff" value="1">
-                             <label for="yes-user-staff">Yes</label><br>
-                        {{end}}
-
-                        {{if eq .StaffStatus 2}}
-                            <input type="radio" id="no-user-staff" name="staff" value="2" checked>
-                            <label for="no-user-staff">No</label>
-                        {{else}}
-                            <input type="radio" id="no-user-staff" name="staff" value="2">
-                            <label for="no-user-staff">No</label>
-                        {{end}}
-                          
-                
-                        <div class="hr"></div>
+                        <input type="number" value="{{ .MaxPrice }}" name="max-price" id="">
                     </div>
+                    <div class="hr"></div>
                 </div>
                 <div class="filter-main-container">
                     <div class="filter-title-container">
-                        By admin status
+                        Min Price
                     </div>
                     <div class="filter-input-label">
-                        {{if eq .AdminStatus 0}}
-                            <input type="radio" id="all-user-admin" name="admin" value="0" checked>
-                            <label for="all-user-admin">All</label><br>
-                        {{else}}
-                           <input type="radio" id="all-user-admin" name="admin" value="0">
-                           <label for="all-user-admin">All</label><br>
-                        {{end}}
-                        {{if eq .AdminStatus 1}}
-                           <input type="radio" id="yes-user-admin" name="admin" value="1" checked>
-                           <label for="yes-user-admin">Yes</label><br>
-                        {{else}}
-                           <input type="radio" id="yes-user-admin" name="admin" value="1">
-                           <label for="yes-user-admin">Yes</label><br>
-                        {{end}}
-
-                        {{if eq .AdminStatus 2}}
-                           <input type="radio" id="no-user-admin" name="admin" value="2" checked>
-                           <label for="no-user-admin">No</label>
-                        {{else}}
-                           <input type="radio" id="no-user-admin" name="admin" value="2">
-                           <label for="no-user-admin">No</label>
-                        {{end}}
+                        <input type="number" value="{{ .MinPrice}}" name="min-price">
                     </div>
+                    <div class="hr"></div>
+                </div>
+                <div class="filter-main-container">
+                    <div class="filter-title-container">
+                        By Categories
+                    </div>
+                    <div>
+                        {{ range .Categories }}
+                        <div class="filter-input-label">
+                            {{ if .IsSelected}}
+                            <input type="checkbox" id="{{ .Category.ID }}" name="category{{  .Category.ID }}" value="{{ .Category.ID }}" checked>
+                            {{ else }}
+                            <input type="checkbox" id="{{ .Category.ID }}" name="category{{  .Category.ID }}" value="{{ .Category.ID }}" >
+                            {{ end }}
+                            <label for="{{ .Category.ID }}">{{.Category.Name}}</label><br>       
+                        </div>
+                        {{ end }}
+                    </div>
+                    <div class="hr"></div>
                 </div>
             </div>
         </div>
