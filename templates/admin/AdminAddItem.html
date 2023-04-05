@@ -1,0 +1,47 @@
+{{define "head"}}
+<title>Add Product</title>
+<link rel="stylesheet" href="/static/css/admin/single-item.css">
+{{end}}
+{{ define "content"}}
+    <div class="main-table-container">
+        <form action="/Admin/add-item" method="POST" enctype="multipart/form-data">
+            <input type="text" name="product-id" value="{{.ID}}" hidden>
+            <div class="main-title">
+                Add Item Instance to {{ .Name }}
+            </div>
+            <div class="attribute-container">
+                <div class="attribute-name">
+                    Size:
+                </div>
+                <div class="attribute-value">
+                    <select type="text" name="size" value="">
+                        {{ range .Sizes}}
+                        <option value="{{.}}">{{.}}</option>
+                        {{ end }}
+                    </select>
+                </div>
+            </div>
+            <div class="attribute-container">
+                <div class="attribute-name">
+                    Color:
+                </div>
+                <div class="attribute-value">
+                    <select type="text" name="color" value="" required>
+                        {{ range .Colors}}
+                        <option value="{{.}}">{{.}}</option>
+                        {{ end }}
+                    </select>
+                </div>
+            </div>
+            <div class="attribute-container">
+                <div class="attribute-name">
+                    Quantity:
+                </div>
+                <div class="attribute-value">
+                    <input type="number" name="quantity" value="" min="1" required>
+                </div>
+            </div>
+            <button type="submit" class="save-button">ADD</button>
+        </form>
+    </div>
+{{end}}

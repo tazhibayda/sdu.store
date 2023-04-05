@@ -27,11 +27,12 @@
                             <th>Category</th>
                             <th>Description</th> 
                             <th>Price</th>
+                            <th></th>
                         </tr>
                             {{ range .Products}}
                             <tr>
                                 <td class="td-username">
-                                    <a href="/Admin/user?id={{.ID}}">
+                                    <a href="/Admin/product?id={{.ID}}">
                                         <div>
                                             {{.Name}}
                                         </div>
@@ -40,6 +41,14 @@
                                 <td class="td-email">{{ .Category }}</td>
                                 <td class="td-email">{{ .Description }}</td>
                                 <td class="td-email">{{ .Price }}</td>
+                                <td class="td-email td-add-item">
+                                    <a href="/Admin/add-item?id={{.ID}}" class="table-add-container add-item">
+                                        <div>ADD ITEM</div>
+                                        <div class="svg-wrapper">
+                                            <img src="/static/image/plus-svgrepo-com-white.svg" alt="svg">
+                                        </div>
+                                    </a>
+                                </td>
 
                             </tr>
                             {{ end }}

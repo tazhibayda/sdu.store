@@ -27,6 +27,12 @@ func (this *Product) Create() error {
 	return server.DB.Create(this).Error
 }
 
+func GetProductByID(productID int) (Product, error) {
+	var product Product
+	err := server.DB.First(&product, productID).Error
+	return product, err
+}
+
 func ParseProduct(product *Product, request *http.Request) error {
 	var err error
 	// parsing name
