@@ -97,6 +97,10 @@ form{
     margin-bottom: 15px;
 }
 
+.filter-input-label{
+    margin-left: 10px;
+}
+
 .hr{
     margin-top: 15px;
     border-bottom: 1px rgba(200,200,200,255) solid;
