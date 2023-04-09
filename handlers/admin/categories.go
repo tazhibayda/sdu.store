@@ -1,10 +1,10 @@
 package admin
 
 import (
-	"html/template"
 	"net/http"
 	"sdu.store/server"
 	"sdu.store/server/model"
+	"sdu.store/server/validators"
 	"sdu.store/utils"
 	"strconv"
 	"strings"
@@ -57,15 +57,16 @@ func Category(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	name := request.FormValue("name")
-	if name == "" {
-		tm, _ := template.ParseFiles(
-			"templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminCategory.html",
+	category.Name = request.FormValue("name")
+	validator := validators.CategoryValidator{Category: &category}
+	if validator.Check(); !validator.IsValid() {
+		utils.ExecuteTemplateWithoutNavbar(
+			writer, request, validator.Errors(), "templates/admin/base.html", "templates/admin/navbar.html",
+			"templates/admin/AdminAddCategory.html",
 		)
-		tm.ExecuteTemplate(writer, "base", category)
 		return
 	}
-	category.Name = name
+
 	if err := category.Update(); err != nil {
 		utils.ServerErrorHandler(writer, request, err)
 		return
@@ -95,15 +96,17 @@ func Categories(w http.ResponseWriter, r *http.Request) {
 
 func CreateCategory(w http.ResponseWriter, r *http.Request) {
 	var category model.Category
-	name := r.FormValue("name")
-	if name == "" {
+	category = model.Category{Name: r.FormValue("name")}
+
+	validator := validators.CategoryValidator{Category: &category}
+
+	if validator.Check(); !validator.IsValid() {
 		utils.ExecuteTemplateWithoutNavbar(
-			w, r, nil, "templates/admin/base.html", "templates/admin/navbar.html",
+			w, r, validator.Errors(), "templates/admin/base.html", "templates/admin/navbar.html",
 			"templates/admin/AdminAddCategory.html",
 		)
 		return
 	}
-	category = model.Category{Name: name}
 
 	if err := server.DB.Create(&category).Error; err != nil {
 		utils.ServerErrorHandler(w, r, err)

@@ -1,0 +1,38 @@
+{{define "head"}}
+<title>Users</title>
+<link rel="stylesheet" href="/static/css/admin/table.css">
+{{end}}
+{{ define "content"}}
+<form action="/Admin/items">
+    <div class="main-table-container">
+        <div class="main-table-title">Select user to change</div>
+    </div>
+    <div class="table-main-content-container">
+        <div class="table-content-container">
+            <div class="table-left-container">
+                <div>
+                    <input class="search-input" type="search" value="{{ .Search }}" name="search">
+                    <button class="search-button">Search</button>
+                </div>
+                <div>
+                    <table>
+                        <tr>
+                            <th>Barcode</th>
+                            <th>Size</th>
+                            <th>Color</th>
+                        </tr>
+                            {{ range .Items}}
+                            <tr>
+                                <td class="td-email">{{.Barcode}}</td>
+                                <td class="td-email">{{ .Size }}</td>
+                                <td class="td-email">{{ .Color }}</td>
+                            </tr>
+                            {{ end }}
+                        </a>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{{end}}

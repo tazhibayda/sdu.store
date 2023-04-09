@@ -16,7 +16,13 @@
                     <input type="text" name="name" value="">
                 </div>
             </div>
-
+            <div class="errors">
+                {{ range . }}
+                <div class="error">
+                    {{.}}
+                </div>
+                {{ end}}
+            </div>
             <button type="submit" class="save-button">ADD</button>
         </form>
     </div>

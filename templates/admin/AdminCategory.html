@@ -16,7 +16,13 @@
                     <input type="text" name="name" value="{{.Name}}">
                 </div>
             </div>
-
+            <div class="errors">
+                {{ range . }}
+                <div class="error">
+                    {{.}}
+                </div>
+                {{ end}}
+            </div>
             <button type="submit" class="save-button">Save</button>
         </form>
         <form action="/Admin/delete-category?id={{.ID}}" method="POST">

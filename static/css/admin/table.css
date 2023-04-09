@@ -26,6 +26,16 @@ form{
     text-decoration: none;
 }
 
+.add-item{
+    width: 100px;
+    margin-right: 10px;
+}
+
+.td-add-item{
+    display: flex;
+    justify-content: flex-end;
+}
+
 .table-add-container img {
     width: 30px;
 }
@@ -95,6 +105,10 @@ form{
     margin-left: 10px;
     font-size: 20px;
     margin-bottom: 15px;
+}
+
+.filter-input-label{
+    margin-left: 10px;
 }
 
 .hr{

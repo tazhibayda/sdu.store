@@ -23,8 +23,21 @@ type Product struct {
 	Items       []Item
 }
 
+func (this *Product) Delete() error {
+	return server.DB.Delete(this).Error
+}
 func (this *Product) Create() error {
 	return server.DB.Create(this).Error
+}
+
+func (this *Product) Update() error {
+	return server.DB.Save(this).Error
+}
+
+func GetProductByID(productID int) (Product, error) {
+	var product Product
+	err := server.DB.First(&product, productID).Error
+	return product, err
 }
 
 func ParseProduct(product *Product, request *http.Request) error {

@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"sdu.store/server"
 	"sdu.store/server/model"
+	"sdu.store/server/validators"
 	"sdu.store/utils"
 	"strconv"
 )
@@ -23,6 +24,7 @@ type ProductTable struct {
 type ProductOutput struct {
 	model.Product
 	Category string
+	Errors   []string
 }
 
 func AddProductPage(w http.ResponseWriter, r *http.Request) {
@@ -37,9 +39,35 @@ func AddProductPage(w http.ResponseWriter, r *http.Request) {
 	)
 }
 
+func DeleteProduct(writer http.ResponseWriter, request *http.Request) {
+	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
+	product, err := model.GetProductByID(id)
+
+	if err != nil {
+		utils.ServerErrorHandler(writer, request, err)
+		return
+	}
+
+	if err := product.Delete(); err != nil {
+		utils.ServerErrorHandler(writer, request, err)
+		return
+	}
+
+	http.Redirect(writer, request, "/Admin/products", http.StatusSeeOther)
+}
+
 func AddProduct(w http.ResponseWriter, r *http.Request) {
 	var product = &model.Product{}
 	err := model.ParseProduct(product, r)
+
+	validator := validators.ProductValidator{Product: product}
+	if validator.Check(); !validator.IsValid() {
+		utils.ExecuteTemplateWithoutNavbar(
+			w, r, validator.Errors(), "templates/admin/base.html", "templates/admin/navbar.html",
+			"templates/admin/AdminAddProduct.html",
+		)
+	}
+
 	if err != nil {
 		utils.ServerErrorHandler(w, r, err)
 		return
@@ -49,6 +77,72 @@ func AddProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.Redirect(w, r, "/Admin/products", http.StatusSeeOther)
+}
+
+func ProductPage(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(r.URL.Query().Get("id"))
+	p, err := model.GetProductByID(id)
+	if err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
+	category, err := model.GetCategoryByID(p.CategoryID)
+	if err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
+	product := ProductOutput{p, category.Name, nil}
+
+	utils.ExecuteTemplateWithoutNavbar(
+		w, r, product, "templates/admin/base.html", "templates/admin/navbar.html", "templates/admin/AdminProduct.html",
+	)
+}
+
+func Product(w http.ResponseWriter, r *http.Request) {
+	var product model.Product
+	id, err := strconv.Atoi(r.FormValue("id"))
+	if err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
+	product.ID = uint(id)
+	err = model.ParseProduct(&product, r)
+	if err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
+	p, err := model.GetProductByID(int(product.ID))
+	if err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
+	product.Images = p.Images
+	product.Colors = p.Colors
+	product.Sizes = p.Sizes
+
+	category, err := model.GetCategoryByID(product.CategoryID)
+	if err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
+
+	validator := validators.ProductValidator{Product: &product}
+	if validator.Check(); !validator.IsValid() {
+		utils.ExecuteTemplateWithoutNavbar(
+			w, r, ProductOutput{product, category.Name, validator.Errors()}, "templates/admin/base.html",
+			"templates/admin/navbar.html",
+			"templates/admin/AdminProduct.html",
+		)
+		return
+	}
+
+	err = product.Update()
+	if err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
+	http.Redirect(w, r, "/Admin/products", http.StatusSeeOther)
+
 }
 
 func Products(w http.ResponseWriter, r *http.Request) {
@@ -96,7 +190,7 @@ func filterProducts(request *http.Request, table *ProductTable) error {
 		if err != nil {
 			return err
 		}
-		table.Products = append(table.Products, ProductOutput{product, category.Name})
+		table.Products = append(table.Products, ProductOutput{product, category.Name, nil})
 	}
 	return nil
 }
