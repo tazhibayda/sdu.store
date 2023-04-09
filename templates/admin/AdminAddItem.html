@@ -9,6 +9,16 @@
             <div class="main-title">
                 Add Item Instance to {{ .Name }}
             </div>
+
+            <div class="attribute-container">
+                <div class="attribute-name">
+                    Barcode:
+                </div>
+                <div class="attribute-value">
+                    <input type="text" name="barcode" value="" required>
+                </div>
+            </div>
+
             <div class="attribute-container">
                 <div class="attribute-name">
                     Size:
@@ -31,14 +41,6 @@
                         <option value="{{.}}">{{.}}</option>
                         {{ end }}
                     </select>
-                </div>
-            </div>
-            <div class="attribute-container">
-                <div class="attribute-name">
-                    Quantity:
-                </div>
-                <div class="attribute-value">
-                    <input type="number" name="quantity" value="" min="1" required>
                 </div>
             </div>
             <button type="submit" class="save-button">ADD</button>
