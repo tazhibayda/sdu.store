@@ -43,7 +43,7 @@ func AddItemPage(writer http.ResponseWriter, request *http.Request) {
 func AddItem(writer http.ResponseWriter, request *http.Request) {
 	productID, err := strconv.Atoi(request.FormValue("product-id"))
 	if err != nil {
-		utils.ServerErrorHandler(writer, request, err)
+		utils.BadRequest(writer, request, err)
 		return
 	}
 

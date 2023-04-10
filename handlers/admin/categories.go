@@ -16,7 +16,11 @@ type CategoryTable struct {
 }
 
 func CategoryPage(writer http.ResponseWriter, request *http.Request) {
-	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
+	id, err := strconv.Atoi(request.URL.Query().Get("id"))
+	if err != nil {
+		utils.BadRequest(writer, request, err)
+		return
+	}
 	category, err := model.GetCategoryByID(id)
 
 	if err != nil {
@@ -32,11 +36,16 @@ func CategoryPage(writer http.ResponseWriter, request *http.Request) {
 }
 
 func CategoryDelete(writer http.ResponseWriter, request *http.Request) {
-	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
+	id, err := strconv.Atoi(request.URL.Query().Get("id"))
+	if err != nil {
+		utils.BadRequest(writer, request, err)
+		return
+	}
+
 	category, err := model.GetCategoryByID(id)
 
 	if err != nil {
-		utils.ServerErrorHandler(writer, request, err)
+		utils.NotFound(writer, request, err)
 		return
 	}
 
@@ -49,11 +58,15 @@ func CategoryDelete(writer http.ResponseWriter, request *http.Request) {
 }
 
 func Category(writer http.ResponseWriter, request *http.Request) {
-	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
+	id, err := strconv.Atoi(request.URL.Query().Get("id"))
+	if err != nil {
+		utils.BadRequest(writer, request, err)
+		return
+	}
 	category, err := model.GetCategoryByID(id)
 
 	if err != nil {
-		utils.ServerErrorHandler(writer, request, err)
+		utils.NotFound(writer, request, err)
 		return
 	}
 

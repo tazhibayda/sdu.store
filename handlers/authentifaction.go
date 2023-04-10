@@ -48,7 +48,6 @@ func DoLogin(writer http.ResponseWriter, user model.User) error {
 	if err != nil {
 		return err
 	}
-
 	http.SetCookie(
 		writer, &http.Cookie{
 			Name:    "session_token",
