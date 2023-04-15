@@ -1,0 +1,21 @@
+{{define "head"}}
+    <link rel="stylesheet" href="/static/css/category.css">
+    <title>Category Products</title>
+{{end}}
+
+{{define "content"}}
+<main>
+    <div class="content"> 
+        <div class="nameblock" id="jeide">{{.Name}}</div>
+        <div class="rowblocks" style= "display: flex; justify-content: space-around;">
+            {{ range .Products }}
+            <div class="cardblock">
+                <div class="imageblock15" style="background: url({{index .Images 0}})"></div>
+                <div class="nameelement">{{ .Name }}</div>
+                <div class="coastel">{{ .Price }} KZT</div>
+                <a class="button" href="">Details</a>
+            </div>
+            {{ end }}
+        </div>
+</main>
+{{end}}

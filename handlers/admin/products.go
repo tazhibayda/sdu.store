@@ -60,6 +60,11 @@ func AddProduct(w http.ResponseWriter, r *http.Request) {
 	var product = &model.Product{}
 	err := model.ParseProduct(product, r)
 
+	if err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
+
 	validator := validators.ProductValidator{Product: product}
 	if validator.Check(); !validator.IsValid() {
 		utils.ExecuteTemplateWithoutNavbar(
@@ -68,10 +73,6 @@ func AddProduct(w http.ResponseWriter, r *http.Request) {
 		)
 	}
 
-	if err != nil {
-		utils.ServerErrorHandler(w, r, err)
-		return
-	}
 	if err = product.Create(); err != nil {
 		utils.ServerErrorHandler(w, r, err)
 		return
