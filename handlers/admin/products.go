@@ -68,6 +68,11 @@ func AddProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
+
 	validator := validators.ProductValidator{Product: product}
 	if validator.Check(); !validator.IsValid() {
 		utils.ExecuteTemplateWithoutNavbar(

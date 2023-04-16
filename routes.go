@@ -21,6 +21,8 @@ func routes() http.Handler {
 	loggingMiddleware := alice.New(middlewares.LoggingMiddleware)
 
 	router.ServeFiles("/static/*filepath", http.Dir("static"))
+	router.ServeFiles("/images/*filepath", http.Dir("images"))
+
 
 	router.HandlerFunc(http.MethodGet, "/", handlers.Index)
 
@@ -61,6 +63,7 @@ func routes() http.Handler {
 	router.Handler(http.MethodGet, "/Admin/items", staffMiddleware.ThenFunc(admin.Items))
 
 	router.Handler(http.MethodPost, "/product/rating", loggingMiddleware.ThenFunc(handlers.AddRating))
+	router.HandlerFunc(http.MethodGet, "/category", handlers.Category)
 
 	//
 	//router.HandleFunc("/Admin/products", admin.Products)

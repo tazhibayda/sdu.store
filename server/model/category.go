@@ -23,7 +23,7 @@ func GetAllCategory() (categories []Category, err error) {
 
 func GetCategoryByID(id int) (Category, error) {
 	var category Category
-	if err := server.DB.Where("ID=?", id).Find(&category).Error; err != nil {
+	if err := server.DB.Where("ID=?", id).Preload("Products").Find(&category).Error; err != nil {
 		return category, err
 	}
 	return category, nil
