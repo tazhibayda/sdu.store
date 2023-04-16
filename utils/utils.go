@@ -97,7 +97,6 @@ func CheckCookie(writer http.ResponseWriter, request *http.Request) (*model.Clai
 	)
 
 	if err != nil {
-
 		return nil, err
 	}
 
