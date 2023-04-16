@@ -1,0 +1,49 @@
+.nameblock{
+	padding: 60px 0px 60px 150px;
+	font-family: 'Roboto', sans-serif;
+	font-size: 50px;
+	color: #fff;
+    background-color: #6fa1f6c9;
+    border-left: solid  20px #0045c0;
+}
+
+.rowblocks{
+	display: flex;
+	justify-content: space-around;
+	font-family: 'Roboto', sans-serif;
+	font-size: 20px;
+	color: #0045c0;
+    background-color: #fff;
+}
+
+.imageblock15{
+    width: 300px;
+    height: 300px;
+    background-size: 300px!important;
+    background-repeat: no-repeat!important;
+    background-attachment: fixed;
+    background-position: center!important;
+}
+
+.imageblock15:hover{
+    /*background: url("./123/jeideler/burjeide/b1.jpg") no-repeat ;*/
+    background-size: 300px;
+}
+
+.coastel{
+	font-size: 15px;
+    padding-bottom: 10px;
+}
+@media (max-width:1200px) {
+    .rowblock{
+    display: grid;
+}
+.nameblock{
+    font-size: 30px;
+    padding-left: 30px;
+}
+#jeide{
+    font-size: 30px;
+    padding-left: 30px;
+}
+}
