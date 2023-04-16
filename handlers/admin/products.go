@@ -40,11 +40,15 @@ func AddProductPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteProduct(writer http.ResponseWriter, request *http.Request) {
-	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
-	product, err := model.GetProductByID(id)
-
+	id, err := strconv.Atoi(request.URL.Query().Get("id"))
 	if err != nil {
-		utils.ServerErrorHandler(writer, request, err)
+		utils.BadRequest(writer, request, err)
+		return
+	}
+
+	product, err := model.GetProductByID(id)
+	if err != nil {
+		utils.NotFound(writer, request, err)
 		return
 	}
 
@@ -59,6 +63,10 @@ func DeleteProduct(writer http.ResponseWriter, request *http.Request) {
 func AddProduct(w http.ResponseWriter, r *http.Request) {
 	var product = &model.Product{}
 	err := model.ParseProduct(product, r)
+	if err != nil {
+		utils.BadRequest(w, r, err)
+		return
+	}
 
 	if err != nil {
 		utils.ServerErrorHandler(w, r, err)
@@ -81,15 +89,19 @@ func AddProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func ProductPage(w http.ResponseWriter, r *http.Request) {
-	id, _ := strconv.Atoi(r.URL.Query().Get("id"))
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+	if err != nil {
+		utils.BadRequest(w, r, err)
+	}
+
 	p, err := model.GetProductByID(id)
 	if err != nil {
-		utils.ServerErrorHandler(w, r, err)
+		utils.NotFound(w, r, err)
 		return
 	}
 	category, err := model.GetCategoryByID(p.CategoryID)
 	if err != nil {
-		utils.ServerErrorHandler(w, r, err)
+		utils.NotFound(w, r, err)
 		return
 	}
 	product := ProductOutput{p, category.Name, nil}
@@ -103,18 +115,18 @@ func Product(w http.ResponseWriter, r *http.Request) {
 	var product model.Product
 	id, err := strconv.Atoi(r.FormValue("id"))
 	if err != nil {
-		utils.ServerErrorHandler(w, r, err)
+		utils.BadRequest(w, r, err)
 		return
 	}
 	product.ID = uint(id)
 	err = model.ParseProduct(&product, r)
 	if err != nil {
-		utils.ServerErrorHandler(w, r, err)
+		utils.BadRequest(w, r, err)
 		return
 	}
 	p, err := model.GetProductByID(int(product.ID))
 	if err != nil {
-		utils.ServerErrorHandler(w, r, err)
+		utils.NotFound(w, r, err)
 		return
 	}
 	product.Images = p.Images
@@ -123,7 +135,7 @@ func Product(w http.ResponseWriter, r *http.Request) {
 
 	category, err := model.GetCategoryByID(product.CategoryID)
 	if err != nil {
-		utils.ServerErrorHandler(w, r, err)
+		utils.NotFound(w, r, err)
 		return
 	}
 

@@ -27,6 +27,16 @@ func ServerErrorHandler(writer http.ResponseWriter, request *http.Request, err e
 	ErrorTemplate(writer, "Server Error", http.StatusInternalServerError, "templates/error.html")
 }
 
+func NotFound(writer http.ResponseWriter, request *http.Request, err error) {
+	ErrorLogger(err.Error(), request)
+	ErrorTemplate(writer, "Not Found", http.StatusNotFound, "templates/error.html")
+}
+
+func BadRequest(writer http.ResponseWriter, request *http.Request, err error) {
+	ErrorLogger(err.Error(), request)
+	ErrorTemplate(writer, "Bad Request", http.StatusBadRequest, "templates/error.html")
+}
+
 func Session(writer http.ResponseWriter, request *http.Request) (user *model.User, err error) {
 	cookie, err := CheckCookie(writer, request)
 	if err != nil {
@@ -74,24 +84,27 @@ func CheckCookie(writer http.ResponseWriter, request *http.Request) (*model.Clai
 	if err != nil {
 		return nil, err
 	}
-	if cookie != nil {
-
-		key := cookie.Value
-
-		token, err := jwt.ParseWithClaims(
-			key, claims, func(token *jwt.Token) (interface{}, error) {
-				return model.JwtKey, nil
-			},
-		)
-		if err != nil {
-
-			return nil, err
-		}
-		if !token.Valid {
-			writer.WriteHeader(http.StatusUnauthorized)
-			return nil, InvalidTokenError
-		}
+	if cookie == nil {
+		return nil, InvalidTokenError
 	}
+
+	key := cookie.Value
+
+	token, err := jwt.ParseWithClaims(
+		key, claims, func(token *jwt.Token) (interface{}, error) {
+			return model.JwtKey, nil
+		},
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if !token.Valid {
+		writer.WriteHeader(http.StatusUnauthorized)
+		return nil, InvalidTokenError
+	}
+
 	var exists bool
 	if server.DB.Model(&model.User{}).
 		Select("count(*) > 0").

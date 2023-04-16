@@ -70,7 +70,11 @@ func AdminUsers(w http.ResponseWriter, r *http.Request) {
 		utils.ServerErrorHandler(w, r, err)
 		return
 	}
-	hasFilter, userTable := HasFilterUserTable(r)
+	hasFilter, userTable, err := HasFilterUserTable(r)
+	if err != nil {
+		utils.BadRequest(w, r, err)
+		return
+	}
 	if hasFilter {
 		sortUserTable(users, &userTable)
 	} else {
@@ -83,10 +87,15 @@ func AdminUsers(w http.ResponseWriter, r *http.Request) {
 
 func UserPage(writer http.ResponseWriter, request *http.Request) {
 
-	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
+	id, err := strconv.Atoi(request.URL.Query().Get("id"))
+	if err != nil {
+		utils.BadRequest(writer, request, err)
+		return
+	}
+
 	user, err := model.GetUserByID(int64(id))
 	if err != nil {
-		utils.ServerErrorHandler(writer, request, err)
+		utils.NotFound(writer, request, err)
 		return
 	}
 	utils.ExecuteTemplateWithoutNavbar(
@@ -97,11 +106,15 @@ func UserPage(writer http.ResponseWriter, request *http.Request) {
 }
 
 func UserDelete(writer http.ResponseWriter, request *http.Request) {
-	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
+	id, err := strconv.Atoi(request.URL.Query().Get("id"))
+	if err != nil {
+		utils.BadRequest(writer, request, err)
+		return
+	}
 	user, err := model.GetUserByID(int64(id))
 
 	if err != nil {
-		utils.ServerErrorHandler(writer, request, err)
+		utils.NotFound(writer, request, err)
 		return
 	}
 
@@ -114,11 +127,15 @@ func UserDelete(writer http.ResponseWriter, request *http.Request) {
 }
 
 func User(writer http.ResponseWriter, request *http.Request) {
-	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
+	id, err := strconv.Atoi(request.URL.Query().Get("id"))
+	if err != nil {
+		utils.BadRequest(writer, request, err)
+		return
+	}
 	user, err := model.GetUserByID(int64(id))
 
 	if err != nil {
-		utils.ServerErrorHandler(writer, request, err)
+		utils.NotFound(writer, request, err)
 		return
 	}
 
@@ -185,18 +202,24 @@ func DeleteUserdata(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func HasFilterUserTable(request *http.Request) (hasFilter bool, filter UserTable) {
+func HasFilterUserTable(request *http.Request) (hasFilter bool, filter UserTable, err error) {
 	if search := request.FormValue("search"); search != "" {
 		hasFilter = true
 		filter.Search = search
 	}
 	if staff := request.FormValue("staff"); staff != "" {
 		hasFilter = true
-		filter.StaffStatus, _ = strconv.Atoi(staff)
+		filter.StaffStatus, err = strconv.Atoi(staff)
+		if err != nil {
+			return
+		}
 	}
 	if admin := request.FormValue("admin"); admin != "" {
 		hasFilter = true
-		filter.AdminStatus, _ = strconv.Atoi(admin)
+		filter.AdminStatus, err = strconv.Atoi(admin)
+		if err != nil {
+			return
+		}
 	}
 	return
 }

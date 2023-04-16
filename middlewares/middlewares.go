@@ -20,6 +20,20 @@ func StaffLoggingMiddleware(next http.Handler) http.Handler {
 	)
 }
 
+func LoggingMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(
+		func(writer http.ResponseWriter, request *http.Request) {
+			_, err := utils.Session(writer, request)
+			if err != nil {
+				utils.ErrorLogger(err.Error(), request)
+				http.Redirect(writer, request, "/login", http.StatusSeeOther)
+				return
+			}
+			next.ServeHTTP(writer, request)
+		},
+	)
+}
+
 func AdminLoggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(writer http.ResponseWriter, request *http.Request) {
