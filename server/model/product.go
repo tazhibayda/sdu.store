@@ -21,6 +21,7 @@ type Product struct {
 	Colors      pq.StringArray `gorm:"type:text[]" json:"colors"`
 	Description string         `json:"description" input:"string"`
 	Items       []Item
+	Rating      float64 `gorm:"default:0"`
 }
 
 func (this *Product) Delete() error {
