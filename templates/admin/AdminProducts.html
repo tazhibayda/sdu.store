@@ -27,7 +27,7 @@
                             <th>Category</th>
                             <th>Description</th> 
                             <th>Price</th>
-                            <th></th>
+                            <th>Rating</th>
                         </tr>
                             {{ range .Products}}
                             <tr>
@@ -41,6 +41,7 @@
                                 <td class="td-email">{{ .Category }}</td>
                                 <td class="td-email">{{ .Description }}</td>
                                 <td class="td-email">{{ .Price }}</td>
+                                <td class="td-email">{{ .Rating }}</td>
                                 <td class="td-email td-add-item">
                                     <a href="/Admin/add-item?id={{.ID}}" class="table-add-container add-item">
                                         <div>ADD ITEM</div>

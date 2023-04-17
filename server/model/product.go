@@ -13,14 +13,18 @@ import (
 
 type Product struct {
 	gorm.Model
-	Name        string         `json:"name"`
-	CategoryID  int            `json:"category"`
-	Price       float64        `json:"price"`
-	Images      pq.StringArray `gorm:"type:text[]" json:"images"`
-	Sizes       pq.StringArray `gorm:"type:text[]" json:"sizes"`
-	Colors      pq.StringArray `gorm:"type:text[]" json:"colors"`
-	Description string         `json:"description" input:"string"`
-	Items       []Item
+	Name           string         `json:"name"`
+	CategoryID     int            `json:"category"`
+	Price          float64        `json:"price"`
+	Images         pq.StringArray `gorm:"type:text[]" json:"images"`
+	Sizes          pq.StringArray `gorm:"type:text[]" json:"sizes"`
+	Colors         pq.StringArray `gorm:"type:text[]" json:"colors"`
+	Description    string         `json:"description" input:"string"`
+	Items          []Item
+	Rating         float64 `gorm:"default:0"`
+	AmountRatings  int64   `gorm:"default:0"`
+	Comments       []Comment
+	AmountComments int64
 }
 
 func (this *Product) Delete() error {

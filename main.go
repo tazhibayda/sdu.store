@@ -20,7 +20,7 @@ func main() {
 		server.DB.AutoMigrate(model.User{}, model.Userdata{})
 		server.DB.AutoMigrate(
 			model.Category{}, model.Delivery{}, model.Product{}, model.Item{},
-			model.Supplier{}, model.DeliveryItem{}, model.Rating{},
+			model.Supplier{}, model.DeliveryItem{}, model.Rating{}, model.Comment{},
 		)
 		model.ConfigCategories()
 	}

@@ -11,8 +11,8 @@ import (
 )
 
 func Login(writer http.ResponseWriter, request *http.Request) {
-	Username := request.PostFormValue("username")
-	Password := request.PostFormValue("password")
+	Username := request.FormValue("username")
+	Password := request.FormValue("password")
 	user, err := model.GetUserByUsername(Username)
 	if err != nil {
 		utils.ExecuteTemplateWithoutNavbar(
@@ -42,7 +42,6 @@ func DoLogin(writer http.ResponseWriter, user model.User) error {
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},
 	}
-
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, usr)
 	tokenString, err := token.SignedString(model.JwtKey)
 	if err != nil {
