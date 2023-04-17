@@ -23,7 +23,6 @@ func routes() http.Handler {
 	router.ServeFiles("/static/*filepath", http.Dir("static"))
 	router.ServeFiles("/images/*filepath", http.Dir("images"))
 
-
 	router.HandlerFunc(http.MethodGet, "/", handlers.Index)
 
 	router.HandlerFunc(http.MethodPost, "/login", handlers.Login)
@@ -63,6 +62,7 @@ func routes() http.Handler {
 	router.Handler(http.MethodGet, "/Admin/items", staffMiddleware.ThenFunc(admin.Items))
 
 	router.Handler(http.MethodPost, "/product/rating", loggingMiddleware.ThenFunc(handlers.AddRating))
+	router.Handler(http.MethodPost, "/product/comment", loggingMiddleware.ThenFunc(handlers.AddComment))
 	router.HandlerFunc(http.MethodGet, "/category", handlers.Category)
 
 	//

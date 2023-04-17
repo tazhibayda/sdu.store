@@ -28,6 +28,16 @@ func (this *Rating) Create() (err error) {
 		err = server.DB.Model(&Product{}).Where("ID = ?", this.ProductID).Update(
 			"rating", fmt.Sprintf("%.2f", rating),
 		).Error
+		var count int64
+		if err = server.DB.Raw(
+			"SELECT Count(*) FROM PRODUCTS, RATINGS WHERE RATINGS.PRODUCT_ID = PRODUCTS.ID AND PRODUCTS.ID = ?",
+			this.ProductID,
+		).Scan(&count).Error; err != nil {
+			return
+		}
+		err = server.DB.Model(&Product{}).Where("ID = ?", this.ProductID).Update(
+			"amount_ratings", count,
+		).Error
 	}()
 	var count int64
 	if err = server.DB.Model(this).Where(
