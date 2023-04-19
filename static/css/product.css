@@ -1,0 +1,232 @@
+main{
+    margin: 80px 50.6px 0px 50.6px;
+}
+
+#comments_images{
+    width: 60%;
+}
+#all_images_of_product{
+    display: flex;
+}
+.image_of_product{
+    width: 72.225px;
+    margin: 0px 12.7px 12.7px 0px;
+}
+#images_of_product{
+    height: 509.55px;
+}
+#all_information{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+#main_image_of_product{
+    height: 496.85px;
+}
+#number_comments{
+    color: darkgrey;
+}
+.date_of_comment{
+    color: darkgrey;
+}
+.comment_info{
+    display: flex;
+    align-items: center;
+}
+.image_of_account{
+    margin-right: 10px;
+}
+.percent_div{
+    background-color: rgb(255, 98, 98);
+    border-radius: 3px;
+    width: 50px;
+}
+.percent{
+    padding: 0px 6px 0px 6px;
+    margin-top: 4px;
+    color: white;
+}
+.prices_div{
+    display: flex;
+    margin-top: 8px;
+}
+.currency_prices{
+    margin: 0px;
+}
+.prices{
+    margin: 0px;
+}
+.description{
+    width: 100%;
+    font-weight: lighter;
+}
+.description_text{
+    font-weight: lighter;
+}
+.product{
+    width: 200px;
+    margin-right: 13px;
+    margin-left: 13px;
+}
+#products{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: stretch;
+}
+#sale_div{
+    display: flex;
+    color: darkgrey;
+    align-items: baseline;
+}
+#real_price_div{
+    display: flex;
+    align-items: baseline;
+}
+#price_div{
+    display: flex;
+    align-items: center;
+}
+.price_text{
+    font-weight: 500;
+}
+#sale_div>h3{
+    font-size: 24px;
+}
+#real_price_div>h2{
+    font-size: 32px;
+}
+#all_information{
+    display: flex;
+}
+#product_description_title{
+    font-size: 24px;
+    margin-top: 0px;
+    font-weight: 500;
+
+}
+#main_product_description{
+    width: 30%;
+    margin-left: 50px;
+    margin-right: 5px;
+}
+#extra_hr{
+    display: none;
+}
+@media (max-width: 1286px) {
+    #all_information{
+        flex-direction: column;
+    }
+    #main_product_description{
+        margin-left: 0px;
+        margin-right: 5px;
+    }
+    #reviews{
+        display: none;
+    }
+    #extra_hr{
+        display: block;
+    }
+    #all_images_of_product{
+        flex-direction: row;
+        justify-content: center;
+    }
+}
+.rating_details{
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+#rating{
+    display: flex;
+}
+.rating_score{
+    margin-left: 10px;
+}
+#shipping_detail{
+    display: flex;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 35px;
+}
+.images_color{
+    margin-right: 10px;
+}
+#color_title{
+    font-size: 16px;
+    font-weight: 500;
+    color: darkgrey;
+    margin-bottom: 15px;
+}
+#size_title{
+    font-size: 16px;
+    font-weight: 500;
+    color: darkgrey;
+    margin-bottom: 15px;
+    margin-top: 45px;
+
+}
+.sizes_of_case{
+    background-color: darkgrey;
+    color: black;
+    font-size: 18px;
+    border-radius: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 48px;
+    width: 100px;
+    margin: 5px
+}
+#size_of_cases{
+    display: flex;
+    flex-wrap: wrap;
+}
+.flex-wrap{
+    display: flex;
+    flex-wrap: wrap;
+}
+.my-btn{
+    background-color: white;
+    border: 0px;
+    color: white;
+}
+#id_comment{
+    font-family: 'Roboto Condensed', sans-serif;
+    border-color: #eeeeee;
+    padding: 10px 0px;
+    border-style: solid;
+    background-color: #eeeeee;
+}
+.new_comment_container{
+    display: flex;
+    align-items: center;
+    background-color: #eeeeee;
+    justify-content: center;
+    border-style: solid;
+    border-color: #C4C4C4;
+    border-radius: 10px;
+    border-width: 1px;
+    margin-bottom: 40px;
+}
+.new_comment_container button{
+    transition: background-color linear .3s;
+    padding: 20px 0px;
+    font-family: 'Roboto Condensed', sans-serif;
+    background-color: #eeeeee;
+    border-color: #eeeeee;
+    padding: 10px 0px;
+    border-style: solid;
+    font-size: 20px;
+    width: 210px;
+    height: 90px;
+    border-radius: 10px;
+}
+.new_comment_container button:hover{
+    background-color: #dadadaf1;
+}
+.new_comment_container img{
+    margin-left: 10px;
+}
+.margin-top{
+    margin-top: 20px;
+}

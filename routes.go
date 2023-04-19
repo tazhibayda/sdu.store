@@ -56,6 +56,7 @@ func routes() http.Handler {
 	router.Handler(http.MethodGet, "/Admin/product", staffMiddleware.ThenFunc(admin.ProductPage))
 	router.Handler(http.MethodPost, "/Admin/product", staffMiddleware.ThenFunc(admin.Product))
 	router.Handler(http.MethodPost, "/Admin/delete-product", staffMiddleware.ThenFunc(admin.DeleteProduct))
+	router.Handler(http.MethodPost, "/Admin/add-image", staffMiddleware.ThenFunc(admin.AddImage))
 
 	router.Handler(http.MethodGet, "/Admin/add-item", staffMiddleware.ThenFunc(admin.AddItemPage))
 	router.Handler(http.MethodPost, "/Admin/add-item", staffMiddleware.ThenFunc(admin.AddItem))
@@ -63,6 +64,7 @@ func routes() http.Handler {
 
 	router.Handler(http.MethodPost, "/product/rating", loggingMiddleware.ThenFunc(handlers.AddRating))
 	router.Handler(http.MethodPost, "/product/comment", loggingMiddleware.ThenFunc(handlers.AddComment))
+	router.HandlerFunc(http.MethodGet, "/product", handlers.Product)
 	router.HandlerFunc(http.MethodGet, "/category", handlers.Category)
 
 	//

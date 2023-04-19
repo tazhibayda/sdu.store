@@ -10,17 +10,10 @@ import (
 )
 
 func Index(writer http.ResponseWriter, request *http.Request) {
-	claim, err := utils.CheckCookie(writer, request)
-	if err == nil {
-		utils.ExecuteTemplateWithNavbar(
-			writer, request, nil, *claim.User, "templates/base.html", "templates/index.html",
-			"templates/private.navbar.html",
-		)
-		return
-	}
-	utils.ExecuteTemplateWithoutNavbar(
-		writer, request, nil, "templates/base.html", "templates/index.html", "templates/public.navbar.html",
+	utils.ExecuteTemplateWithNavbar(
+		writer, request, nil, "templates/index.html",
 	)
+	return
 }
 
 func Account(writer http.ResponseWriter, request *http.Request) {

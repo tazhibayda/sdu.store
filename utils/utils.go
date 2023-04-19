@@ -128,8 +128,14 @@ func ErrorTemplate(w http.ResponseWriter, err string, status int, files ...strin
 }
 
 func ExecuteTemplateWithNavbar(
-	w http.ResponseWriter, r *http.Request, data interface{}, user model.User, files ...string,
+	w http.ResponseWriter, r *http.Request, data interface{}, files ...string,
 ) {
+	files = append(files, "templates/base.html")
+	if _, err := CheckCookie(w, r); err != nil {
+		files = append(files, "templates/public.navbar.html")
+	} else {
+		files = append(files, "templates/private.navbar.html")
+	}
 	t, err := template.ParseFiles(files...)
 	if err != nil {
 		ServerErrorHandler(w, r, err)
