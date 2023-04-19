@@ -1,0 +1,142 @@
+{{define "head"}}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Name}}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">    
+    <link rel="stylesheet" href="/static/css/product.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/static/js/product.js" defer></script>
+    <script src="/static/js/rating.js" defer></script>
+
+{{end}}
+{{define "content"}}
+<main>
+    <div id="all_information">
+        <div id="comments_images">
+            <div id="all_images_of_product">
+                <div id="images_of_product">
+                    {{ range .Images}}
+                    <div class="image_of_product">
+                        <img src="{{.}}" alt="" width="100%" onmouseover="image(this)">
+                    </div>
+                    {{ end }}
+                </div>
+                <div id="main_image_of_product_div">
+                    <img src="{{index .Images 0}}" id="main_image_of_product" alt="" height="496.85px" id="main_image">
+                </div>
+            </div>
+            <div id="reviews">
+                <div id="Total_reviews">
+                    <h4><b>Reviews</b> <b id="number_comments">{{.AmountComments}}</b></h4>
+                </div>
+                <hr>
+                <form action="/product/comment" method="post" enctype="multipart/form-data">
+                    <input type="number" name="productID" value="{{.ID}}" hidden>
+                    <div class="new_comment_container">
+                        <img src="/static/image/ava.png" alt="" height="40px">
+                        <textarea name="text" cols="120" rows="3" required="" id="id_comment"></textarea>
+                        <button type="submit">Comment</button>
+                    </div>
+                </form>
+                <div id="comments">
+                    {{ range .Comments}}
+                        <div class="comment_div">
+                            <div class="comment_info">
+                                <div class="image_of_account">
+                                    <img src="/static/image/ava.png" height="36px" alt="">
+                                </div>
+                                <div>
+                                    <h5><b>Unknown</b></h5>
+                                    <h6><b class="date_of_comment">{{.CreatedAt}}</b></h6>
+                                </div>
+                            </div>
+                            <div>
+                                <h5>{{.Text}}</h5>
+                            </div>
+                        </div>
+                        <hr>
+                    {{ end }}
+                </div>
+            </div>
+            <hr id="extra_hr">
+        </div>
+        <div id="main_product_description">
+            <div id="product_description_title">
+                {{.Description}}
+            </div>
+            <div id="rating">
+                <div class="rating_details">
+                    <img src="/static/image/icons8-star-half-empty-60.png" height="16px" alt="">
+                    <img src="/static/image/icons8-star-half-empty-60.png" height="16px" alt="">
+                    <img src="/static/image/icons8-star-half-empty-60.png" height="16px" alt="">
+                    <img src="/static/image/icons8-star-half-empty-60.png" height="16px" alt="">
+                    <img src="/static/image/icons8-star-half-empty-60.png" height="16px" alt="">
+                    <div class="rating_score">{{ .Rating }}</div>
+                </div>
+                <div class="rating_details">+{{ .AmountComments }} Reviews</div>
+                <div class="rating_details">
+                    <img src="/static/image/icons8-heart-50.png" height="16px" alt="">
+                </div>
+                <div class="rating_details">
+                    <img src="/static/image/icons8-share-24.png" alt="" height="16px">
+                    <div class="rating_score">Share</div>
+                </div>
+            </div>
+            <div class="add-rating-container">
+                <div class="rating_container">
+                    <form action="" method="post" class="rate-form">
+                        <input type="number" id="product_id" name="productID" value="{{.ID}}" hidden/>
+                        <button type="submit" style="background-color: transparent;" class="btn btn-light my-btn">
+                            <img height="45px" id="one" src="/static/image/star_stroke.png" alt="" data-original="/static/image/star_filled.png">
+                        </button>
+                        <button type="submit" style="background-color: transparent;" class="btn btn-light my-btn">
+                            <img height="45px" id="two" src="/static/image/star_stroke.png" alt="" data-original="/static/image/star_filled.png">
+                        </button>
+                        <button type="submit" style="background-color: transparent;" class="btn btn-light my-btn">
+                            <img height="45px" id="three" src="/static/image/star_stroke.png" alt="" data-original="/static/image/star_filled.png">
+                        </button>
+                        <button type="submit" style="background-color: transparent;" class="btn btn-light my-btn">
+                            <img height="45px" id="four" src="/static/image/star_stroke.png" alt="" data-original="/static/image/star_filled.png">
+                        </button>
+                        <button type="submit" style="background-color: transparent;" class="btn btn-light my-btn">
+                            <img height="45px" id="five" src="/static/image/star_stroke.png" alt="" data-original="/static/image/star_filled.png">
+                        </button>
+                    </form>
+                    <br>
+                    <div id="confirm-box"></div>
+                </div>
+            </div>
+            <div id="price_div">
+                <div id="real_price_div">
+                    <h2 class="currency_prices price_text">KZT&nbsp;</h2>
+                    <h2 class="prices price_text">{{ .Price }}</h2>
+                    <h2>&nbsp;&nbsp;&nbsp;</h2>
+                </div>
+            </div>
+            <button class="btn btn-danger" id="search_button" style="height: 48px; width: 130px; margin-top: 15px;"><b>Buy</b></button>
+            <div class="margin-top">
+                <div id="color_title">Color</div>
+                <div class="flex-wrap">
+                    {{ range .Colors }}
+                        <div class="sizes_of_case" onclick="color('{{.}}')">
+                            {{ . }}
+                        </div>
+                    {{ end }}
+                </div>
+            </div>
+            <div>
+                <div id="size_title">Size</div>
+                <div class="flex-wrap">
+                    {{ range .Sizes }}
+                        <div id="size_of_cases">
+                            <div class="sizes_of_case" onclick="size(this)">
+                                {{.}} 
+                            </div>
+                        </div>
+                    {{ end }}
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</main>
+{{end}}

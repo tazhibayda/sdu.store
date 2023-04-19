@@ -40,7 +40,7 @@ func (this *Product) Update() error {
 
 func GetProductByID(productID int) (Product, error) {
 	var product Product
-	err := server.DB.First(&product, productID).Error
+	err := server.DB.Where("ID=?", productID).Preload("Comments").Find(&product).Error
 	return product, err
 }
 
@@ -79,7 +79,7 @@ func ParseProduct(product *Product, request *http.Request) error {
 }
 
 func retrieveFilesNameSlice(request *http.Request, name string) ([]string, error) {
-	err := request.ParseMultipartForm(200000) // grab the multipart form
+	err := request.ParseMultipartForm(2000000000) // grab the multipart form
 	if err != nil {
 		return nil, err
 	}

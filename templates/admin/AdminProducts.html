@@ -28,6 +28,8 @@
                             <th>Description</th> 
                             <th>Price</th>
                             <th>Rating</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                             {{ range .Products}}
                             <tr>
@@ -42,13 +44,27 @@
                                 <td class="td-email">{{ .Description }}</td>
                                 <td class="td-email">{{ .Price }}</td>
                                 <td class="td-email">{{ .Rating }}</td>
-                                <td class="td-email td-add-item">
+
+                                <td class="td-email">
                                     <a href="/Admin/add-item?id={{.ID}}" class="table-add-container add-item">
                                         <div>ADD ITEM</div>
                                         <div class="svg-wrapper">
                                             <img src="/static/image/plus-svgrepo-com-white.svg" alt="svg">
                                         </div>
                                     </a>
+                                </td>
+                                <td class="td-email">
+                                    <form method="post" style="margin: 0px;" action="/Admin/add-image?id={{.ID}}" class="table-add-container add-image  table-add-container" enctype="multipart/form-data">
+                                        <button style="color: white; border: 0px solid rgb(170, 170, 170); background-color: rgb(170, 170, 170); padding: 3px 7px; align-items: center;" class="add-image-title">
+                                            ADD IMAGE
+                                        </button>
+                                        <div class="svg-wrapper">
+                                            <input type="file" name="image" id="image_input{{.ID}}" required>
+                                            <label for="image_input{{.ID}}">
+                                                <img src="/static/image/plus-svgrepo-com-white.svg" alt="svg">
+                                            </label>
+                                        </div>
+                                    </form>
                                 </td>
 
                             </tr>

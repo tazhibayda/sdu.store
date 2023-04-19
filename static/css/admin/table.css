@@ -22,18 +22,11 @@ form{
     border-radius: 10px;
     padding: 3px 7px;
     color: white;
-    margin-right: 50px;
     text-decoration: none;
 }
 
 .add-item{
     width: 100px;
-    margin-right: 10px;
-}
-
-.td-add-item{
-    display: flex;
-    justify-content: flex-end;
 }
 
 .table-add-container img {
@@ -166,3 +159,17 @@ td a{
     color: rgba(70,127,156,255);
 }
 
+.add-image-form{
+    display: flex;
+    align-items: center;
+    margin: 0px;
+
+}
+
+.add-image{
+    width: 115px;
+
+}
+.add-image-title{
+    width: 100px;
+}

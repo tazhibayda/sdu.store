@@ -2,7 +2,9 @@ package admin
 
 import (
 	"gorm.io/gorm"
+	"io"
 	"net/http"
+	"os"
 	"sdu.store/server"
 	"sdu.store/server/model"
 	"sdu.store/server/validators"
@@ -58,6 +60,30 @@ func DeleteProduct(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	http.Redirect(writer, request, "/Admin/products", http.StatusSeeOther)
+}
+
+func AddImage(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.FormValue("id"))
+	if err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
+	product, err := model.GetProductByID(id)
+	if err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
+	filename, err := retrieveFileName(r)
+	if err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
+	product.Images = append(product.Images, filename)
+	if err = product.Update(); err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
+	http.Redirect(w, r, "/Admin/products", http.StatusSeeOther)
 }
 
 func AddProduct(w http.ResponseWriter, r *http.Request) {
@@ -280,4 +306,38 @@ func setDefaultCategory(table *ProductTable) {
 	for i, _ := range table.Categories {
 		table.Categories[i].IsSelected = true
 	}
+}
+
+func retrieveFileName(request *http.Request) (string, error) {
+	err := request.ParseMultipartForm(2000000000) // grab the multipart form
+	if err != nil {
+		return "", err
+	}
+
+	file, header, err := request.FormFile("image")
+	if err != nil {
+		return "", err
+	}
+
+	defer file.Close()
+	if err != nil {
+		return "", err
+	}
+
+	filename := "images/" + header.Filename
+
+	out, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0666)
+
+	defer out.Close()
+	if err != nil {
+		return "", err
+	}
+
+	_, err = io.Copy(out, file)
+
+	if err != nil {
+		return "", err
+	}
+
+	return "/" + filename, nil
 }

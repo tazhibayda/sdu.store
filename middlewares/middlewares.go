@@ -26,6 +26,7 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 			_, err := utils.Session(writer, request)
 			if err != nil {
 				utils.ErrorLogger(err.Error(), request)
+				writer.WriteHeader(http.StatusNetworkAuthenticationRequired)
 				http.Redirect(writer, request, "/login", http.StatusSeeOther)
 				return
 			}

@@ -26,5 +26,5 @@ func AddComment(writer http.ResponseWriter, request *http.Request) {
 		utils.ServerErrorHandler(writer, request, err)
 		return
 	}
-	http.Redirect(writer, request, "", http.StatusSeeOther)
+	http.Redirect(writer, request, "/product?id="+strconv.Itoa(productID), http.StatusSeeOther)
 }
