@@ -5,7 +5,11 @@
 
 {{define "content"}}
 <main>
-    <div class="content"> 
+    <div class="content">
+        <form action="/products">
+            <input type="text" name="search" id="">
+            <button type="submit">Submit</button>
+        </form>
         <div class="nameblock" id="jeide">{{.Name}}</div>
         <div class="rowblocks" style= "display: flex; justify-content: space-around;">
             {{ range .Products }}
@@ -13,7 +17,7 @@
                 <div class="imageblock15" style="background: url({{index .Images 0}})"></div>
                 <div class="nameelement">{{ .Name }}</div>
                 <div class="coastel">{{ .Price }} KZT</div>
-                <a class="button" href="">Details</a>
+                <a class="button" href="/product?id={{.ID}}">Details</a>
             </div>
             {{ end }}
         </div>

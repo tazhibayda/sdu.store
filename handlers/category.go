@@ -8,12 +8,15 @@ import (
 	"sdu.store/utils"
 )
 
-
-func Category(writer http.ResponseWriter, request *http.Request){
-	id, _ := strconv.Atoi(request.URL.Query().Get("id"))
+func Category(writer http.ResponseWriter, request *http.Request) {
+	id, err := strconv.Atoi(request.URL.Query().Get("id"))
+	if err != nil {
+		utils.BadRequest(writer, request, err)
+		return
+	}
 	category, err := model.GetCategoryByID(id)
 
-	if err != nil{
+	if err != nil {
 		utils.ServerErrorHandler(writer, request, err)
 		return
 	}

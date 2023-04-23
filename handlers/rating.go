@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"sdu.store/server/model"
+	"sdu.store/server/validators"
 	"sdu.store/utils"
 	"strconv"
 )
@@ -21,8 +22,16 @@ func AddRating(writer http.ResponseWriter, request *http.Request) {
 		utils.BadRequest(writer, request, err)
 		return
 	}
-	rating := model.Rating{UserID: int(user.ID), ProductID: productID, Value: value}
-	if err = rating.Create(); err != nil {
+	validator :=
+		validators.RatingValidator{
+			Rating: &model.Rating{UserID: int(user.ID), ProductID: productID, Value: value},
+		}
+	if validator.Check(); !validator.IsValid() {
+		utils.BadRequest(writer, request, nil)
+		return
+	}
+
+	if err = validator.Rating.Create(); err != nil {
 		utils.ServerErrorHandler(writer, request, err)
 		return
 	}

@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"sdu.store/server/model"
+	"sdu.store/server/validators"
 	"sdu.store/utils"
 	"strconv"
 )
@@ -21,8 +22,12 @@ func AddComment(writer http.ResponseWriter, request *http.Request) {
 		utils.BadRequest(writer, request, err)
 		return
 	}
-	comment := model.Comment{UserID: int(user.ID), ProductID: productID, Text: text}
-	if err = comment.Create(); err != nil {
+	validator := validators.CommentValidator{Comment: &model.Comment{UserID: int(user.ID), ProductID: productID, Text: text}}
+	if validator.Check(); !validator.IsValid() {
+		utils.BadRequest(writer, request, err)
+		return
+	}
+	if err = validator.Comment.Create(); err != nil {
 		utils.ServerErrorHandler(writer, request, err)
 		return
 	}

@@ -11,9 +11,10 @@ type Category struct {
 }
 
 func ConfigCategories() {
-	server.DB.Create(&Category{Name: "Hoodies"})
-	server.DB.Create(&Category{Name: "Caps"})
-	server.DB.Create(&Category{Name: "T-shirts"})
+	server.DB.Create(&Category{Name: "Shopperler"})
+	server.DB.Create(&Category{Name: "Jeideler"})
+	server.DB.Create(&Category{Name: "Burjeideler"})
+	server.DB.Create(&Category{Name: "Qosymshalar"})
 }
 
 func GetAllCategory() (categories []Category, err error) {

@@ -53,9 +53,14 @@ func AdminUserdata(w http.ResponseWriter, r *http.Request) {
 	_, err := utils.SessionAdmin(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusUnauthorized)
+		return
 	}
 
-	tm, _ := template.ParseFiles("templates/Admin/AdminUserdata.gohtml")
+	tm, err := template.ParseFiles("templates/Admin/AdminUserdata.gohtml")
+	if err != nil {
+		utils.ServerErrorHandler(w, r, err)
+		return
+	}
 	var userdata []model.Userdata
 	server.DB.Find(&userdata)
 	err = tm.Execute(w, userdata)

@@ -66,6 +66,7 @@ func routes() http.Handler {
 	router.Handler(http.MethodPost, "/product/comment", loggingMiddleware.ThenFunc(handlers.AddComment))
 	router.HandlerFunc(http.MethodGet, "/product", handlers.Product)
 	router.HandlerFunc(http.MethodGet, "/category", handlers.Category)
+	router.HandlerFunc(http.MethodGet, "/products", handlers.Products)
 
 	//
 	//router.HandleFunc("/Admin/products", admin.Products)
