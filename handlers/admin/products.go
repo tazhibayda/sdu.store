@@ -65,12 +65,12 @@ func DeleteProduct(writer http.ResponseWriter, request *http.Request) {
 func AddImage(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.FormValue("id"))
 	if err != nil {
-		utils.ServerErrorHandler(w, r, err)
+		utils.BadRequest(w, r, err)
 		return
 	}
 	product, err := model.GetProductByID(id)
 	if err != nil {
-		utils.ServerErrorHandler(w, r, err)
+		utils.NotFound(w, r, err)
 		return
 	}
 	filename, err := retrieveFileName(r)
@@ -91,11 +91,6 @@ func AddProduct(w http.ResponseWriter, r *http.Request) {
 	err := model.ParseProduct(product, r)
 	if err != nil {
 		utils.BadRequest(w, r, err)
-		return
-	}
-
-	if err != nil {
-		utils.ServerErrorHandler(w, r, err)
 		return
 	}
 

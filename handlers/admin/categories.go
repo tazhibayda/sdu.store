@@ -15,6 +15,11 @@ type CategoryTable struct {
 	Search     string
 }
 
+type CategoryOutput struct {
+	*validators.CategoryValidator
+	ErrorsString []string
+}
+
 func CategoryPage(writer http.ResponseWriter, request *http.Request) {
 	id, err := strconv.Atoi(request.URL.Query().Get("id"))
 	if err != nil {
@@ -24,12 +29,13 @@ func CategoryPage(writer http.ResponseWriter, request *http.Request) {
 	category, err := model.GetCategoryByID(id)
 
 	if err != nil {
-		utils.ServerErrorHandler(writer, request, err)
+		utils.NotFound(writer, request, err)
 		return
 	}
 
 	utils.ExecuteTemplateWithoutNavbar(
-		writer, request, category, "templates/admin/base.html", "templates/admin/navbar.html",
+		writer, request, newCategoryOutput(&category), "templates/admin/base.html",
+		"templates/admin/navbar.html",
 		"templates/admin/AdminCategory.html",
 	)
 	return
@@ -71,11 +77,12 @@ func Category(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	category.Name = request.FormValue("name")
-	validator := validators.CategoryValidator{Category: &category}
-	if validator.Check(); !validator.IsValid() {
+	categoryOuput := newCategoryOutput(&category)
+	if categoryOuput.Check(); !categoryOuput.IsValid() {
+		categoryOuput.ErrorsString = categoryOuput.Errors()
 		utils.ExecuteTemplateWithoutNavbar(
-			writer, request, validator.Errors(), "templates/admin/base.html", "templates/admin/navbar.html",
-			"templates/admin/AdminAddCategory.html",
+			writer, request, categoryOuput, "templates/admin/base.html", "templates/admin/navbar.html",
+			"templates/admin/AdminCategory.html",
 		)
 		return
 	}
@@ -111,11 +118,12 @@ func CreateCategory(w http.ResponseWriter, r *http.Request) {
 	var category model.Category
 	category = model.Category{Name: r.FormValue("name")}
 
-	validator := validators.CategoryValidator{Category: &category}
+	categoryOutput := newCategoryOutput(&category)
 
-	if validator.Check(); !validator.IsValid() {
+	if categoryOutput.Check(); !categoryOutput.IsValid() {
+		categoryOutput.ErrorsString = categoryOutput.Errors()
 		utils.ExecuteTemplateWithoutNavbar(
-			w, r, validator.Errors(), "templates/admin/base.html", "templates/admin/navbar.html",
+			w, r, categoryOutput, "templates/admin/base.html", "templates/admin/navbar.html",
 			"templates/admin/AdminAddCategory.html",
 		)
 		return
@@ -160,4 +168,9 @@ func isValidCategory(category model.Category, table *CategoryTable) bool {
 		return contains
 	}
 	return true
+}
+
+func newCategoryOutput(category *model.Category) CategoryOutput {
+	validator := validators.CategoryValidator{Category: category}
+	return CategoryOutput{CategoryValidator: &validator}
 }

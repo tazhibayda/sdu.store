@@ -1,0 +1,124 @@
+{{define "head"}}
+<title>Products</title>
+<link rel="stylesheet" href="/static/css/admin/table.css">
+<link rel="stylesheet" href="/static/css/category.css">
+{{end}}
+{{ define "content"}}
+<form action="/products">
+    <div class="table-main-content-container">
+        <div class="table-content-container">
+            <div class="table-left-container">
+                <div>
+                    <input class="search-input" type="search" value="{{ .Search }}" name="search">
+                    <button class="search-button">Search</button>
+                </div>
+                <div class="rowblocks" style= "display: flex; justify-content: space-around;">
+                    {{ range .Products }}
+                    <div class="cardblock">
+                        <div class="imageblock15" style="background: url({{index .Images 0}})"></div>
+                        <div class="nameelement">{{ .Name }}</div>
+                        <div class="coastel">{{ .Price }} KZT</div>
+                        <a class="button" href="/product?id={{.ID}}">Details</a>
+                    </div>
+                    {{ end }}
+                </div>
+            </div>
+            <div class="table-right-container">
+                <div class="filter-title filter-main-container-title">
+                    Filter
+                </div>
+                <div class="filter-main-container">
+                    <div class="filter-title-container">
+                        Max Price
+                    </div>
+                    <div class="filter-input-label">
+                        <input type="number" value="{{ .MaxPrice }}" name="max-price" id="">
+                    </div>
+                    <div class="hr"></div>
+                </div>
+                <div class="filter-main-container">
+                    <div class="filter-title-container">
+                        Min Price
+                    </div>
+                    <div class="filter-input-label">
+                        <input type="number" value="{{ .MinPrice}}" name="min-price">
+                    </div>
+                    <div class="hr"></div>
+                </div>
+                <div class="filter-main-container">
+                    <div class="filter-title-container">
+                        By Categories
+                    </div>
+                    <div>
+                        {{ range .Categories }}
+                        <div class="filter-input-label">
+                            {{ if .IsSelected}}
+                            <input type="checkbox" id="{{ .Category.ID }}" name="category{{  .Category.ID }}" value="{{ .Category.ID }}" checked>
+                            {{ else }}
+                            <input type="checkbox" id="{{ .Category.ID }}" name="category{{  .Category.ID }}" value="{{ .Category.ID }}" >
+                            {{ end }}
+                            <label for="{{ .Category.ID }}">{{.Category.Name}}</label><br>       
+                        </div>
+                        {{ end }}
+                    </div>
+                </div>
+                <div class="filter-main-container">
+                    <div class="filter-title-container">
+                        By Rating
+                    </div>
+                    <div>
+                        <input type="radio" id="rating0" name="rating" value="0" 
+                        {{ if eq .MinRating 0}}
+                            checked
+                        {{ else }}
+
+                        {{ end }}
+                        >
+                        <label for="rating0">>=0</label><br>
+                        <input type="radio" id="rating1" name="rating" value="1" 
+                        {{ if eq .MinRating 1}}
+                            checked
+                        {{ else }}
+
+                        {{ end }}
+                        >
+                        <label for="rating1">>=1</label><br>
+                        <input type="radio" id="rating2" name="rating" value="2" 
+                        {{ if eq .MinRating 2}}
+                            checked
+                        {{ else }}
+
+                        {{ end }}
+                        >
+                        <label for="rating2">>=2</label><br>
+                        <input type="radio" id="rating3" name="rating" value="3" 
+                        {{ if eq .MinRating 3}}
+                            checked
+                        {{ else }}
+
+                        {{ end }}
+                        >
+                        <label for="rating0">>=3</label><br>
+                        <input type="radio" id="rating4" name="rating" value="4" 
+                        {{ if eq .MinRating 4}}
+                            checked
+                        {{ else }}
+
+                        {{ end }}
+                        >
+                        <label for="rating0">>=4</label><br>
+                        <input type="radio" id="rating5" name="rating" value="5" 
+                        {{ if eq .MinRating 5}}
+                            checked
+                        {{ else }}
+
+                        {{ end }}
+                        >
+                        <label for="rating0">5</label><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{{end}}
