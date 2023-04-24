@@ -11,6 +11,10 @@ type UserValidator struct {
 	Validator
 }
 
+func NewUserValidator(user *model.User) UserValidator {
+	return UserValidator{user, Validator{errors: []string{}}}
+}
+
 func (v *UserValidator) Check() {
 
 	if v.User.Username == "" {

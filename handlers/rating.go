@@ -22,10 +22,7 @@ func AddRating(writer http.ResponseWriter, request *http.Request) {
 		utils.BadRequest(writer, request, err)
 		return
 	}
-	validator :=
-		validators.RatingValidator{
-			Rating: &model.Rating{UserID: int(user.ID), ProductID: productID, Value: value},
-		}
+	validator := validators.NewRatingValidator(&model.Rating{UserID: int(user.ID), ProductID: productID, Value: value})
 	if validator.Check(); !validator.IsValid() {
 		utils.BadRequest(writer, request, nil)
 		return

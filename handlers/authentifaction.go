@@ -84,7 +84,7 @@ func SignUp(writer http.ResponseWriter, request *http.Request) {
 			Email:    request.PostFormValue("email"),
 			Password: request.PostFormValue("password"),
 		}
-		v := validators.UserValidator{User: &user}
+		v := validators.NewUserValidator(&user)
 		if v.Check(); !v.IsValid() {
 			utils.ExecuteTemplateWithoutNavbar(writer, request, v.Errors(), "templates/sign-up.html")
 			return

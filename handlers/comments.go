@@ -22,7 +22,7 @@ func AddComment(writer http.ResponseWriter, request *http.Request) {
 		utils.BadRequest(writer, request, err)
 		return
 	}
-	validator := validators.CommentValidator{Comment: &model.Comment{UserID: int(user.ID), ProductID: productID, Text: text}}
+	validator := validators.NewCommentValidator(&model.Comment{UserID: int(user.ID), ProductID: productID, Text: text})
 	if validator.Check(); !validator.IsValid() {
 		utils.BadRequest(writer, request, err)
 		return

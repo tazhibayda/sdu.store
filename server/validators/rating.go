@@ -7,6 +7,10 @@ type RatingValidator struct {
 	Validator
 }
 
+func NewRatingValidator(rating *model.Rating) RatingValidator {
+	return RatingValidator{rating, Validator{errors: []string{}}}
+}
+
 func (v *RatingValidator) Check() {
 	if v.Value < 1 || v.Value > 5 {
 		v.errors = append(v.errors, "Rating value should be in range from 1 till 5")

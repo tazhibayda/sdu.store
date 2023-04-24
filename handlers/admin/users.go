@@ -26,7 +26,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	isStaff := r.FormValue("staff") == "on"
 	isAdmin := r.FormValue("admin") == "on"
 	user := model.User{Email: email, Password: password, Username: username, Is_staff: isStaff, Is_admin: isAdmin}
-	v := validators.UserValidator{User: &user}
+	v := validators.NewUserValidator(&user)
 	if v.Check(); !v.IsValid() {
 		utils.ExecuteTemplateWithoutNavbar(
 			w, r, v.Errors(), "templates/admin/base.html", "templates/admin/navbar.html",

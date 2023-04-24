@@ -16,7 +16,10 @@ func main() {
 
 	if *restart {
 		fmt.Println("restart ")
-
+		server.DB.Migrator().DropTable(
+			model.Comment{}, model.Rating{}, model.DeliveryItem{}, model.Supplier{}, model.Item{}, model.Product{},
+			model.Delivery{}, model.Category{}, model.Userdata{}, model.User{},
+		)
 		server.DB.AutoMigrate(model.User{}, model.Userdata{})
 		server.DB.AutoMigrate(
 			model.Category{}, model.Delivery{}, model.Product{}, model.Item{},

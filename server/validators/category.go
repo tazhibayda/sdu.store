@@ -10,6 +10,10 @@ type CategoryValidator struct {
 	Validator
 }
 
+func NewCategoryValidator(category *model.Category) CategoryValidator {
+	return CategoryValidator{category, Validator{errors: []string{}}}
+}
+
 func (v *CategoryValidator) Check() {
 	if v.Name == "" {
 		v.errors = append(v.errors, InvalidFormatOfName)

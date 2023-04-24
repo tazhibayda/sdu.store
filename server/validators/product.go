@@ -7,6 +7,10 @@ type ProductValidator struct {
 	Validator
 }
 
+func NewProductValidator(product *model.Product) ProductValidator {
+	return ProductValidator{product, Validator{errors: []string{}}}
+}
+
 func (v *ProductValidator) Check() {
 	if v.Name == "" {
 		v.errors = append(v.errors, InvalidFormatOfName)
@@ -27,4 +31,3 @@ func (v *ProductValidator) Check() {
 		v.errors = append(v.errors, DescriptionFormat)
 	}
 }
-
