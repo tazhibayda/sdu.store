@@ -18,12 +18,12 @@ func main() {
 		fmt.Println("restart ")
 		server.DB.Migrator().DropTable(
 			model.Comment{}, model.Rating{}, model.DeliveryItem{}, model.Supplier{}, model.Item{}, model.Product{},
-			model.Delivery{}, model.Category{}, model.Userdata{}, model.User{},
+			model.Delivery{}, model.Category{}, model.Userdata{}, model.User{}, model.Purchase{},
 		)
-		server.DB.AutoMigrate(model.User{}, model.Userdata{})
-		server.DB.AutoMigrate(
+		server.DB.AutoMigrate(model.User{}, model.Userdata{},
 			model.Category{}, model.Delivery{}, model.Product{}, model.Item{},
 			model.Supplier{}, model.DeliveryItem{}, model.Rating{}, model.Comment{},
+			model.Purchase{},
 		)
 		model.ConfigCategories()
 	}

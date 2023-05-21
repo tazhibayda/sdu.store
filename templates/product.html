@@ -113,11 +113,12 @@
                 </div>
             </div>
             <button class="btn btn-danger" id="search_button" style="height: 48px; width: 130px; margin-top: 15px;"><b>Buy</b></button>
+            <div id="error"></div>
             <div class="margin-top">
                 <div id="color_title">Color</div>
                 <div class="flex-wrap">
                     {{ range .Colors }}
-                        <div class="sizes_of_case" onclick="color('{{.}}')">
+                        <div class="sizes_of_case" onclick="colorx('{{.}}')">
                             {{ . }}
                         </div>
                     {{ end }}
@@ -128,7 +129,7 @@
                 <div class="flex-wrap">
                     {{ range .Sizes }}
                         <div id="size_of_cases">
-                            <div class="sizes_of_case" onclick="size(this)">
+                            <div class="sizes_of_case" onclick="sizex('{{.}}')">
                                 {{.}} 
                             </div>
                         </div>

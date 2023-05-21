@@ -12,6 +12,9 @@ main{
     width: 72.225px;
     margin: 0px 12.7px 12.7px 0px;
 }
+#error{
+    color: red;
+}
 #images_of_product{
     height: 509.55px;
 }

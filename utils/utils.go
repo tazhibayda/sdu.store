@@ -8,7 +8,6 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"sdu.store/server"
 	"sdu.store/server/model"
 )
 
@@ -43,9 +42,6 @@ func Session(writer http.ResponseWriter, request *http.Request) (user *model.Use
 		return nil, err
 	}
 	user = cookie.User
-	if err = server.DB.Find(user).Error; err != nil {
-		return nil, err
-	}
 	return user, nil
 }
 
@@ -55,8 +51,7 @@ func SessionStaff(writer http.ResponseWriter, request *http.Request) (user *mode
 		return nil, err
 	}
 	user = cookie.User
-	err = server.DB.Find(user).Error
-	if !user.IsStaff() || err != nil {
+	if !user.IsStaff() {
 		err = errors.New("Invalid staff access")
 		return nil, err
 	}
@@ -69,8 +64,7 @@ func SessionAdmin(writer http.ResponseWriter, request *http.Request) (user *mode
 		return nil, err
 	}
 	user = cookie.User
-	err = server.DB.Find(user).Error
-	if !user.IsAdmin() || err != nil {
+	if !user.IsAdmin() {
 		err = errors.New("Invalid admin access")
 		return nil, err
 	}
@@ -102,14 +96,6 @@ func CheckCookie(writer http.ResponseWriter, request *http.Request) (*model.Clai
 
 	if !token.Valid {
 		writer.WriteHeader(http.StatusUnauthorized)
-		return nil, InvalidTokenError
-	}
-
-	var exists bool
-	if server.DB.Model(&model.User{}).
-		Select("count(*) > 0").
-		Where("id = ?", claims.User.ID).
-		Find(&exists); !exists {
 		return nil, InvalidTokenError
 	}
 	return claims, nil

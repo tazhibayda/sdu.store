@@ -8,6 +8,7 @@ import (
 type Item struct {
 	gorm.Model
 	Barcode   string `json:"id" gorm:"primaryKey"`
+	IsSold    bool   `json:"is-sold"`
 	ProductID uint   `json:"product_id"`
 	Color     string `json:"color"`
 	Size      string `json:"size"`
@@ -23,6 +24,18 @@ type Item struct {
 func GetAllItems() (items []Item, err error) {
 	err = server.DB.Find(&items).Error
 	return
+}
+
+func GetNotSoldItemBySizeAndColorAndProductID(color, size string, productID int) (*Item, error) {
+	var item = &Item{}
+	err := server.DB.Find(item, "COLOR = ? AND SIZE = ? AND IS_SOLD = FALSE AND PRODUCT_ID = ?", color, size, productID).Error
+	return item, err
+}
+
+func GetItemByBarcode(barcode string) (*Item, error) {
+	item := &Item{}
+	err := server.DB.Where("BARCODE = ?", barcode).Find(item).Error
+	return item, err
 }
 
 func (item *Item) Create() error {
